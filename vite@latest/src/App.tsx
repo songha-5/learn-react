@@ -25,6 +25,11 @@ function App() {
         <div onClick={() => alert('no div')}>no div</div>
         <button onClick={() => alert('yes button')}>사용자 고려버튼</button>
       </section>
+      <footer className='footer'>
+        <small>
+          COPYRIGHT RESERVE &copy; <abbr>카피라이터!</abbr>
+        </small>
+      </footer>
     </>
   )
 }
