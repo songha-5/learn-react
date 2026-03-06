@@ -1,9 +1,7 @@
 import Header from '../components/header/header'
 import Button from '../components/button/button'
-import Image from '../components/image/image'
-import FormField from '../components/form-field/form-field'
 import Footer from '../components/foorer/footer'
-import style from '../styles/App.module.css'
+import Main from '../components/main/Main'
 
 /**
  * JSX (JavaScript eXtension: 자바스크립트 확장 (비표준: 브라우저 해석 못함: SyntaxError))
@@ -16,15 +14,7 @@ function App() {
       {/* header */}
       <Header />
 
-      <section className={style.main}>
-        {/* image */}
-        <Image />
-
-        <h2><abbr>HTML</abbr>이 아닙니다</h2>
-
-        {/* formField */}
-        <FormField />
-      </section>
+      <Main />
       <section>
         <h2>웹 표준과 접근성을 준수해야 합니다.</h2>
         {/* button 위치 */}
