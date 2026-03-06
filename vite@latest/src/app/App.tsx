@@ -1,4 +1,5 @@
-import style from './App.module.css'
+import Button from '../components/button/button'
+import style from '../styles/App.module.css'
 
 /**
  * JSX (JavaScript eXtension: 자바스크립트 확장 (비표준: 브라우저 해석 못함: SyntaxError))
@@ -12,6 +13,7 @@ function App() {
         <h1>
           <dfn><abbr>JSX</abbr></dfn> 기초 배우기
         </h1>
+        <Button />
       </header>
       <section className={style.main}>
         <h2><abbr>HTML</abbr>이 아닙니다</h2>
@@ -20,10 +22,8 @@ function App() {
       </section>
       <section>
         <h2>웹 표준과 접근성을 준수해야 합니다.</h2>
-        {/* 클릭 이벤트 리스너 추가 onClick = {함수} */}
-        {/* button은 button으로! div X */}
-        <div onClick={() => alert('no div')}>no div</div>
-        <button className={style.button} onClick={() => alert('yes button')}>사용자 고려버튼</button>
+        {/* button 위치 */}
+        <Button /> {/* 리액트 컴포넌트 JSX구문 */}
       </section>
       <footer className={style.footer}>
         <small>
