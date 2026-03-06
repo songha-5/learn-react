@@ -1,6 +1,4 @@
 import './App.css'
-const size = 120
-
 
 /**
  * JSX (JavaScript eXtension: 자바스크립트 확장 (비표준: 브라우저 해석 못함: SyntaxError))
@@ -15,17 +13,18 @@ function App() {
           <dfn><abbr>JSX</abbr></dfn> 기초 배우기
         </h1>
       </header>
-      <main>
-        {/* 태그 닫기! */}
-        <h2>모든 태그는 닫혀야 합니다.</h2>
-        <img src="/react.svg" alt="리액트 로고" width={size} height={size}/>
-
-        <p>
-          <dfn>
-            <abbr title="Hyper Text Markup Language">HTML</abbr>에서는 허용되었던 {'<img>'}태그도 닫아야합니다.
-          </dfn>
-        </p>
-      </main>
+      <section>
+        <h2><abbr>HTML</abbr>이 아닙니다</h2>
+        <label htmlFor='username'>이름</label>
+        <input id='username' type='text' className='input' placeholder='이름을 입력하세요.'/>
+      </section>
+      <section>
+        <h2>웹 표준과 접근성을 준수해야 합니다.</h2>
+        {/* 클릭 이벤트 리스너 추가 onClick = {함수} */}
+        {/* button은 button으로! div X */}
+        <div onClick={() => alert('no div')}>no div</div>
+        <button onClick={() => alert('yes button')}>사용자 고려버튼</button>
+      </section>
     </>
   )
 }
