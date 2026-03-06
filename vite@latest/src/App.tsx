@@ -7,11 +7,24 @@ import './App.css'
 
 function App() {
   return (
-    <header className='header'>
-      <h1>
-        <dfn><abbr>JSX</abbr></dfn> 기초 배우기
-      </h1>
-    </header>
+    <>
+      <header className='header'>
+        <h1>
+          <dfn><abbr>JSX</abbr></dfn> 기초 배우기
+        </h1>
+      </header>
+      <main>
+        {/* 태그 닫기! */}
+        <h2>모든 태그는 닫혀야 합니다.</h2>
+        <img src="/react.svg" alt="리액트 로고" width="300"/>
+
+        <p>
+          <dfn>
+            <abbr title="Hyper Text Markup Language">HTML</abbr>에서는 허용되었던 {'<img>'}태그도 닫아야합니다.
+          </dfn>
+        </p>
+      </main>
+    </>
   )
 }
 
