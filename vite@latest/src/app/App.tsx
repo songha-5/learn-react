@@ -1,4 +1,8 @@
+import Header from '../components/header/header'
 import Button from '../components/button/button'
+import Image from '../components/image/image'
+import FormField from '../components/form-field/form-field'
+import Footer from '../components/foorer/footer'
 import style from '../styles/App.module.css'
 
 /**
@@ -9,27 +13,26 @@ import style from '../styles/App.module.css'
 function App() {
   return (
     <>
-      <header className={style.header}>
-        <h1>
-          <dfn><abbr>JSX</abbr></dfn> 기초 배우기
-        </h1>
-        <Button />
-      </header>
+      {/* header */}
+      <Header />
+
       <section className={style.main}>
+        {/* image */}
+        <Image />
+
         <h2><abbr>HTML</abbr>이 아닙니다</h2>
-        <label className={style.field} htmlFor='username'>이름</label>
-        <input id='username' type='text' className={style.input} placeholder='이름을 입력하세요.'/>
+
+        {/* formField */}
+        <FormField />
       </section>
       <section>
         <h2>웹 표준과 접근성을 준수해야 합니다.</h2>
         {/* button 위치 */}
         <Button /> {/* 리액트 컴포넌트 JSX구문 */}
       </section>
-      <footer className={style.footer}>
-        <small>
-          COPYRIGHT RESERVE &copy; <abbr>카피라이터!</abbr>
-        </small>
-      </footer>
+
+      {/* footer */}
+      <Footer />
     </>
   )
 }
