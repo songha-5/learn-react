@@ -1,5 +1,5 @@
-import FormField from "../form-field/form-field";
-import Image from "../image/image";
+import FormField from "../form-field/Form-field";
+import Image from "../image/Image";
 import style from './main.module.css'
 
 export default function Main() {

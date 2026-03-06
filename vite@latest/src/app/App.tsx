@@ -1,6 +1,6 @@
-import Header from '../components/header/header'
-import Button from '../components/button/button'
-import Footer from '../components/foorer/footer'
+import Header from '../components/header/Header'
+import Button from '../components/button/Button'
+import Footer from '../components/foorer/Footer'
 import Main from '../components/main/Main'
 
 /**
