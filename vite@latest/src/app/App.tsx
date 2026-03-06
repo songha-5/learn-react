@@ -1,7 +1,8 @@
-import Header from '../components/header/Header'
-import Button from '../components/button/Button'
-import Footer from '../components/foorer/Footer'
-import Main from '../components/main/Main'
+import Header from '@/components/header/Header'
+import Button from '@/components/button/Button'
+import Footer from '@/components/foorer/Footer'
+import Main from '@/components/main/Main'
+import JsxExpressiton from '@/components/jsx-expression/JsxExpressiton'
 
 /**
  * JSX (JavaScript eXtension: 자바스크립트 확장 (비표준: 브라우저 해석 못함: SyntaxError))
@@ -21,6 +22,8 @@ function App() {
         <Button /> {/* 리액트 컴포넌트 JSX구문 */}
       </section>
 
+      {/* JsxExpressiton */}
+      <JsxExpressiton />
       {/* footer */}
       <Footer />
     </>
