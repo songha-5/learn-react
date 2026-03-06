@@ -1,4 +1,6 @@
 import './App.css'
+const size = 120
+
 
 /**
  * JSX (JavaScript eXtension: 자바스크립트 확장 (비표준: 브라우저 해석 못함: SyntaxError))
@@ -16,7 +18,7 @@ function App() {
       <main>
         {/* 태그 닫기! */}
         <h2>모든 태그는 닫혀야 합니다.</h2>
-        <img src="/react.svg" alt="리액트 로고" width="300"/>
+        <img src="/react.svg" alt="리액트 로고" width={size} height={size}/>
 
         <p>
           <dfn>
