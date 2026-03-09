@@ -3,7 +3,15 @@ import S from './style.module.css'
 // 부모(상위) 컴포넌트가 자식(하위) 컴포넌트에 전달한 데이터 집합 props = properties
 // javascript 함수이름(인자) -> function 함수이름(매개변수) {}
 // react 컴포넌트이름(데이터, {키:값}) -> function 컴포넌트이름(props) {}
-export default function Footer(props: { slogan: string }) {
+
+// 타입스크립트 문서 - 인터페이스
+// https://www.typescriptlang.org/ko/docs/handbook/2/everyday-types.html
+
+interface FooterProps {
+  slogan: string
+}
+
+export default function Footer(props: FooterProps) {
 
   // 부모 자식컴포넌트의 관계
   // 몇몇의 정보를 자식 컴포넌트에게 전달 가능
