@@ -7,3 +7,9 @@
 // 4. components/Section
 // 5. components/Button
 // 6. 다시 내보내기(re-export) 구문
+
+// 다시 내보내기
+export { default as Button } from './Button'
+export { default as Footer } from './Footer'
+export { default as Header } from './Header'
+export { default as Section } from './Section'

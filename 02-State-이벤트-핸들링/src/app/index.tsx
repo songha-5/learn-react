@@ -1,8 +1,8 @@
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import S from './style.module.css'
-import Section from '@/components/Section'
-import Button from '@/components/Button'
+
+// 다시 내보내기
+import {Button, Header, Section, Footer} from '@/components'
+
 // import { createElement } from 'react'
 
 export default function App() {
