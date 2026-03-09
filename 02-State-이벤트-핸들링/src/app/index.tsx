@@ -1,7 +1,8 @@
+import { ConditionalRendering } from '@/learns'
 import S from './style.module.css'
 
 // 다시 내보내기
-import {Button, Header, Section, Footer} from '@/components'
+import {Button, Header, Section, Wrapper, Footer} from '@/components'
 
 // import { createElement } from 'react'
 
@@ -11,6 +12,10 @@ export default function App() {
       <Header>
         <h1>헤더 컴포넌트</h1>
       </Header>
+
+      <Wrapper>
+        <ConditionalRendering />
+      </Wrapper>
 
       <Section title="타이틀입니다" isShowTitle={true}>
         <p>섹션입니다.</p>
