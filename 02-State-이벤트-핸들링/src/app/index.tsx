@@ -1,4 +1,4 @@
-import { ConditionalRendering } from '@/learns'
+import { ComponentState, ConditionalRendering } from '@/learns'
 import S from './style.module.css'
 
 // 다시 내보내기
@@ -15,6 +15,7 @@ export default function App() {
 
       <Wrapper>
         <ConditionalRendering />
+        <ComponentState />
       </Wrapper>
 
       <Section title="타이틀입니다" isShowTitle={true}>
