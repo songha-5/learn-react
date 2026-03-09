@@ -4,4 +4,9 @@
   background-color: #20232a;
   color: white;
   text-align: center;
+
+  small {
+    display: block;
+    text-align: center;
+  }
 }

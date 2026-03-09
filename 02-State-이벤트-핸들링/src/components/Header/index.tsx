@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import S from './style.module.css'
+import Wrapper from '../Wrapper'
 
 interface HeaderProps {
   children: ReactNode
@@ -18,12 +19,9 @@ function Header(props: HeaderProps) {
 
   return (
     <header className={S.header}>
-      <h2>
-        <dfn>
-          <abbr title="JavaScript eXtension">JSX</abbr>
-        </dfn>{' '}
-        기초 배우기
-      </h2>
+      <Wrapper>
+        {props.children}
+      </Wrapper>
     </header>
   )
 }

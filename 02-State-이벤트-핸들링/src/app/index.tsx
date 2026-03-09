@@ -6,15 +6,8 @@ import S from './style.module.css'
 export default function App() {
   return (
     <div className={S.container}>
-      <h1>타이틀</h1>
-      <Header />
-
       <Header>
-        <h1>ss</h1>
-      </Header>
-      <Header>
-        <h1>ss</h1>
-        <p>aa</p>
+        <h1>헤더 컴포넌트</h1>
       </Header>
       <Footer slogan={'완주 이후엔 스스로 학습이 가능!'}/>
       
