@@ -2,6 +2,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import S from './style.module.css'
 import Section from '@/components/Section'
+import Button from '@/components/Button'
 // import { createElement } from 'react'
 
 export default function App() {
@@ -13,6 +14,11 @@ export default function App() {
 
       <Section title="타이틀입니다" isShowTitle={true}>
         <p>섹션입니다.</p>
+        <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
+          <Button>Reaction</Button>
+          <Button isDisabled>Reactive</Button>
+          <Button>Reactivity</Button>
+        </div>
       </Section>
       <Footer slogan={'완주 이후엔 스스로 학습이 가능!'}/>
       
