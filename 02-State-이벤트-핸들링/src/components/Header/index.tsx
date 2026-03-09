@@ -1,6 +1,14 @@
+import type { ReactNode } from 'react'
 import S from './style.module.css'
 
-function Header() {
+interface HeaderProps {
+  children: ReactNode
+}
+
+// ReactNode란? 모든 타입을 사용할거라는 선언
+function Header(props: HeaderProps) {
+
+  console.log(props)
   /**
    * 컴포넌트의 `children` 속성
    * - 부모 내부에 삽입되는 (리액트) 자식 요소들
