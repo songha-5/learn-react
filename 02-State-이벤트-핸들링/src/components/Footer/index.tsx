@@ -1,6 +1,13 @@
 import S from './style.module.css'
 
-export default function Footer() {
+// 부모(상위) 컴포넌트가 자식(하위) 컴포넌트에 전달한 데이터 집합 props = properties
+// javascript 함수이름(인자) -> function 함수이름(매개변수) {}
+// react 컴포넌트이름(데이터, {키:값}) -> function 컴포넌트이름(props) {}
+export default function Footer(props: { slogan: string }) {
+
+  // 부모 자식컴포넌트의 관계
+  // 몇몇의 정보를 자식 컴포넌트에게 전달 가능
+  // https://ko.react.dev/learn/passing-props-to-a-component
   /**
    * 데이터 바인딩 (Data Binding = Data + JSX = Markup)
    * - JavaScript 데이터(변수, 상수, 계산된 값(표현식, 함수 반환 값) 등)
@@ -16,7 +23,8 @@ export default function Footer() {
    * - React.createElement API에서 Props
    * - Props 타입 정의 (인라인 → 인터페이스)
    */
-  const slogan = '완벽보다 완주를!'
+  const slogan = props.slogan
+  console.log({ props }, props.slogan)
 
   /**
    * 접근성 고려
