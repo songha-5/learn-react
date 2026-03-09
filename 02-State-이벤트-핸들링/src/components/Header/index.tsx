@@ -19,7 +19,7 @@ function Header(props: HeaderProps) {
 
   return (
     <header className={S.header}>
-      <Wrapper>
+      <Wrapper width={480}>
         {props.children}
       </Wrapper>
     </header>
