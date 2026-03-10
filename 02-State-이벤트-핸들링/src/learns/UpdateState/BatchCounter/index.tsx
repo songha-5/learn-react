@@ -26,6 +26,10 @@ export default function BatchCounter() {
         <button type='button'
           className={`${S.button} ${S.primary}`}
           // 배칭, 과거의 값에서 가져와야 바로 계산을해서 다음값에 계산을 할 수 있음
+          // setCount(count + 1)
+          // setCount(count + 1)
+          // setCount(count + 1)
+          // 최종적으로 +1 만 적용
           onClick={() => setCount(INITAL_COUNT => INITAL_COUNT + 1)}
         >
           +1 증가
