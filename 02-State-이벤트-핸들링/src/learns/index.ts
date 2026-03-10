@@ -11,4 +11,5 @@ export { default as EventHandling } from './EventHandling'
 // 4. State 업데이트 : learn/UpdateState
 export { default as UpdateState } from './UpdateState'
 // 5. 입력 동기화 : learn/ControlledComponent
+export { default as ControlledComponent } from './ControlledComponent'
 // 6. 스냅샷의 이해 : learn/StateIsSnapshot

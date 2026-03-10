@@ -1,4 +1,4 @@
-import { ComponentState, ConditionalRendering, EventHandling, UpdateState } from '@/learns'
+import { ComponentState, ConditionalRendering, ControlledComponent, EventHandling, UpdateState } from '@/learns'
 import S from './style.module.css'
 
 // 다시 내보내기
@@ -14,6 +14,7 @@ export default function App() {
       </Header>
 
       <Wrapper>
+        <ControlledComponent />
         <UpdateState />
         <ConditionalRendering />
         <ComponentState />
