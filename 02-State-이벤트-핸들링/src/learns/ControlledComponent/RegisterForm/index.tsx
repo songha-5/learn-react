@@ -7,7 +7,7 @@ export default function RegisterForm() {
   
   // 리액트에 화면을 그리도록 요청하기 위해 상태 선언
   const [formState, setFormState] = useState({
-    name: 'jm4613',
+    name: 'NAME',
     email: 'email@naver.com',
   })
 
