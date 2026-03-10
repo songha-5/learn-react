@@ -20,12 +20,27 @@ function EventHandler() {
   const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log(`${e.type} 이벤트 발동`)
   }
+  // closure 클로저
+  const makeClickHandler = (message: string) => {
+    return () => {
+      console.log('캡쳐링')
+      console.log(message)
+    }
+  }
+
+  const message = '오늘 하루도 행복하게 시작합시다! 🍀'
 
   return (
     <section className={S.container}>
       <h2 className={S.title}>이벤트 핸들링 실습</h2>
       <div role="group" className={S.buttonGroup}>
-        <button type="button" className={S.button} onClickCapture={handleIncreseCount} onMouseEnter={() => handlePrintMessage('오늘 수업 끝!')}>
+        <button 
+          type="button"
+          className={S.button}
+          onClick={handleIncreseCount}
+          onClickCapture={makeClickHandler(message)}
+          onMouseEnter={() => handlePrintMessage('오늘 수업 끝!')}
+          >
           클릭 이벤트 {count}
         </button>
         <button type="button" className={`${S.button} ${S.secondary}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
