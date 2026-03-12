@@ -6,10 +6,10 @@ import { ProductList, ScheduleTable, ShiftManager } from '@/components'
 export default function App() {
   return (
     <div className={S.container}>
+      <StaffList />
       <ProductList />
       <ScheduleTable />
       <ShiftManager />
-      <StaffList />
       <FruitList />
     </div>
   )

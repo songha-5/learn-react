@@ -2,6 +2,8 @@ import { useState } from 'react'
 import StaffData from './data/staff.json' // JSON 파일
 import type { Staff } from './type/staff' // 타입을 꺼내와서 쓰기
 import S from './style.module.css'
+import StaffListSearch from './parts/StaffListSearch'
+import StaffCardList from './parts/StaffCardList'
 
  // 원본 손 터치X(불변성) // 타입지정
 const INITTAL_STAFE: Staff[] = StaffData
@@ -9,7 +11,6 @@ const INITTAL_STAFE: Staff[] = StaffData
 
 export default function StaffList() {
   const [staffs] = useState(INITTAL_STAFE)
-  const [firstStaff] = staffs
   return (
     <section className={S.container}>
       <header className={S.header}>
@@ -17,36 +18,10 @@ export default function StaffList() {
         <span className={S.count}>총원 {staffs.length} 명</span>
       </header>
 
+      <StaffListSearch />
 
       <ul className={S.grid}>
-        {staffs.map((person) => {
-          const {id, name, phone, role, status, wage} = person
-          const isActiveStatus = status === 'active'
-          const staffClassname = `${S.statusBadge} ${isActiveStatus ? S.active : ''}`
-          return (
-            <li key={id} className={S.card}>
-              <span
-                role='status'
-                aria-label='출근 중'
-                title='출근 중'
-                className={staffClassname.trim()}
-              />
-              <strong className={S.name}>{name}</strong>
-              <span className={S.role}>{role}</span>
-
-              <div className={S.infoGroup}>
-                <div className={S.infoRow}>
-                  <span className={S.label}>시급</span>
-                  <span className={S.value}>{wage.toLocaleString()}원</span>
-                </div>
-                <div className={S.infoRow}>
-                  <span className={S.label}>연락처</span>
-                  <span className={S.value}>{phone}</span>
-                </div>
-              </div>
-            </li>
-          )
-        })}
+        <StaffCardList staffs={staffs}/>
       </ul>
 
       {/* <search className={S.searchSection}>
