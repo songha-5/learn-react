@@ -74,6 +74,7 @@ export default function UserForm() {
         </div>
         
         <div role='group' 
+          hidden
           style={{marginBlockStart: 8, display: 'flex', gap: 8}}
         >
           <button type='submit'>제출</button>
