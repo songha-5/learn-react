@@ -1,21 +1,55 @@
 import { useState } from 'react'
-import StaffData from './data/staff.json'
-import type { Staff } from './type/staff'
+import StaffData from './data/staff.json' // JSON 파일
+import type { Staff } from './type/staff' // 타입을 꺼내와서 쓰기
 import S from './style.module.css'
 
-export default function StaffList() {
-  const [staffs] = useState<Staff[]>(StaffData)
+ // 원본 손 터치X(불변성) // 타입지정
+const INITTAL_STAFE: Staff[] = StaffData
 
+
+export default function StaffList() {
+  const [staffs] = useState(INITTAL_STAFE)
+  const [firstStaff] = staffs
   return (
     <section className={S.container}>
       <header className={S.header}>
         <h2>알바생 관리 명부</h2>
-        <span className={S.count}>
-          검색된 인원: {staffs.length} / 총원: {staffs.length}명
-        </span>
+        <span className={S.count}>총원 {staffs.length} 명</span>
       </header>
 
-      <search className={S.searchSection}>
+
+      <ul className={S.grid}>
+        {staffs.map((person) => {
+          const {id, name, phone, role, status, wage} = person
+          const isActiveStatus = status === 'active'
+          const staffClassname = `${S.statusBadge} ${isActiveStatus ? S.active : ''}`
+          return (
+            <li key={id} className={S.card}>
+              <span
+                role='status'
+                aria-label='출근 중'
+                title='출근 중'
+                className={staffClassname.trim()}
+              />
+              <strong className={S.name}>{name}</strong>
+              <span className={S.role}>{role}</span>
+
+              <div className={S.infoGroup}>
+                <div className={S.infoRow}>
+                  <span className={S.label}>시급</span>
+                  <span className={S.value}>{wage.toLocaleString()}원</span>
+                </div>
+                <div className={S.infoRow}>
+                  <span className={S.label}>연락처</span>
+                  <span className={S.value}>{phone}</span>
+                </div>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+
+      {/* <search className={S.searchSection}>
         <div className={S.searchField}>
           <label htmlFor="staff-search" className="sr-only">
             스태프 검색 (이름, 역할, 연락처)
@@ -80,7 +114,7 @@ export default function StaffList() {
           </p>
           <button className={S.resetBtn}>검색 초기화</button>
         </div>
-      )}
+      )} */}
     </section>
   )
 }
