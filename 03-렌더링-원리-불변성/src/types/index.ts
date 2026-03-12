@@ -1,0 +1,1 @@
+export type ResetEvent<T = HTMLFormElement> = React.SyntheticEvent<T>
