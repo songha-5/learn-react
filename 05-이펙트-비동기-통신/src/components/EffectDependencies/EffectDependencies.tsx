@@ -10,7 +10,8 @@ export default function EffectDependencies() {
   const [text, setText] = useState('')
   
   // - 마운트 상태
-  const [mounted] = useState(false)
+  // 리액트 앱이 마운트 전이다
+  const [mounted, setMounted] = useState(false)
 
   // 이펙트 설정 (종속성 / 의존성 (Dependencies: Array))
   // useEffect(() => {
@@ -22,8 +23,12 @@ export default function EffectDependencies() {
   // 상황2. 의존성 배열이 비어있는 경우
   // [] 종속성이 비어있는 경우 화면 렌더될때 이펙트 함수의 로직이 한번만 실행
   useEffect(() => {
-    const currentYear = new Date().getFullYear()
-    setCount(currentYear)
+    // const currentYear = new Date().getFullYear()
+    // setCount(currentYear)
+
+    // 언마운트
+    // 리액트 앱이 마운트 됨
+    setMounted(true)
   }, []) 
 
   // 상황3. 의존성 배열에 특정 값이 포함된 경우
@@ -33,10 +38,13 @@ export default function EffectDependencies() {
     document.title = `현재 카운트 값 ${count}`
   }, [count])
 
+  const mountedISOTime = mounted ? new Date().toISOString() : undefined
+
   return (
     <article className={S.container}>
       <header className={S.display}>
         <h2>의존성 배열 학습</h2>
+        <output>{mounted ? '마운트 됨' : '마운트 안됨'}</output>
         <p className={S.description}>실시간 카운트 상태를 확인하세요.</p>
         <output className={S.countOutput} aria-live="polite" aria-atomic="true">
           {count}
@@ -77,7 +85,7 @@ export default function EffectDependencies() {
         <p>콘솔창(F12)을 확인하며 Effect의 동작을 관찰하세요.</p>
         <p>
           현재 입력 내용:
-          <ins className={S.textHighlight}>{text || '입력 대기중 ...'}</ins>
+          <ins dateTime={mountedISOTime} className={S.textHighlight}>{text || '입력 대기중 ...'}</ins>
         </p>
       </footer>
     </article>
