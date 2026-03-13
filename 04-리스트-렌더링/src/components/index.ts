@@ -12,3 +12,5 @@ export { default as ProductList } from './ProductList'
 // 데이터 필터링
 export { default as ProductListWithFilter } from './ProductListWithFilter'
 export { default as StaffListWithFilter } from './StaffListWithFilter'
+
+export { default as StatusList } from './StatusList'
