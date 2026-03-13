@@ -1,9 +1,10 @@
 import S from './style.module.css'
-import { EffectBasic } from '@/components'
+import { EffectBasic, EffectDependencies } from '@/components'
 
 export default function App() {
   return (
     <div className={S.container}>
+      <EffectDependencies />
       <EffectBasic />
     </div>
   )
