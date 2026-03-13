@@ -1,12 +1,12 @@
-import type { Product } from '../type'
+import type { Product } from '../type/index'
 import { getPexelsImage } from '../util/getPexelsImage'
-import S from './productCard.module.css'
+import S from './ProductCard.module.css'
 
 interface ProductCardProps {
   product: Product
 }
 
-export default function ProductCard({ product } : ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const { id, name, price, isSoldOut } = product
 
   return (
