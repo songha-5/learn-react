@@ -6,19 +6,25 @@ import StaffListSearch from './parts/StaffListSearch'
 import StaffCardList from './parts/StaffCardList'
 import StaffListInfo from './parts/StaffListHeader'
 
- // 원본 손 터치X(불변성) // 타입지정
-const INITTAL_STAFE: Staff[] = StaffData
-
 
 export default function StaffList() {
-  const [staffs] = useState(INITTAL_STAFE)
+  const [staffs] = useState<Staff[]>(StaffData)
+  const [search, setSearch] = useState('')
+
+  const searchedStaffs = staffs.filter(staff => {
+    const hasName =  staff.name.toLowerCase().includes(search.toLowerCase().trim())
+    const hasRole =  staff.role.toLowerCase().includes(search.toLowerCase().trim())
+    const hasPhone =  staff.phone.toLowerCase().includes(search.toLowerCase().trim())
+    return hasName || hasPhone || hasRole
+  })
+
   return (
     <section>
-      <StaffListInfo staffs={staffs} />
-      <StaffListSearch />
+      <StaffListInfo staffs={staffs} searchedStaffs={searchedStaffs} />
+      <StaffListSearch search={search} setSearch={setSearch} />
 
       <ul className={S.grid}>
-        <StaffCardList staffs={staffs}/>
+        <StaffCardList staffs={searchedStaffs}/>
       </ul>
     </section>
   )
