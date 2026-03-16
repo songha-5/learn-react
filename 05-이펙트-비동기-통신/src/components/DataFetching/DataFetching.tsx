@@ -23,7 +23,7 @@ export default function PostList() {
     console.log('[이펙트] 시작')
 
    // 데이터 가져오기 함수
-   const fetchData = () => {
+  /*  const fetchData = () => {
     console.log('[이펙트: 데이터 가져오기] 시작')
     // 로딩 화면 표시 (로딩 상태를 true로 변경 : 리액트에게 렌더 트리거(요청))
     setIsLoading(true)
@@ -52,7 +52,33 @@ export default function PostList() {
       }).finally (() => {
         setIsLoading(false)
       })
-   }
+   } */
+
+  const fetchData = async () => {
+    console.log('[이펙트: 데이터 가져오기] 시작')
+    setIsLoading(true)
+
+    try {
+      const response = await fetch(POSTS_ENDPOINT)
+
+      if(!response.ok) throw new Error ('포스트 리스트 데이터 가져오기에 실패했습니다.')
+
+      // 성공한경우
+      // 데이터 상태 업데이트 요청(렌더트리거)
+      const data = await response.json()
+      setPosts(data.posts)
+
+    } catch (error) {
+      if(error instanceof Error)
+      setError(error.message)
+      // 실패한경우
+      // 에러상태 업데이트 요청(렌더 트리거)
+    } finally {
+      // 요청 응답 성공/실패 유무와 상관없이 항상 실행
+      // 로딩화면감춤
+      setIsLoading(false)
+    }
+  }
 
 
    // 데이터 가져오기 함수 실행
