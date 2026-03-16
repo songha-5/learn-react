@@ -1,9 +1,10 @@
 import S from './style.module.css'
-import { EffectBasic, EffectCleanup, EffectDependencies } from '@/components'
+import { DataFetching, EffectBasic, EffectCleanup, EffectDependencies } from '@/components'
 
 export default function App() {
   return (
     <div className={S.container}>
+      <DataFetching />
       <EffectCleanup />
       <EffectDependencies />
       <EffectBasic />
