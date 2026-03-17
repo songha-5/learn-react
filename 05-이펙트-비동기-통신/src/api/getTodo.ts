@@ -1,21 +1,24 @@
+// API 엔드포인트(Endpoint)
+const { VITE_API_URL: API_URL } = import.meta.env
 
-export interface Todo {
+// 응답 데이터 타입 지정
+interface ResponseTodosData {
   message: string
   todos: Todo[]
 }
 
-interface GetTodo {
+export interface Todo {
   id: number
-  option?: RequestInit
+  content: string
+  completed: boolean
+  userId: number
 }
-const API_URL = import.meta.env.VITE_API_URL
 
-export const getTodo = async ({id, option}: GetTodo): Promise<Todo> => {
+export const getTodos = async (userId: string, option?: RequestInit) => {
   try {
-    const response = await fetch(`${API_URL}/api/todos?userId=${id}`, option)
-    if(!response.ok) throw new Error(`${id}의 TODO 호출에 실패했습니다`)
-
-    return response.json()
+    const response = await fetch(`${API_URL}/api/todos?userId=${userId}`, option)
+    const data: ResponseTodosData = await response.json()
+    return data.todos
   } catch(error) {
     throw error instanceof Error ? error : new Error(String(error))
   }

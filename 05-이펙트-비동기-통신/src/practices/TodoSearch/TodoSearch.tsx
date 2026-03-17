@@ -1,52 +1,63 @@
 import { useEffect, useState } from 'react'
+import { getTodos, type Todo } from '@/api/getTodo'
 import S from './TodoSearch.module.css'
 
-// API 엔드포인트(Endpoint)
-const { VITE_API_URL: API_URL } = import.meta.env
-console.log(`${API_URL}/api/todos?userId=${1}`)
-
-// 응답 데이터 타입 지정
-interface ResponseTodosData {
-  message: string
-  todos: Todo[]
-}
-
-interface Todo {
-  id: number
-  content: string
-  completed: boolean
-  userId: number
-}
-
+// 디바운스 시간(ms)
+const DEBOUNCE_TIME = 500
 
 export default function TodoSearch() {
+  // 리액트로 하여금 화면을 변경
+  // 선언적 API로 제어 (상태 선언)
+  // - 로딩(loading) 상태
   const [loading, setLoading] = useState(false)
+  // - 할 일 목록(todos) 상태
   const [todos, setTodos] = useState<Todo[]>([])
+  // - 사용자 ID(userId) 상태
   const [userId, setUserId] = useState('')
 
-  // 사용자 ID값이 변경될때마다 실행
+  // 사용자 ID 값이 변경될 때마다 이펙트 함수 실행
   useEffect(() => {
 
-    // userId가 빈값이면 함수종료
-    const getTodos = async () => {
-      if (userId === '') {
-        setTodos([])
-        return
-      }
-
-      // 로딩 상태 업데이트
+    // 아직 응답되지 않은 이전의 네트워크 요청 중단
+    const controller = new AbortController()
+    const { signal } = controller
+    
+    const fetchTodos = async () => {
+      if (userId === '') return setTodos([])
+        
       setLoading(true)
-
-      // 데이터 요청/응답 (비동기)
-      const response = await fetch(`${API_URL}/api/todos?userId=${userId}`)
-      const data: ResponseTodosData = await response.json()
-      setTodos(data.todos)
-      // 로딩 상태 업데이트
-      setLoading(false)
+        
+      try {
+        const todos = await getTodos(userId, { signal })
+        setTodos(todos)
+      } catch(error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          console.error('데이터 로드 실패')
+          setTodos([]) // todos 상태 초기화
+        }
+      } finally {
+        if (!signal.aborted) {
+          setLoading(false)
+        }
+      }
     }
 
-    getTodos()
+    // 디바운스 : 사용자 입력이 더 없다면 그때 데이터 가져오기 요청 (시간만큼)
+    const debounceId = setTimeout(fetchTodos, DEBOUNCE_TIME)
+
+
+    // 클린업(정리) 함수
+    return () => {
+      controller.abort()
+      console.log('정리(Cleanup): 중복된 또는 응답되지 않은 이전의 요청 중단')
+      clearTimeout(debounceId)
+    }
+
   }, [userId])
+
+  // 파생된 상태 (Derived State)
+  // 테스트를 목적으로 todos 순환하여 랜덤으로 completed 상태 전환
+  const dummyTodos = getRandomCompletedTodos(todos)
 
   return (
     <section className={S.container}>
@@ -62,29 +73,29 @@ export default function TodoSearch() {
         <input
           id="user-id-input"
           type="number"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value.trim())}
           min={1}
           max={20}
           placeholder="사용자 ID를 입력하세요 (예: 1 ~ 20)"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value.trim())}
         />
       </div>
 
-      {/* 할 일 목록 템플릿 */}
       {!loading && todos.length > 0 && (
         <ul className={S.list}>
-          {todos.map(({ id, content/* , completed 실제 데이터 */ }) => {
-            const isDone = getRandomDone() // 할 일 완료 상태 확인 (목적)
-            const doneClassname = isDone ? S.completed : ''
+          {dummyTodos.map(({ id, content, completed }) => {
+            const doneClassname = completed ? S.completed : ''
 
             return (
               <li key={id} className={S.item}>
-                <span className={`${S.textContent} ${doneClassname}`}>{content}</span>
+                <span className={`${S.textContent} ${doneClassname}`}>
+                  {content}
+                </span>
                 <span
-                  aria-label={isDone ? '완료' : '예정'}
-                  style={{ opacity: isDone ? 1 : 0.3 }}
+                  aria-label={completed ? '완료' : '예정'}
+                  style={{ opacity: completed ? 1 : 0.3 }}
                 >
-                  {isDone ? '✅' : '❎'}
+                  {completed ? '✅' : '❎'}
                 </span>
               </li>
             )
@@ -92,13 +103,9 @@ export default function TodoSearch() {
         </ul>
       )}
 
-      {/* 상태 알림 템플릿 */}
       <div role="status" className={S.statusRegion}>
-        {/* 데이로 로딩 중 표시 메시지 */}
-        {loading && (
-          <p className={S.loading}>데이터를 가져오고 있습니다...</p>
-        )}
-        {/* 검색 결과가 없을 경우 표시 메시지 */}
+        {loading && <p className={S.loading}>데이터를 가져오고 있습니다...</p>}
+
         {!loading && userId && todos.length === 0 && (
           <p>검색 결과가 없습니다.</p>
         )}
@@ -108,4 +115,8 @@ export default function TodoSearch() {
 }
 
 // 유틸리티 함수
-const getRandomDone = () => Math.random() >= 0.5
+const getRandomCompletedTodos = (todos: Todo[]) =>
+  todos.map((todo) => ({
+    ...todo,
+    completed: Math.random() >= 0.5,
+  }))
