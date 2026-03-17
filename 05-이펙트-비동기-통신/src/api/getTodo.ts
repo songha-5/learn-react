@@ -1,7 +1,7 @@
 
 export interface Todo {
   message: string
-  todos: []
+  todos: Todo[]
 }
 
 interface GetTodo {
