@@ -26,6 +26,7 @@ export default function SmartForm() {
       <form
         className={S.form}
         onSubmit={(e) => e.preventDefault()}
+        noValidate={true}
       >
         <NicknameField value={nickname} onChange={setNickname} />
         <EmailField value={email} onChange={setEmail} />
