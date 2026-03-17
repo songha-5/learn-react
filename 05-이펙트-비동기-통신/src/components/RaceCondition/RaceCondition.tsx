@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import S from './RaceCondition.module.css'
-import { getUser, type User } from '../../../api/getUser'
+import { type ResponseUserData, type User } from '../../../api/getUser'
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function RaceCondition() {
   // 리액트가 제어할 상태(State) 선언
@@ -12,32 +13,60 @@ export default function RaceCondition() {
 
   // 이펙트 내부에서 데이터 가져오기 (외부 시스템과 동기화)
   // 데이터 가져오기 상황(로딩, 에러, 데이터)에 따라 상태 업데이트 요청(Trigger)
+  // 이펙트 내부에서 데이터 가져오기 (외부 시스템과 동기화)
+  // 데이터 가져오기 상황(로딩, 에러, 데이터)에 따라 상태 업데이트 요청(Trigger)
   useEffect(() => {
     if (!userId) {
       setUser(null) // 유저 데이터 초기화
       setError('')  // 에러 데이터 초기화
-
       return // 불필요한 이펙트 함수 실행 차단(중지)
     }
+
+    // AbortController 객체 생성
+    const controller = new AbortController() // AbortController { signal, abort }
+    const { signal } = controller // AbortSignal { aborted, reason }
 
     // 서버에 데이터 요청/응답 처리 비동기 함수
     const fetchUser = async () => {
       setPending(true) // 로딩 상태 업데이트 요청 (화면 변경)
 
       try {
-        const data = await getUser(userId)
-        setUser(data.user) // 유저 상태 업데이트 요청 (화면 변경)
-      } catch(error) {
-        if (error instanceof Error) {
-          setError(error.message) // 에러 상태 업데이트 요청 (화면 변경)
+        // const data = await getUser(userId, { signal }) // 데이터 가져오기 요청 (중단 가능하도록 신호 옵션 설정)
+
+        const response = await fetch(`${API_URL}/api/users/${userId}`, { signal })
+    
+        if (!response.ok) {
+          throw new Error(`사용자 "${userId}" 요청에 실패했습니다.`)
         }
+
+        const data: ResponseUserData = await response.json()
+        setUser(data.user) // 유저 상태 업데이트 요청 (화면 변경)
+        setError('') // 이전의 에러 메시지 초기화
+      } catch(error) {
+        const err = error as Error
+
+        // 클린업(정리) 함수가 실행되어 이전 요청이 중단된 것이므로 에러가 아님
+        if (err && err.name === 'AbortError') {
+          console.warn('이전 요청이 중담됨')
+          return // 함수 종료 (에러 처리 안함)
+        }
+        
+        // 오류 처리 (중단 요청이 아닌 경우)
+        setError(err.message) // 에러 상태 업데이트 요청 (화면 변경)
+        setUser(null) // 이전 기록된 유저 정보를 초기화
       } finally {
-        setPending(false) // 로딩 상태 업데이트 요청 (화면 변경)
+        if(!signal.aborted) {
+          setPending(false) // 로딩 상태 업데이트 요청 (화면 변경)
+        }
       }
     }
+    
+    fetchUser() // 데이터 가져오기 함수 실행
 
-    // 데이터 가져오기 함수 실행
-    fetchUser()
+    // 정리(cleanup) 함수 (이펙트의 설정 함수보다 먼저 실행됨 : 정리(해제) → 설정(연결))
+    return () => {
+      controller.abort() // 아직 도착 전인 이전 상태가 있을 경우, 요청 중단
+    }
 
   }, [userId])
 
