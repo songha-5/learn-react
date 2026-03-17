@@ -24,7 +24,9 @@ export default function EmailField({ value, onChange }: Props) {
   }
 
   // TODO 3: '방문했고(isTouched)' + '에러가 있을 때'만 에러를 보여주도록 변수를 설정하세요.
-  const showError = isTouched && error // 이 부분을 완성하세요.
+  const showError = isTouched && !!error // 이 부분을 완성하세요.
+
+
   console.log(showError)
   return (
     <div className={S.field}>
