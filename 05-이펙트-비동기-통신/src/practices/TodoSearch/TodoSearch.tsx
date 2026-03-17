@@ -1,7 +1,15 @@
+import { useEffect, useState } from 'react'
 import S from './TodoSearch.module.css'
 
+
 export default function TodoSearch() {
-  
+  const [useId, setUseId] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+  const [todos, setTodos] = useState('')
+
+  // useEffect((
+  // ), [useId])
+
   return (
     <section className={S.container}>
       <header>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import S from './DataFetching.module.css'
-import { getPosts, type Post } from '../../../api/getPost'
+import { getPosts, type Post } from '../../api/getPost'
 
 export default function PostList() {
   const [isLoading, setIsLoading] = useState(false)

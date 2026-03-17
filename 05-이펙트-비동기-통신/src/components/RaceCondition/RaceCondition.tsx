@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import S from './RaceCondition.module.css'
-import { type ResponseUserData, type User } from '../../../api/getUser'
+import { type ResponseUserData, type User } from '../../api/getUser'
 const API_URL = import.meta.env.VITE_API_URL
 
 export default function RaceCondition() {
