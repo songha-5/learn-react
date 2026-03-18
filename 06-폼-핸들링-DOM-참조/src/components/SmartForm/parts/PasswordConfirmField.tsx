@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import S from '../SmartForm.module.css'
 import { PasswordInput } from './PasswordInput'
+import ShowErrorOrInfoMessage from './showErrorOrInfoMessage'
 
 interface Props {
   value: string
@@ -37,7 +38,6 @@ export default function PasswordConfirmField({
     return value !== basePassword ? '패스워드와 동일한 값을 입력해야 합니다.' : ''
   }
   const error = getErrorMessage()
-  const showError = error !== ''
 
   return (
     <div className={S.field}>
@@ -52,18 +52,11 @@ export default function PasswordConfirmField({
         onChange={onChange}
         onBlur={() => setIsTouched(true)}
       />
-      {
-        showError ? (
-          <p role="alert" className={S.errorMessage}>
-            {error}
-          </p>
-        ) : (
-          <p id={messageId} className={S.infoMessage}>
-            패스워드와 동일한 값 입력
-          </p>
-        )
-      }
-
+      <ShowErrorOrInfoMessage 
+        id={fieldId}
+        requiredMessage={'패스워드와 동일한 값 입력'}
+        error={error}
+      />
     </div>
   )
 }

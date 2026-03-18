@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import S from '../SmartForm.module.css'
+import ShowErrorOrInfoMessage from './showErrorOrInfoMessage'
 
 // 이메일 검사를 위한 정규식
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -41,13 +42,11 @@ export default function EmailField({ value, onChange }: Props) {
         value={value}
       />
 
-      {showError ? (
-        <p id={messageId} role="alert" className={S.errorMessage}>
-          {error}
-        </p>
-      ) : (
-          <p id={messageId} className={S.infoMessage}>올바른 이메일 주소 입력</p>
-        )}
+      <ShowErrorOrInfoMessage 
+        id={messageId}
+        requiredMessage='올바른 이메일 주소 입력'
+        error={error}
+      />
     </div>
   )
 }
