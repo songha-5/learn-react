@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import S from '../SmartForm.module.css'
 import { PasswordInput } from './PasswordInput'
 import ShowErrorOrInfoMessage from './showErrorOrInfoMessage'
+import { createValidator } from '../util'
 
 interface Props {
   value: string
@@ -23,6 +24,13 @@ interface Props {
 // 5. 에러 변수를 토대로 '에러 표시 여부(showError, 파생된 상태)' 변수를 작성합니다.
 // -------------------------------------------------------------------
 
+// 패스워드 확인 유효성 검사 함수 생성
+const validatePasswordConfirm = createValidator(
+  '확인용 패스워드를 입력해야 합니다.',
+  (value) => 
+    value === 'true' /* 사용자 입력값과 베이스입력값이 같다면 */ ? '' : '패스워드와 동일한 값을 입력해야 합니다.'
+)
+
 export default function PasswordConfirmField({
   value,
   basePassword,
@@ -31,13 +39,8 @@ export default function PasswordConfirmField({
   const fieldId = useId()
   const messageId = useId()
   const [isTouched, setIsTouched] = useState(false)
-
-  const getErrorMessage = () => {
-    if (!isTouched) return ''
-    if (!value) return '확인용 패스 워드를 입력해야 합니다'
-    return value !== basePassword ? '패스워드와 동일한 값을 입력해야 합니다.' : ''
-  }
-  const error = getErrorMessage()
+  const isSame = value === basePassword
+  const [error, showError] = validatePasswordConfirm(String(isSame), isTouched)
 
   return (
     <div className={S.field}>
@@ -51,6 +54,7 @@ export default function PasswordConfirmField({
         value={value}
         onChange={onChange}
         onBlur={() => setIsTouched(true)}
+        isError={showError}
       />
       <ShowErrorOrInfoMessage 
         id={fieldId}
