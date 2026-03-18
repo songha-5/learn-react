@@ -36,6 +36,7 @@ type FormState = typeof INITIAL_FORM_STATE
 export default function MultiInputForm() {
   const sectionId = useId()
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
+  const [formResetKey, setFormResetKey] = useState(0)
 
   // type FormStateKey = 'nickname' | 'email' | 'password' | 'passwordConfirm'
   type FormStateKey = keyof FormState // fromstate에 key만 쏙빼와서 정의
@@ -51,6 +52,11 @@ export default function MultiInputForm() {
     })
   }
 
+  const handleReset:React.ReactEventHandler<HTMLFormElement> = (e) => {
+    console.log('초기화')
+    setFormResetKey((prev) => prev + 1)
+  }
+
   return (
     <article className={S.card} aria-labelledby={sectionId}>
       <header className={S.header}>
@@ -62,7 +68,7 @@ export default function MultiInputForm() {
         </p>
       </header>
 
-      <form className={S.form}>
+      <form key={formResetKey} className={S.form} onReset={handleReset}>
         <NicknameField
           value={formState.nickname}
           onChange={(value) => {changeFormState('nickname', value)}}
