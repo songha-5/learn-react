@@ -37,7 +37,13 @@ export default function MultiInputForm() {
   const sectionId = useId()
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
 
-  const changeFormState = (name: string, value: string) => {
+  // type FormStateKey = 'nickname' | 'email' | 'password' | 'passwordConfirm'
+  type FormStateKey = keyof FormState // fromstate에 key만 쏙빼와서 정의
+
+  const changeFormState = (
+    name: FormStateKey, 
+    value: string
+  ) => {
     // 계산된 속성
     setFormState({
       ...formState,
@@ -67,12 +73,12 @@ export default function MultiInputForm() {
         />
         <PasswordField
           value={formState.password}
-          onChange={(value) => {changeFormState(value)}}
+          onChange={(value) => {changeFormState('password', value)}}
         />
         <PasswordConfirmField
           value={formState.passwordConfirm}
           basePassword={formState.password}
-          onChange={(value) => {changeFormState(value)}}
+          onChange={(value) => {changeFormState('passwordConfirm', value)}}
         />
         <div role="group" className={S.buttonGroup}>
           <button type="reset" className={S.resetButton}>
