@@ -35,7 +35,7 @@ type FormState = typeof INITIAL_FORM_STATE
 
 export default function MultiInputForm() {
   const sectionId = useId()
-  const [formState] = useState<FormState>(INITIAL_FORM_STATE)
+  const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
 
 
   return (
@@ -52,7 +52,26 @@ export default function MultiInputForm() {
       <form className={S.form}>
         <NicknameField
           value={formState.nickname}
-          onChange={() => {}}
+          onChange={(nextNickName) => {
+            // 방법 1
+            // // 불변성 유지(보존)
+            // // 새 상태를 전달 (리액트는 다른 참조로 인식해서 화면 업데이트)
+            // // 새 객체 생성
+            // const nextFormState: FormState = {
+            //   ...formState,
+            //   nickname: nextNickName //nextNickName으로 업데이트
+            // }
+            // // 상태 업데이트 함수에 전달
+            // setFormState(nextFormState)
+
+            // 방법 2
+            setFormState((prve => {
+              return {
+                ...prve,
+                nickname: nextNickName
+              }
+            }))
+          }}
         />
         <EmailField
           value={formState.email}
