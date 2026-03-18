@@ -37,6 +37,13 @@ export default function MultiInputForm() {
   const sectionId = useId()
   const [formState, setFormState] = useState<FormState>(INITIAL_FORM_STATE)
 
+  const changeFormState = (name: string, value: string) => {
+    // 계산된 속성
+    setFormState({
+      ...formState,
+      [name]: value
+    })
+  }
 
   return (
     <article className={S.card} aria-labelledby={sectionId}>
@@ -52,39 +59,20 @@ export default function MultiInputForm() {
       <form className={S.form}>
         <NicknameField
           value={formState.nickname}
-          onChange={(nextNickName) => {
-            // 방법 1
-            // // 불변성 유지(보존)
-            // // 새 상태를 전달 (리액트는 다른 참조로 인식해서 화면 업데이트)
-            // // 새 객체 생성
-            // const nextFormState: FormState = {
-            //   ...formState,
-            //   nickname: nextNickName //nextNickName으로 업데이트
-            // }
-            // // 상태 업데이트 함수에 전달
-            // setFormState(nextFormState)
-
-            // 방법 2
-            setFormState((prve => {
-              return {
-                ...prve,
-                nickname: nextNickName
-              }
-            }))
-          }}
+          onChange={(value) => {changeFormState('nickname', value)}}
         />
         <EmailField
           value={formState.email}
-          onChange={() => {}}
+          onChange={(value) => {changeFormState('email', value)}}
         />
         <PasswordField
           value={formState.password}
-          onChange={() => {}}
+          onChange={(value) => {changeFormState(value)}}
         />
         <PasswordConfirmField
           value={formState.passwordConfirm}
           basePassword={formState.password}
-          onChange={() => {}}
+          onChange={(value) => {changeFormState(value)}}
         />
         <div role="group" className={S.buttonGroup}>
           <button type="reset" className={S.resetButton}>
