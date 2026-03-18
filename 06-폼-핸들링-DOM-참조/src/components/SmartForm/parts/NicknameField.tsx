@@ -12,23 +12,36 @@ interface Props {
   onChange: React.Dispatch<React.SetStateAction<string>>
 }
 
+
+// 고차함수를 이용해 코드정리
+function createValidator(requiredMessage: string, customValidator: (value: string) => string) {
+
+  return function validate(value:string, isTouched: boolean) {
+    if (!isTouched) return ['', false] as const // tuple [string, boolean]
+    if (!value) return [requiredMessage, true] as const // (as const 상수, 문자 불리언 순으로 나감) // tuple [string, boolean]
+    const error = customValidator(value)
+    const showError = error !== '' // true, false
+    return [error, showError] as const
+  }
+}
+
+// 고차함수를 이용해 코드정리 및 호출
+const validateNickName = createValidator(
+  '닉네임을 입력하세요.',
+  (value: string) => {
+    return PROFANITY_REG.test(value) 
+      ? '비속어는 닉네임으로 사용할 수 없습니다.' 
+      : ''
+  }
+)
+
 export default function NicknameField({ value, onChange }: Props) {
   const fieldId = useId()
   const messageId = useId()
-
   const [isTouched, setIsTouched] = useState(false)
+  const [error, showError] = validateNickName(value, isTouched)
 
-  const getErrorMessage = () => {
-    if (!isTouched) return ''
-    if (!value) return '닉네임을 입력하세요.'
-    return PROFANITY_REG.test(value)
-      ? '비속어는 닉네임으로 사용할 수 없습니다.'
-      : ''
-  }
-
-  const error = getErrorMessage()
-  const showError = error !== ''
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
 
