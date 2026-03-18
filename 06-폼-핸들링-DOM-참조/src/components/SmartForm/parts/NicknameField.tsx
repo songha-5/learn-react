@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import S from '../SmartForm.module.css'
 import ShowErrorOrInfoMessage from './showErrorOrInfoMessage'
+import { createValidator } from '../util/index'
 
 const MAX_NICKNAME = 10
 const PROFANITY_PATTERN = '바보 멍청이 또라이'.split(' ').join('|')
@@ -12,19 +13,6 @@ interface Props {
   onChange: React.Dispatch<React.SetStateAction<string>>
 }
 
-
-// 고차함수를 이용해 코드정리
-function createValidator(requiredMessage: string, customValidator: (value: string) => string) {
-
-  return function validate(value:string, isTouched: boolean) {
-    if (!isTouched) return ['', false] as const // tuple [string, boolean]
-    if (!value) return [requiredMessage, true] as const // (as const 상수, 문자 불리언 순으로 나감) // tuple [string, boolean]
-    const error = customValidator(value)
-    const showError = error !== '' // true, false
-    return [error, showError] as const
-  }
-}
-
 // 고차함수를 이용해 코드정리 및 호출
 const validateNickName = createValidator(
   '닉네임을 입력하세요.',
@@ -34,6 +22,7 @@ const validateNickName = createValidator(
       : ''
   }
 )
+
 
 export default function NicknameField({ value, onChange }: Props) {
   const fieldId = useId()

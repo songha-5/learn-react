@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import { PasswordInput } from './PasswordInput'
 import S from '../SmartForm.module.css'
 import ShowErrorOrInfoMessage from './showErrorOrInfoMessage'
+import { createValidator } from '../util'
 
 // 8자 이상, 대문자, 숫자, 특수문자(!@#$%^&*) 포함 정규식
 const PW_PATTERN = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
@@ -11,23 +12,17 @@ interface Props {
   onChange: (val: string) => void
 }
 
+// 패스워드 유효성 검사 함수
+const validatePassword = createValidator('대문자, 숫자, 특수문자(!@#$%^&*) 포함 8자 이상 입력', 
+  (value) => PW_PATTERN.test(value) ? '' : '8자 이상, 대문자, 숫자, 특수문자 조합이 필요합니다.'
+)
+
+
 export default function PasswordField({ value, onChange }: Props) {
   const fieldId = useId()
   const messageId = useId()
-
   const [isTouched, setIsTouched] = useState(false)
-
-  const getErrorMessage = () => {
-    if (!isTouched) return ''
-    if (!value) return '패스워드를 입력해주세요.'
-
-    return PW_PATTERN.test(value)
-      ? ''
-      : '8자 이상, 대문자, 숫자, 특수문자 조합이 필요합니다.'
-  }
-
-  const error = getErrorMessage()
-  const showError = error !== ''
+  const [error, showError] = validatePassword(value, isTouched)
 
   return (
     <div className={S.field}>
