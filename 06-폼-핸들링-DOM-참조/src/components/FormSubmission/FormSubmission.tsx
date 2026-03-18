@@ -4,12 +4,15 @@ import EmailField from './parts/EmailField'
 import PasswordField from './parts/PasswordField'
 import PasswordConfirmField from './parts/PasswordConfirmField'
 import S from './FormSubmission.module.css'
+import { wait } from '../SmartForm/util/wait'
+import SuccessMessage from './parts/SuccessScreen'
+
 
 const INITIAL_STATE = {
-  nickname: '',
-  email: '',
-  password: '',
-  passwordConfirm: '',
+  nickname: '테스트',
+  email: 'email@email.com',
+  password: 'asdf!1234',
+  passwordConfirm: 'asdf!1234',
 }
 
 type FormState = typeof INITIAL_STATE
@@ -56,6 +59,48 @@ export default function FormSubmission() {
     setFormResetKey((prev) => prev + 1)
   }
 
+  // 폼 제출 상태 선언
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // 폼 제출(가입) 성공 상태 선언
+  const [isSuccess, setIsSuccess] = useState(false)
+
+  // [파생된 상태] 모든 입력이 채워졌는가?
+  const isAllInputed = Object.values(formState).every(Boolean)
+
+  // [파생된 상태] 일부 입력이 하나라도 채워졌는가
+  const isSomeInputed = Object.values(formState).some(Boolean)
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault() // 리액트 기본 작동 방지(새로고침)
+    
+    // // 브라우저 방식
+    // const formData = new FormData(e.currentTarget)
+    // // 사용자 입력 값 (formData 객체) => 자바스크립트 객체화
+    // console.log(Object.fromEntries(formData))
+
+    // 방어 (폼 서브미션(제출중) 중이거나 모든 입력필드가 채워지지 않았다면 실행 중단)
+    if (isSubmitting || !isAllInputed) return
+    
+    // 서버에서의 응답은 즉시 일어나지 않음(지연된 처리 필요(비동기))
+    try {
+      setIsSubmitting(true)
+      await wait(2000)
+      alert('가입성공')
+      setIsSuccess(true)
+      handleReset()
+    } catch {
+      alert('가입실패')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // 가입에 성공했다면 성공 화면을 렌더링하세요!
+  if (isSuccess) {
+    return <SuccessMessage onGoBack={() => setIsSuccess(false)} />
+  }
+
   return (
     <article className={S.card} aria-labelledby={sectionId}>
       <header className={S.header}>
@@ -71,6 +116,7 @@ export default function FormSubmission() {
         key={formResetKey}
         className={S.form}
         onReset={handleReset}
+        onSubmit={handleSubmit}
         noValidate
       >
         <NicknameField
@@ -91,11 +137,13 @@ export default function FormSubmission() {
           onChange={(value) => changeFormState('passwordConfirm', value)}
         />
         <div role="group" className={S.buttonGroup}>
-          <button type="reset" className={S.resetButton}>
+          <button type="reset" className={S.resetButton} aria-disabled={
+            (isSubmitting || !isSomeInputed) ? 'true' : 'false'
+          }>
             취소
           </button>
-          <button type="submit" className={S.submitButton}>
-            가입
+          <button type="submit" className={S.submitButton} aria-disabled={(isSubmitting || !isAllInputed) ? 'true' : 'false'}>
+            {isSubmitting ? '처리중' : '가입'}
           </button>
         </div>
       </form>
