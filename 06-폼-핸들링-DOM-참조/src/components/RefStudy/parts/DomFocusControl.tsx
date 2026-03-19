@@ -18,10 +18,24 @@ import styles from '../RefStudy.module.css'
 const SCROLL_ITEMS_COUNT = 10 // 스크롤 아이템 개수
 
 export default function DomFocusControl() {
-
+  const scrollBoxRef = useRef<HTMLDivElement>(null)
   const focusInputRef = useRef<HTMLInputElement>(null)
 
   const handleFocusInput = () => focusInputRef.current?.select()
+
+  // 코드 중복
+  const scrollTo = (position: 'top' | 'bottom') => {
+    // 스크롤 박스 요소의 scrollTo(옵션) 실행
+    const scrollBox = scrollBoxRef.current
+    
+    scrollBox?.scrollTo({
+      top: position === 'bottom' ? scrollBox.scrollHeight : 0,
+      behavior: 'smooth'
+    })
+  }
+  // 이벤트 핸들러
+  const handleScrollTop = () => scrollTo('top')
+  const handleScrollBottom = () => scrollTo('bottom')
 
 
   return (
@@ -51,20 +65,22 @@ export default function DomFocusControl() {
           <button 
             type="button"
             className={styles.button}
-            aria-disabled={false}
+            aria-disabled={true}
+            onClick={handleScrollTop}
           >
             맨 위로 ▲
           </button>
           <button
             type="button"
             className={styles.button}
-            aria-disabled={true}
+            aria-disabled={false}
+            onClick={handleScrollBottom}
           >
             맨 아래로 ▼
           </button>
         </div>
 
-        <div className={styles.scrollBox}>
+        <div ref={scrollBoxRef} className={styles.scrollBox}>
           <div className={styles.scrollContent}>
             <p>📜 스크롤 테스트 영역입니다.</p>
             <p>내용이 아주 길어서 스크롤바가 생겼습니다.</p>
