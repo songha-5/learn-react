@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/immutability */
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import S from '../RefStudy.module.css'
 
 export default function CounterComparison() {
   // State
   const [countState, setCountState] = useState(0)
   const handleIncreamentState = () => setCountState((c) => c + 1)
+
 
   // Variable
   let countVariable = 0
@@ -15,8 +16,13 @@ export default function CounterComparison() {
     countVariable += 1
   }
 
-  // Ref
-  const countRef = { current: 0 }
+  // Ref (렌더링에는 영향이 하나도 없음)
+  // 렌더될때만 반영되고 그전에는 계산된 값만 가지고 있음
+  const countRef = useRef(0)
+  // current로 접근
+  console.log(countRef.current)
+
+
   const handleIncreamentRef = () => {
     console.log(`Ref 객체 countRef의 현재 값 ${countRef.current}`)
     countRef.current += 1
