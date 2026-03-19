@@ -20,7 +20,9 @@ const SCROLL_ITEMS_COUNT = 10 // 스크롤 아이템 개수
 export default function DomFocusControl() {
 
   const focusInputRef = useRef<HTMLInputElement>(null)
-  const moveFoucsButtonRef = useRef<HTMLButtonElement>(null)
+
+  const handleFocusInput = () => focusInputRef.current?.select()
+
 
   return (
     <section className={styles.section}>
@@ -33,33 +35,12 @@ export default function DomFocusControl() {
           aria-label='초점 이동 테스트'
           className={styles.input}
           placeholder="여기에 초점이 이동됩니다."
-          ref={(element) => {
-            focusInputRef.current = element
-          }}
+          ref={focusInputRef}
         />
         <button
           type="button"
           className={`${styles.button} ${styles.primary}`}
-          // ref 선언
-          ref={(element) => {
-            // ref참조의 current 값 업데이트
-            moveFoucsButtonRef.current = element
-          }}
-          onClick={() => {
-            // 자바스크립트 방식
-            // document.querySelector<HTMLElement>(`.${styles.input}`)?.focus()
-
-            console.log('리액트 방식', focusInputRef.current)
-            console.log('리액트 방식', moveFoucsButtonRef.current)
-
-            // 방법1 // 추천
-            focusInputRef.current?.focus()
-
-            // 방법2
-            // if(focusInputRef.current) {
-            //   focusInputRef.current.focus()
-            // }
-          }}
+          onClick={handleFocusInput}
         >
           초점 이동
         </button>
