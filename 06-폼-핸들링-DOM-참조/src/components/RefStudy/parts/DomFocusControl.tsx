@@ -1,3 +1,4 @@
+import { useId, useRef } from 'react'
 import styles from '../RefStudy.module.css'
 
 // ---------------------------------------------------------------------
@@ -18,6 +19,9 @@ const SCROLL_ITEMS_COUNT = 10 // 스크롤 아이템 개수
 
 export default function DomFocusControl() {
 
+  const focusInputRef = useRef<HTMLInputElement>(null)
+  const moveFoucsButtonRef = useRef<HTMLButtonElement>(null)
+
   return (
     <section className={styles.section}>
       <h3 className={styles.title}>3. DOM 직접 제어 (Focus & Scroll)</h3>
@@ -26,12 +30,36 @@ export default function DomFocusControl() {
       <div className={styles.inputGroup}>
         <input
           type="text"
+          aria-label='초점 이동 테스트'
           className={styles.input}
           placeholder="여기에 초점이 이동됩니다."
+          ref={(element) => {
+            focusInputRef.current = element
+          }}
         />
         <button
           type="button"
           className={`${styles.button} ${styles.primary}`}
+          // ref 선언
+          ref={(element) => {
+            // ref참조의 current 값 업데이트
+            moveFoucsButtonRef.current = element
+          }}
+          onClick={() => {
+            // 자바스크립트 방식
+            // document.querySelector<HTMLElement>(`.${styles.input}`)?.focus()
+
+            console.log('리액트 방식', focusInputRef.current)
+            console.log('리액트 방식', moveFoucsButtonRef.current)
+
+            // 방법1 // 추천
+            focusInputRef.current?.focus()
+
+            // 방법2
+            // if(focusInputRef.current) {
+            //   focusInputRef.current.focus()
+            // }
+          }}
         >
           초점 이동
         </button>
