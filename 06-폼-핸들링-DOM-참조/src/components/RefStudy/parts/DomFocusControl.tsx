@@ -1,4 +1,4 @@
-import { useId, useRef } from 'react'
+import { useId, useRef, useState } from 'react'
 import styles from '../RefStudy.module.css'
 
 // ---------------------------------------------------------------------
@@ -20,8 +20,9 @@ const SCROLL_ITEMS_COUNT = 10 // 스크롤 아이템 개수
 export default function DomFocusControl() {
   const scrollBoxRef = useRef<HTMLDivElement>(null)
   const focusInputRef = useRef<HTMLInputElement>(null)
-
+  
   const handleFocusInput = () => focusInputRef.current?.select()
+
 
   // 코드 중복
   const scrollTo = (position: 'top' | 'bottom') => {
@@ -37,6 +38,20 @@ export default function DomFocusControl() {
   const handleScrollTop = () => scrollTo('top')
   const handleScrollBottom = () => scrollTo('bottom')
 
+  // 스크롤 높이 위치에 따른 비활성 제어를 위한 상태
+  const [isTop, setIsTop] = useState(true)
+  const [isBottom, setIsBottom] = useState(false)
+
+  // 스크롤 박스 스크롤 이벤트 핸들러
+  const handleScroll = () => {
+    const scrollBox = scrollBoxRef.current
+    
+    if (scrollBox) {
+      const { scrollTop, clientHeight, scrollHeight } = scrollBox
+      setIsTop(scrollTop === 0)
+      setIsBottom(scrollTop + clientHeight >= scrollHeight - 1)
+    }
+  }
 
   return (
     <section className={styles.section}>
@@ -65,7 +80,7 @@ export default function DomFocusControl() {
           <button 
             type="button"
             className={styles.button}
-            aria-disabled={true}
+            aria-disabled={isTop}
             onClick={handleScrollTop}
           >
             맨 위로 ▲
@@ -73,14 +88,14 @@ export default function DomFocusControl() {
           <button
             type="button"
             className={styles.button}
-            aria-disabled={false}
+            aria-disabled={isBottom}
             onClick={handleScrollBottom}
           >
             맨 아래로 ▼
           </button>
         </div>
 
-        <div ref={scrollBoxRef} className={styles.scrollBox}>
+        <div ref={scrollBoxRef} className={styles.scrollBox} onScroll={handleScroll}>
           <div className={styles.scrollContent}>
             <p>📜 스크롤 테스트 영역입니다.</p>
             <p>내용이 아주 길어서 스크롤바가 생겼습니다.</p>
