@@ -51,8 +51,31 @@ export default function FileUpload() {
 
   // [상태]
   const [previewUrl, setPreviewUrl] = useState('')
+  const [isUploading, setIsUploading] = useState(false)
 
+  const handleUploadSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
+    try {
+      setIsUploading(true)
+
+      // 서버에 파일 업로드 요청
+      // 폼 데이터
+      const file = fileRef.current?.files?.[0]
+      if(!file) throw new Error('업로드할 파일을 선택하세요')
+
+      const formData = new FormData()
+      formData.append('image', file)
+
+      // 업로드할 파일
+
+      alert('파일 업도르 성공')
+    } catch(error) {
+      alert(error)
+    } finally {
+      setIsUploading(false)
+    }
+  }
 
   
   // [이벤트 핸들러]
@@ -99,7 +122,7 @@ export default function FileUpload() {
   return (
     <section className={S.card}>
       <h2 className={S.title}>프로필 설정</h2>
-      <form onSubmit={handleUpload} className={S.form}>
+      <form onSubmit={handleUploadSubmit} className={S.form}>
         <NickNameField />
         <FileUploadField
           onFileChange={handleFileChange}
