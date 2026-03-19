@@ -3,6 +3,11 @@ import FileUploadField from './parts/FileUploadField'
 import SaveButton from './parts/SaveButton'
 import FileUploadResult from './parts/FileUploadResult'
 import S from './FileUpload.module.css'
+import { useRef, useState } from 'react'
+
+const { VITE_IMGBB_URL: apiUrl, VITE_IMGBB_API_KEY: apiKey } = import.meta.env
+const API_ENDPOINT = `${apiUrl}?key=${apiKey}`
+console.log(API_ENDPOINT)
 
 // --------------------------------------------------------------------------------------
 // 실습 가이드
@@ -40,16 +45,71 @@ import S from './FileUpload.module.css'
 // --------------------------------------------------------------------------------------
 
 export default function FileUpload() {
+  
+  // fileUploadField 내부의 <input type="file"/>요소를 참조하기 위한 Ref 객체 생성
+  const fileRef = useRef<HTMLInputElement>(null) // { current: null } -> { current: HTMLInputElement }
+
+  // [상태]
+  const [previewUrl, setPreviewUrl] = useState('')
+
+
+
+  
+  // [이벤트 핸들러]
+  // 파일 업로드
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target
+    const file = files?.item(0)
+
+    if(!file) return // 올릴 파일이 없다면 함수 종료
+
+    // URL.revokeObjectURL (URL 해제, 정리)
+    if(previewUrl) URL.revokeObjectURL(previewUrl) // 메모리정리
+    
+
+    // URL.createObjectURL (URL 생성)
+    const createPreviewUrl = URL.createObjectURL(file)
+    setPreviewUrl(createPreviewUrl)
+  }
+
+  // 미리보기 이미지 및 파일 삭제
+  const handleDeleteFile = () => {
+    // 미리보기 이미지 초기화
+    if(previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+      setPreviewUrl('')
+    }
+    // 파일의 소스 삭제
+    const file = fileRef.current
+    if(file) file.value = ''
+  }
+
+
+  // 회원가입 폼 (제어 방식 : 실시간 검증 및 안내, 잦은 리렌더링 이슈)
+  // 파일 업로드 폼 (웹표준방식 : 리액트가 제어 불가능 (브라우저 보안 문제 때문))
+  const handleUpload = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const formElement = e.currentTarget
+    // 폼 데이터 생성
+    const formData = new FormData(formElement) //폼 데이터 생성
+    console.log(Object.fromEntries(formData)) // 사용자 입력 폼 데이터 확인
+  }
 
   return (
     <section className={S.card}>
       <h2 className={S.title}>프로필 설정</h2>
-      <form className={S.form}>
+      <form onSubmit={handleUpload} className={S.form}>
         <NickNameField />
-        <FileUploadField />
+        <FileUploadField
+          onFileChange={handleFileChange}
+          ref={fileRef}
+          previewUrl={previewUrl}
+          onDeleteFile={handleDeleteFile}
+        />
         <SaveButton />
       </form>
-      <FileUploadResult />
+      {/* <FileUploadResult /> */}
     </section>
   )
 }
