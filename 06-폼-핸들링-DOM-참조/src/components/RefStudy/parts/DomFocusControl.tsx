@@ -16,6 +16,8 @@ import styles from '../RefStudy.module.css'
 // ---------------------------------------------------------------------
 
 const SCROLL_ITEMS_COUNT = 10 // 스크롤 아이템 개수
+// 일이 작동하는 시간 (쓰로틀(조정) 타임)
+const THROTTLE_TIME = 300
 
 export default function DomFocusControl() {
   const scrollBoxRef = useRef<HTMLDivElement>(null)
@@ -34,6 +36,20 @@ export default function DomFocusControl() {
       behavior: 'smooth'
     })
   }
+
+  // 쓰로틀(Throttle)
+  // 현재시간과 마지막 실행시간의 차이를 계산하여
+  // 특정시간(예: 3~400ms)이 지났을 때만 로직을 실행
+
+  // 필요 리스트
+  // 마지막 실행 시간 (값 참조(Ref) : 리렌더링이 발생하더라도 값을 기억)
+  const lastRunRef = useRef(0)
+  // // 현재 시간
+  // const now = Date.now()
+  // // 일이 작동하는 시간 (쓰로틀(조정) 타임)
+  // const THROTTLE_TIME = 300
+
+
   // 이벤트 핸들러
   const handleScrollTop = () => scrollTo('top')
   const handleScrollBottom = () => scrollTo('bottom')
@@ -44,13 +60,26 @@ export default function DomFocusControl() {
 
   // 스크롤 박스 스크롤 이벤트 핸들러
   const handleScroll = () => {
+    // 스크롤링 횟수
+    console.log('%c스크롤링', 'color: #0f0')
     const scrollBox = scrollBoxRef.current
     
-    if (scrollBox) {
-      const { scrollTop, clientHeight, scrollHeight } = scrollBox
-      setIsTop(scrollTop === 0)
-      setIsBottom(scrollTop + clientHeight >= scrollHeight - 1)
+    // 스크롤링 하는 현재 시간
+    const now = Date.now()
+
+    // 조건 현재 시간 - 마지막 실행시간 > 조정 시간 ( 리액트 렌더 하는 시간)
+    if (now - lastRunRef.current > THROTTLE_TIME) {
+      console.log('%c쓰로틀링(조정)', 'color: #f00')
+      lastRunRef.current = now
+
+      // 스로틀링으로 적은빈도로 코드실행
+      if (scrollBox) {
+        const { scrollTop, clientHeight, scrollHeight } = scrollBox
+        setIsTop(scrollTop === 0)
+        setIsBottom(scrollTop + clientHeight >= scrollHeight - 1)
+      }
     }
+
   }
 
   return (
