@@ -111,6 +111,24 @@ export default function NestedObject() {
   const isDisabled = 1 > doit.trim().length
 
   // 할일 수정 (update)
+
+  // 동일코드 축약형
+  /* const updateTodo = (todoId: Todo['id']) =>
+    setTodos(
+      todos.map((todo) =>
+        todo.id !== todoId
+          ? todo
+          : {
+              ...todo,
+              done: !todo.done,
+              metadata: {
+                ...todo.metadata,
+                updatedAt: getCurrentDateString(),
+              },
+            },
+      ),
+    ) */
+
   const updateTodo = (todoId: Todo['id']) => {
     // 해당 할 일의 완료 상태를 반전(toggle)
     // 절대 뮤테이션 X / 새 객체를 생성해서 반환
@@ -118,7 +136,7 @@ export default function NestedObject() {
     // nextTodos(복제본)
 
     // const nextTodos: Todo[] = [...todos]
-    const nextTodos: Todo[] = todos.map((todo) => {
+    const nextTodos = todos.map((todo) => {
       // 변경하고 싶은 할 일을 제외한 나머지는 그대로 내보내기(변경 필요없음)
       if (todo.id !== todoId) return todo
       // 변경하고싶은 할 일이라면 새로운 객체로 생성해서 반환
