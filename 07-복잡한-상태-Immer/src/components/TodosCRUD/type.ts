@@ -5,7 +5,7 @@ export interface Metadata {
 
 export interface Todo {
   id: string
-  text: string | FormDataEntryValue
+  text: string
   done: boolean
   metadata: Metadata
 }

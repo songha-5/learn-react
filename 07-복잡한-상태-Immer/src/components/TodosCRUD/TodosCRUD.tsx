@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import S from './TodosCRUD.module.css'
 import type {Todo} from './type'
 // --------------------------------------------------------------
@@ -40,14 +40,31 @@ const INITAL_TODO: Todo[] = [
 export default function NestedObject() {
   const [todos, setTodos] = useState(INITAL_TODO)
 
+  // 할일 뒤집기 (위에 할일이 쌓이도록) => 파생된 상태: 상태가 변경되면 렌더링 중에 다시 계산된 값
+  const reversedTodos = [...todos].toReversed()
+
+  // input 컴포넌트의 참조 - DOM 접근 / 조작
+  const doitRef = useRef<HTMLInputElement>(null)
+
   // 입력필드 사용 방식 : 제어 vs [비제어]
   const handledSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
+    // 웹 표준 방식으로 사용자 입력 값 읽기
     const formData = new FormData(e.currentTarget)
-    const doit = formData.get('doit')
+    const doit = formData.get('doit') as string // 타입 단언
     console.log(doit)
-    if(doit) addTodo(doit)
-    console.log('핸들 클릭')
+    // 유효성검사 & 이 코드가 없다면 빈상태에서 추가누르면 추가 됨
+    if(doit && doit.trim().length > 0) {
+      // 할 일 추가
+      addTodo(doit)
+
+      // 할 일 입력 필드 초기화
+      const doitInput = doitRef.current
+      if(doitInput) {
+        doitInput.value = ''
+        doitInput.focus()
+      }
+    }
   }
 
   const addTodo = (doit: Todo['text']) => {
@@ -73,6 +90,7 @@ export default function NestedObject() {
 
         <form className={S.form} onSubmit={handledSubmit}>
           <input
+            ref={doitRef}
             type="text"
             name="doit" // 비제어 방식에 필요함
             className={S.input}
@@ -86,7 +104,7 @@ export default function NestedObject() {
       </header>
 
       <ul className={S.list} aria-label="할 일 목록">
-        {todos.map((todo) => {
+        {reversedTodos.map((todo) => {
           const todoTextClassName = `${S.text} ${todo.done ? S.completed : ''}`.trim()
           const { createdAt, updatedAt } = todo.metadata
 
