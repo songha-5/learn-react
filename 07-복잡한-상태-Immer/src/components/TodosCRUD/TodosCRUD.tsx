@@ -45,6 +45,7 @@ export default function NestedObject() {
 
   // input 컴포넌트의 참조 - DOM 접근 / 조작
   const doitRef = useRef<HTMLInputElement>(null)
+  const addButtonRef = useRef<HTMLButtonElement>(null)
 
   // 입력필드 사용 방식 : 제어 vs [비제어]
   const handledSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -91,13 +92,24 @@ export default function NestedObject() {
         <form className={S.form} onSubmit={handledSubmit}>
           <input
             ref={doitRef}
+            onInput={(e) => {
+              const input = e.currentTarget.value
+              const addButton = addButtonRef.current
+              console.log(input)
+
+              if(input.trim().length > 0) {
+                addButton?.setAttribute('aria-disabled', 'false')
+              } else {
+                addButton?.setAttribute('aria-disabled', 'true')
+              }
+            }}
             type="text"
             name="doit" // 비제어 방식에 필요함
             className={S.input}
             aria-label="할 일"
             placeholder="오늘 할 일 입력"
           />
-          <button type="submit" className={S.buttonAdd}>
+          <button ref={addButtonRef} type="submit" className={S.buttonAdd} aria-disabled={true}>
             추가
           </button>
         </form>
