@@ -1,13 +1,18 @@
+import { useRef, useState } from 'react'
+import type { ResponseDatas } from './type'
 import NickNameField from './parts/NickNameField'
 import FileUploadField from './parts/FileUploadField'
 import SaveButton from './parts/SaveButton'
-import FileUploadResult from './parts/FileUploadResult'
+// import FileUploadResult from './parts/FileUploadResult'
 import S from './FileUpload.module.css'
-import { useRef, useState } from 'react'
 
 const { VITE_IMGBB_URL: apiUrl, VITE_IMGBB_API_KEY: apiKey } = import.meta.env
-const API_ENDPOINT = `${apiUrl}?key=${apiKey}`
-console.log(API_ENDPOINT)
+
+const getEndpoint = () => {
+  const url = new URL(apiUrl)
+  url.searchParams.append('key', apiKey)
+  return url.toString()
+}
 
 // --------------------------------------------------------------------------------------
 // 실습 가이드
@@ -53,8 +58,17 @@ export default function FileUpload() {
   const [previewUrl, setPreviewUrl] = useState('')
   const [isUploading, setIsUploading] = useState(false)
 
+  // [재사용 함수]
+  // 업로드 파일 인풋 초기화
+  const restPreviewAndFile = () => {
+
+  }
+
   const handleUploadSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    // 현재 서버에 올라가는 중인지
+    if (isUploading || isDisabled) return
 
     try {
       setIsUploading(true)
@@ -68,6 +82,21 @@ export default function FileUpload() {
       formData.append('image', file)
 
       // 업로드할 파일
+      const response = await fetch(getEndpoint(), {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('파일 업로드 실패')
+      }
+
+      // 업로드 파일 인풋 초기화
+      restPreviewAndFile()
+
+      const responseData: ResponseDatas = await response.json
+
+      console.log(responseData.data)
 
       alert('파일 업도르 성공')
     } catch(error) {
@@ -107,17 +136,8 @@ export default function FileUpload() {
     if(file) file.value = ''
   }
 
-
-  // 회원가입 폼 (제어 방식 : 실시간 검증 및 안내, 잦은 리렌더링 이슈)
-  // 파일 업로드 폼 (웹표준방식 : 리액트가 제어 불가능 (브라우저 보안 문제 때문))
-  const handleUpload = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const formElement = e.currentTarget
-    // 폼 데이터 생성
-    const formData = new FormData(formElement) //폼 데이터 생성
-    console.log(Object.fromEntries(formData)) // 사용자 입력 폼 데이터 확인
-  }
+  // 파생된 상태 : 미리보기 이미지가 화면에 표시된 상태인지 아닌지 여부
+  const isDisabled = 1 > previewUrl.trim().length
 
   return (
     <section className={S.card}>
@@ -130,7 +150,9 @@ export default function FileUpload() {
           previewUrl={previewUrl}
           onDeleteFile={handleDeleteFile}
         />
-        <SaveButton />
+        <SaveButton 
+          isDisabled={isUploading || isDisabled}
+        />
       </form>
       {/* <FileUploadResult /> */}
     </section>
