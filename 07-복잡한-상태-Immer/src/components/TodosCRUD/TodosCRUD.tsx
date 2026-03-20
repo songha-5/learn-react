@@ -183,11 +183,28 @@ export default function NestedObject() {
     }
 
   }
+  
+  // =-========
+  // 디바운스 - 렌더링 횟수 완화
+  const DEBOUNCE_TIME = 300
+  const timeoutIdRef = useRef<ReturnType<typeof setTimeout>>(null)
 
   const handleChangeDoit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
-    setDoit(value)
+    const timeoutId = timeoutIdRef.current
+
+    // 타이머가 이미 설정되어있다면 timeoutIdRef.current값이 null이 아니라면
+    // 사용자가 입력할 때마다 설정된 타이머 해제
+    if(timeoutId) clearTimeout(timeoutId)
+
+    // 특정 시간이 지난 후 상태 업데이트 ( 타이머 설정 )
+    timeoutIdRef.current = setTimeout(() => {
+      setDoit(value)
+    }, DEBOUNCE_TIME)
   }
+
+
+  
 
   return (
     <section className={S.container} aria-labelledby="todos-title">
@@ -203,7 +220,7 @@ export default function NestedObject() {
             // onInput={handleUncontrolledInput}
 
             // 방법 2 제어 방식
-            value={doit}
+            defaultValue={doit} // e디바운싱하려면 defaultValue 넣어야함
             onChange={handleChangeDoit}
             type="text"
             name="doit" // 비제어 방식에 필요함
