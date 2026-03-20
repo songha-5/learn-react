@@ -1,4 +1,4 @@
-export interface ResponseDatas {
+export interface ResponseData {
   success: boolean
   status: number
   data: ImageData

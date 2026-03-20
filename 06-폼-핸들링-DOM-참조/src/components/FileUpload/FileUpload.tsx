@@ -1,18 +1,12 @@
 import { useRef, useState } from 'react'
-import type { ResponseDatas } from './type'
 import NickNameField from './parts/NickNameField'
+import type { ImageData } from './type'
 import FileUploadField from './parts/FileUploadField'
 import SaveButton from './parts/SaveButton'
-// import FileUploadResult from './parts/FileUploadResult'
+import FileUploadResult from './parts/FileUploadResult'
 import S from './FileUpload.module.css'
+import { uploadFile } from './parts/upload'
 
-const { VITE_IMGBB_URL: apiUrl, VITE_IMGBB_API_KEY: apiKey } = import.meta.env
-
-const getEndpoint = () => {
-  const url = new URL(apiUrl)
-  url.searchParams.append('key', apiKey)
-  return url.toString()
-}
 
 // --------------------------------------------------------------------------------------
 // 실습 가이드
@@ -57,12 +51,8 @@ export default function FileUpload() {
   // [상태]
   const [previewUrl, setPreviewUrl] = useState('')
   const [isUploading, setIsUploading] = useState(false)
-
-  // [재사용 함수]
-  // 업로드 파일 인풋 초기화
-  const restPreviewAndFile = () => {
-
-  }
+  // 업로드가 된 파일
+  const [uploadedData, setUploadedData] = useState<null|ImageData>(null)
 
   const handleUploadSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -70,35 +60,24 @@ export default function FileUpload() {
     // 현재 서버에 올라가는 중인지
     if (isUploading || isDisabled) return
 
+    // 업로드할 파일 검사
+    const file = fileRef.current?.files?.[0]
+    if(!file) throw new Error('업로드할 파일을 선택하세요.')
+    
+    const formData = new FormData()
+    formData.append('image', file)
+
     try {
       setIsUploading(true)
 
-      // 서버에 파일 업로드 요청
-      // 폼 데이터
-      const file = fileRef.current?.files?.[0]
-      if(!file) throw new Error('업로드할 파일을 선택하세요')
+      const result = await uploadFile(formData)
 
-      const formData = new FormData()
-      formData.append('image', file)
-
-      // 업로드할 파일
-      const response = await fetch(getEndpoint(), {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!response.ok) {
-        throw new Error('파일 업로드 실패')
+      if(result.success) {
+        // 업로드된 파일 데이터를 uploaded에 올리기
+        setUploadedData(result.data)
+        handleDeleteFile()
+        alert('파일 성공')
       }
-
-      // 업로드 파일 인풋 초기화
-      restPreviewAndFile()
-
-      const responseData: ResponseDatas = await response.json
-
-      console.log(responseData.data)
-
-      alert('파일 업도르 성공')
     } catch(error) {
       alert(error)
     } finally {
@@ -154,7 +133,7 @@ export default function FileUpload() {
           isDisabled={isUploading || isDisabled}
         />
       </form>
-      {/* <FileUploadResult /> */}
+      <FileUploadResult uploadedData={uploadedData} />
     </section>
   )
 }
