@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import S from './TodosCRUD.module.css'
 import type {Todo} from './type'
+import { formatDate } from '../../util/index'
 // --------------------------------------------------------------
 // 실습 가이드
 // --------------------------------------------------------------
@@ -153,8 +154,8 @@ export default function NestedObject() {
                 {todo.text}
                 <span className="sr-only">
                   {!todo.done
-                    ? `${createdAt} 생성`
-                    : `${updatedAt} 완료`}
+                    ? `${formatDate(createdAt)} 생성`
+                    : `${formatDate(updatedAt ?? '')} 완료`}
                 </span>
               </span>
               <div className={S.buttonGroup}>
