@@ -167,6 +167,22 @@ export default function NestedObject() {
     // }
   }
 
+  // 삭제하기
+  const deleteTodo = (todoId: Todo['id']) => {
+    // 삭제로직 ( 원본 배열을 변경하지 않고 복제본을 사용)
+
+    if(confirm('정말로 삭제하시겠습니까?')) {
+      // 삭제할 할 일의 인덱스를 찾기
+      // filter 권장
+      const deleteTodoIndex = todos.filter((todo) => todo.id !== todoId)
+      // 비권장
+      // const deleteTodoIndex = todos.findIndex((todo) => todo.id !== todoId)
+      // const nextTodos = [...todos].splice(deleteTodoIndex, 1)
+  
+      setTodos(deleteTodoIndex)
+    }
+
+  }
 
   const handleChangeDoit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -232,6 +248,7 @@ export default function NestedObject() {
                   type="button"
                   className={S.buttonDelete}
                   aria-label={`${todo.text} 삭제`}
+                  onClick={() => deleteTodo(todo.id)}
                 >
                   삭제
                 </button>
