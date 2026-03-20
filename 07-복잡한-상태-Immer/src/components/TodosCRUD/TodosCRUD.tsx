@@ -40,7 +40,7 @@ const INITAL_TODO: Todo[] = [
 export default function NestedObject() {
   const [todos, setTodos] = useState(INITAL_TODO)
 
-  // 입력필드 사용 방식 : 제어 vs 비제어
+  // 입력필드 사용 방식 : 제어 vs [비제어]
   const handledSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
