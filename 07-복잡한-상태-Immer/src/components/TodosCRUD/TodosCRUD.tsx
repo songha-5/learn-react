@@ -38,6 +38,8 @@ const INITAL_TODO: Todo[] = [
     },
   ]
 
+const getCurrentDateString = () => new Date().toISOString();
+
 export default function NestedObject() {
   const [todos, setTodos] = useState(INITAL_TODO)
 
@@ -79,7 +81,7 @@ export default function NestedObject() {
       text: doit,
       done: false,
       metadata: {
-        createdAt: new Date().toISOString(),
+        createdAt: getCurrentDateString,
         updatedAt: null
       }
     }
@@ -101,11 +103,52 @@ export default function NestedObject() {
     
   // =---
   
+
   // 방법 2
   const [doit, setDoit] = useState('')
 
   // 파생된 상태
   const isDisabled = 1 > doit.trim().length
+
+  // 할일 수정 (update)
+  const updateTodo = (todoId: Todo['id']) => {
+    // 해당 할 일의 완료 상태를 반전(toggle)
+    // 절대 뮤테이션 X / 새 객체를 생성해서 반환
+    // 리액트가 이전/현재 비교시 다르다고 인식해야 화면 변경
+    // nextTodos(복제본)
+
+    // const nextTodos: Todo[] = [...todos]
+    const nextTodos: Todo[] = todos.map((todo) => {
+      // 변경하고 싶은 할 일을 제외한 나머지는 그대로 내보내기(변경 필요없음)
+      if (todo.id !== todoId) return todo
+      // 변경하고싶은 할 일이라면 새로운 객체로 생성해서 반환
+      const nextTodo = {
+        ...todo,
+        done: !todo.done,
+        metadata: {
+          ...todo.metadata,
+          updateAt: getCurrentDateString()
+        }
+      }
+    })
+
+    // const todo = nextTodos.find((todo) => todo.id === todoId)
+
+    // 안에 복사하고 복사하고 복사해야함
+    // if(todo) {
+    //   const changeTodo = {
+    //     ...todo,
+    //     done: !todo.done,
+    //     metadata: {
+    //       ...todo.metadata,
+    //       updatedAt: getCurrentDateString()
+    //     }
+    //   }
+
+    //   console.log(changeTodo)
+    // }
+  }
+
 
   const handleChangeDoit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -163,6 +206,7 @@ export default function NestedObject() {
                   type="button"
                   className={S.buttonToggle}
                   aria-pressed={todo.done}
+                  onClick={() => updateTodo(todo.id)}
                 >
                   {todo.done ? '취소' : '완료'}
                 </button>
