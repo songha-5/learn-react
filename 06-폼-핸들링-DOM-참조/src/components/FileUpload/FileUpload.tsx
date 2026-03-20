@@ -105,11 +105,16 @@ export default function FileUpload() {
 
   // 미리보기 이미지 및 파일 삭제
   const handleDeleteFile = () => {
+
     // 미리보기 이미지 초기화
     if(previewUrl) {
       URL.revokeObjectURL(previewUrl)
       setPreviewUrl('')
     }
+
+    // 파일 선택 시 uploadedData 상태 초기화
+    if (uploadedData) setUploadedData(null)
+
     // 파일의 소스 삭제
     const file = fileRef.current
     if(file) file.value = ''
