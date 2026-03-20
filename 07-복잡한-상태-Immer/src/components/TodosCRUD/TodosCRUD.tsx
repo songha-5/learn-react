@@ -47,6 +47,9 @@ export default function NestedObject() {
   const doitRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
 
+
+  
+
   // 입력필드 사용 방식 : 제어 vs [비제어]
   const handledSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -82,7 +85,7 @@ export default function NestedObject() {
     setTodos((prev) => [...prev, newTodo])
   }
 
-  const handleUncontrolledInput = (e: React.InputEvent<HTMLInputElement>) => {
+  /* const handleUncontrolledInput = (e: React.InputEvent<HTMLInputElement>) => {
     const input = e.currentTarget.value
     const addButton = addButtonRef.current
     
@@ -92,6 +95,20 @@ export default function NestedObject() {
     } else {
       addButton?.setAttribute('aria-disabled', 'true')
     }
+  } */
+
+    
+  // =---
+  
+  // 방법 2
+  const [doit, setDoit] = useState('')
+
+  // 파생된 상태
+  const isDisabled = 1 > doit.trim().length
+
+  const handleChangeDoit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setDoit(value)
   }
 
   return (
@@ -104,14 +121,22 @@ export default function NestedObject() {
         <form className={S.form} onSubmit={handledSubmit}>
           <input
             ref={doitRef}
-            onInput={handleUncontrolledInput}
+            // 방법 1 비제어방식
+            // onInput={handleUncontrolledInput}
+
+            // 방법 2 제어 방식
+            value={doit}
+            onChange={handleChangeDoit}
             type="text"
             name="doit" // 비제어 방식에 필요함
             className={S.input}
             aria-label="할 일"
             placeholder="오늘 할 일 입력"
           />
-          <button ref={addButtonRef} type="submit" className={S.buttonAdd} aria-disabled={true}>
+          <button ref={addButtonRef} type="submit" className={S.buttonAdd} 
+            // 비제어방식
+            aria-disabled={isDisabled}
+          >
             추가
           </button>
         </form>
