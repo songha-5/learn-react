@@ -82,6 +82,18 @@ export default function NestedObject() {
     setTodos((prev) => [...prev, newTodo])
   }
 
+  const handleUncontrolledInput = (e: React.InputEvent<HTMLInputElement>) => {
+    const input = e.currentTarget.value
+    const addButton = addButtonRef.current
+    
+    // if 조건문
+    if (input.trim().length > 0) {
+      addButton?.setAttribute('aria-disabled', 'false')
+    } else {
+      addButton?.setAttribute('aria-disabled', 'true')
+    }
+  }
+
   return (
     <section className={S.container} aria-labelledby="todos-title">
       <header className={S.header}>
@@ -92,17 +104,7 @@ export default function NestedObject() {
         <form className={S.form} onSubmit={handledSubmit}>
           <input
             ref={doitRef}
-            onInput={(e) => {
-              const input = e.currentTarget.value
-              const addButton = addButtonRef.current
-              console.log(input)
-
-              if(input.trim().length > 0) {
-                addButton?.setAttribute('aria-disabled', 'false')
-              } else {
-                addButton?.setAttribute('aria-disabled', 'true')
-              }
-            }}
+            onInput={handleUncontrolledInput}
             type="text"
             name="doit" // 비제어 방식에 필요함
             className={S.input}
