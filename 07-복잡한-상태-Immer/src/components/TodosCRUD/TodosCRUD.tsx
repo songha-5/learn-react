@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import S from './TodosCRUD.module.css'
-
+import type {Todo} from './type'
 // --------------------------------------------------------------
 // 실습 가이드
 // --------------------------------------------------------------
@@ -14,9 +15,8 @@ import S from './TodosCRUD.module.css'
 // - [A11y, 접근성] 초점 이동, 버튼 비활성화 등 사용자 경험 향상 고려
 // --------------------------------------------------------------
 
-export default function NestedObject() {
 
-  const todos = [
+const INITAL_TODO: Todo[] = [
     {
       id: 'todo-1773533484499', 
       text: '중첩된 객체 합성',
@@ -37,6 +37,33 @@ export default function NestedObject() {
     },
   ]
 
+export default function NestedObject() {
+  const [todos, setTodos] = useState(INITAL_TODO)
+
+  // 입력필드 사용 방식 : 제어 vs 비제어
+  const handledSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const doit = formData.get('doit')
+    console.log(doit)
+    if(doit) addTodo(doit)
+    console.log('핸들 클릭')
+  }
+
+  const addTodo = (doit: Todo['text']) => {
+    // 새로운 할 일 객체
+    const newTodo: Todo = {
+      id: `todo-${Date.now()}`,
+      text: doit,
+      done: false,
+      metadata: {
+        createdAt: new Date().toISOString(),
+        updatedAt: null
+      }
+    }
+    setTodos((prev) => [...prev, newTodo])
+  }
+
   return (
     <section className={S.container} aria-labelledby="todos-title">
       <header className={S.header}>
@@ -44,9 +71,10 @@ export default function NestedObject() {
           객체/배열 <abbr title="Create Read Update Delete">CRUD</abbr> 실습
         </h2>
 
-        <form className={S.form}>
+        <form className={S.form} onSubmit={handledSubmit}>
           <input
             type="text"
+            name="doit" // 비제어 방식에 필요함
             className={S.input}
             aria-label="할 일"
             placeholder="오늘 할 일 입력"
