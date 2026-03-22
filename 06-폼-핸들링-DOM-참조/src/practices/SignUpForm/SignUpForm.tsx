@@ -21,7 +21,7 @@ export default function SignUpForm() {
   const isValid = Object.values(formData).every(Boolean)
 
 
-  const sandFormData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSandFormData = (e: React.ChangeEvent<HTMLInputElement>) => {
     // input값 반영
     const { value, name } = e.target
     setFormData({
@@ -30,12 +30,16 @@ export default function SignUpForm() {
     })
   }
 
+  const handleOnSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log(isValid)
+  }
 
   return (
     <section className={S.container}>
       <h2 className={S.title}>회원가입</h2>
 
-      <form className={S.form} onSubmit={(e) => e.preventDefault()}>
+      <form className={S.form} onSubmit={handleOnSubmit}>
         <div className={S.field}>
           <label htmlFor={usernameId} className={S.label}>
             아이디 (한글 가능)
@@ -43,7 +47,7 @@ export default function SignUpForm() {
           <input
             type="text"
             value={formData.username}
-            onChange={sandFormData}
+            onChange={handleSandFormData}
             onCompositionStart={() => setIsComposing(true)}
             onCompositionEnd={() => setIsComposing(false)}
             id={usernameId}
@@ -66,7 +70,7 @@ export default function SignUpForm() {
           <input
             type="email"
             value={formData.email}
-            onChange={sandFormData}
+            onChange={handleSandFormData}
             onCompositionStart={() => setIsComposing(true)}
             onCompositionEnd={() => setIsComposing(false)}
             id={emailId}
@@ -89,7 +93,7 @@ export default function SignUpForm() {
           <input
             type="password"
             value={formData.password}
-            onChange={sandFormData}
+            onChange={handleSandFormData}
             onCompositionStart={() => setIsComposing(true)}
             onCompositionEnd={() => setIsComposing(false)}
             id={passwordId}
@@ -108,6 +112,7 @@ export default function SignUpForm() {
         <button
           type="submit"
           className={S.submitBtn}
+          aria-disabled={!isValid}
         >
           {'가입' /* 또는 '처리 중...' */}
         </button>

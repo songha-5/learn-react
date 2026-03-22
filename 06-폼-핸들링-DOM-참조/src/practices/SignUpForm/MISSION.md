@@ -3,15 +3,15 @@
 **목표**: 객체형 State를 활용한 제어 컴포넌트 구현 및 기초 접근성 설정
 
 1. **상태 구성 (State)**  
-    - `username`, `email`, `password`를 속성으로 갖는 단일 객체 `formData` 상태를 생성합니다.
-    - 한글 입력 시 발생하는 중복 제출 방지를 위해 **`isCompositing`** 상태를 관리합니다.
+    - **완료** `username`, `email`, `password`를 속성으로 갖는 단일 객체 `formData` 상태를 생성합니다.
+    - **완료** 한글 입력 시 발생하는 중복 제출 방지를 위해 **`isCompositing`** 상태를 관리합니다.
 2. **공통 핸들러 (Handler)**  
-    - `e.target.name`과 `e.target.value`를 구조 분해 할당으로 추출합니다.
-    - **계산된 속성 이름**(`[name]: value`)을 사용하여 모든 입력 필드를 하나의 `handleChange` 함수로 처리합니다.
+    - **완료** `e.target.name`과 `e.target.value`를 구조 분해 할당으로 추출합니다.
+    - **완료** **계산된 속성 이름**(`[name]: value`)을 사용하여 모든 입력 필드를 하나의 `handleChange` 함수로 처리합니다.
 3. **UI 및 접근성 (A11y)**  
-    - 모든 `input`은 `id`와 `htmlFor`를 통해 대응하는 `label`과 엄격하게 연결되어야 합니다.
+    - **완료** 모든 `input`은 `id`와 `htmlFor`를 통해 대응하는 `label`과 엄격하게 연결되어야 합니다.
     - 모든 필드의 값이 비어있지 않은지 확인하는 **`isValid` 파생 변수**를 생성합니다.
-    - 제출 버튼에 `aria-disabled={!isValid}` 속성을 적용하여 보조 공학 기기에 상태를 알립니다.
+    - **완료** 제출 버튼에 `aria-disabled={!isValid}` 속성을 적용하여 보조 공학 기기에 상태를 알립니다.
 
 <br />
 
