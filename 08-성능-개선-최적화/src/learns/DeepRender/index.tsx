@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { createElement, useEffect, useState } from 'react'
 import { formatTime } from './util/formatTime'
 import GrandFather from './parts/GrandFather'
 import S from './style.module.css'
 
+const getCurrentDate = () => new Date()
+
 export default function DeepRender() {
-  const [time, setTime] = useState(new Date())
+  const [time, setTime] = useState(getCurrentDate)
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -28,6 +31,10 @@ export default function DeepRender() {
       </section>
 
       <div className={S.counterSection}>
+        {/* 매번 렌더링 할 때마다 리액트 엘리먼트(객체) 생성 */}
+        {/* { createElement(GrandFather, { count, setCount })} */}
+        {/* <GrandFather count={count} setCount={setCount} /> */}
+        
         <GrandFather count={count} setCount={setCount} />
       </div>
     </div>
