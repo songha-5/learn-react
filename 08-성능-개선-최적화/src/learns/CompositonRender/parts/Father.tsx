@@ -4,7 +4,7 @@ import S from './style.module.css'
 
 const iconSize = 20
 
-export default function Father() {
+export default function Father({children}: {children: React.ReactNode}) {
   
   console.log('%cFather 렌더링', 'color: #3a9874')
 
@@ -15,7 +15,9 @@ export default function Father() {
         중간에 낀 파더
       </h3>
       <p>나는 Props도 State도 없지만 부모(상위) 컴포넌트가 렌더링되면 다시 그려집니다.</p>
-      <Child />
+      {/* 직접 컴포넌트를 안넣고 children을 넣을것임 */}
+      {children}
+      {/* <Child /> */}
     </div>
   )
 }

@@ -1,18 +1,15 @@
 import grandFatherImage from '@/assets/icons/grand-father.png'
 import Father from './Father'
 import S from './style.module.css'
+import { useState } from 'react'
 
 // 렌더링 지연 시간(ms)
 export const blockThreadTime = 0.2
 
 const iconSize = 22
 
-interface Props {
-  count: number
-  setCount: React.Dispatch<React.SetStateAction<number>>
-}
-
-export default function GrandFather({ count, setCount }: Props) {
+export default function GrandFather({children}: {children: React.ReactNode}) {
+  const [count, setCount] = useState(0)
 
   console.log('%cGrandFather 렌더링', 'color: #349bf0')
 
@@ -26,7 +23,7 @@ export default function GrandFather({ count, setCount }: Props) {
         <button type="button" aria-label='카운트 1증가' onClick={() => setCount(count + 1)}>
           카운트 ↑
         </button>
-        <Father />
+        {children}
       </div>
     </section>
   )
