@@ -1,6 +1,8 @@
 import grandFatherImage from '@/assets/icons/grand-father.png'
 import Father from './Father'
 import S from './style.module.css'
+import { memo } from 'react'
+import GrandFather from '@/learns/DeepRender/parts/GrandFather'
 
 // 렌더링 지연 시간(ms)
 export const blockThreadTime = 0.2
@@ -12,7 +14,7 @@ interface Props {
   setCount: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function GrandFather({ count, setCount }: Props) {
+function GrandFather({ count, setCount }: Props) {
 
   console.log('%cGrandFather 렌더링', 'color: #349bf0')
 
@@ -31,3 +33,12 @@ export default function GrandFather({ count, setCount }: Props) {
     </section>
   )
 }
+
+// memo propsAreEqual
+// 잘못하면 버그가 되니 신중하게 사용하기
+export default memo(GrandFather, (prevProps, nextProps) => {
+  // return true -> re-rander X
+  // return false -> re-rander O 
+  // 특정 속성만 비교해서, 리턴되게
+  return prevProps.count === nextProps.count
+})

@@ -1,10 +1,10 @@
-import { CompositionRender, DeepRender } from '@/learns'
+import { CompositionRender, DeepRender, MemoizationRender } from '@/learns'
 import S from './style.module.css'
 
 export default function App() {
   return (
     <div className={S.container}>
-      <CompositionRender />
+      <MemoizationRender />
     </div>
   )
 }
