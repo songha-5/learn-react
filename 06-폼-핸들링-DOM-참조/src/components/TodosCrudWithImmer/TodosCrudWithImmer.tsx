@@ -1,5 +1,6 @@
 import { useState, useRef, useId } from 'react'
 import S from './TodosCurdWithImmer.module.css'
+import { useImmer } from 'use-immer'
 
 interface Todo {
   id: string
@@ -33,13 +34,15 @@ const INITIAL_TODOS: Todo[] = [
 ]
 
 export default function TodosCrudWithImmer() {
-  const [todos, setTodos] = useState<Todo[]>(INITIAL_TODOS)
+  const [todos, setTodos] = useImmer(INITIAL_TODOS)
 
   const [doIt, setDoIt] = useState('')
   const todoInputRef = useRef<HTMLInputElement>(null)
 
   const addTodo = () => {
-    const newTodo: Todo = {
+
+    // 할 일 추가
+    /* const newTodo: Todo = {
       id: `todo-${Date.now()}`,
       text: doIt,
       done: false,
@@ -49,13 +52,41 @@ export default function TodosCrudWithImmer() {
       },
     }
 
-    setTodos((prev) => [...prev, newTodo])
+    setTodos((prev) => [...prev, newTodo]) */
+
+    setTodos((draft) => {
+      // draft초안 : 뮤테이션(변이) 방식을 적용할 수 있는 프록시(우회)객체
+      const newTodo = {
+        id: `todo-${Date.now()}`,
+        text: doIt,
+        done: false,
+        metadata: {
+          createdAt: getCurrentDate(),
+          updatedAt: null
+        }
+      }
+      draft.push(newTodo)
+    })
+
+    // 입력 필드 초기화 & 초점 이동
     setDoIt('')
     todoInputRef.current?.focus()
   }
 
   const toggleTodo = (todoId: Todo['id']) => {
-    setTodos((prev) =>
+    
+    // Immer사용예시코드
+    setTodos((draft) => {
+      // 초안(대체자)배열에서 todoId와 일치하는 아이템 찾기
+      const item = draft.find((item) => item.id === todoId)
+
+      if (item) {
+        item.done = !item.done
+        item.metadata.updatedAt = getCurrentDate()
+      }
+    })
+
+    /* setTodos((prev) =>
       prev.map((todo) =>
         todo.id === todoId
           ? {
@@ -68,12 +99,20 @@ export default function TodosCrudWithImmer() {
             }
           : todo,
       ),
-    )
+    ) */
   }
 
   const deleteTodo = (todoId: Todo['id']) => {
+    setTodos((draft) => {
+      const index = draft.findIndex((item) => item.id === todoId)
+      if (index > -1) {
+        draft.splice(index, 1)
+      }
+    }
+    )
+
     // if (confirm('정말 삭제하시겠습니까?')) {
-      setTodos((prev) => prev.filter((todo) => todo.id !== todoId))
+      // setTodos((prev) => prev.filter((todo) => todo.id !== todoId))
     // }
   }
 
