@@ -1,6 +1,7 @@
 import { Switch } from '@/components'
 import { blockThread } from '@/util/blockThread'
 import S from '../SmartHomePanel.module.css'
+import { memo } from 'react'
 
 interface DeviceItemProps {
   name: string
@@ -10,7 +11,7 @@ interface DeviceItemProps {
 
 const delay = 50
 
-export function DeviceItem({ name, status, onToggle }: DeviceItemProps) {
+export const DeviceItem = memo(function DeviceItem({ name, status, onToggle }: DeviceItemProps) {
   blockThread(delay)
 
   console.log(`%c🔌 DeviceItem ${name} 렌더링`, 'color: #5856d6; font-weight: 500')
@@ -28,4 +29,4 @@ export function DeviceItem({ name, status, onToggle }: DeviceItemProps) {
       </div>
     </li>
   )
-}
+})

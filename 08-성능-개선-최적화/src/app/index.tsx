@@ -1,10 +1,14 @@
 import { MemoizationCallback, MemoizationValue } from '@/learns'
 import S from './style.module.css'
+import { SmartHomePanel } from '@/practices'
+import { DeviceItem } from '@/practices/PerformanceCheck/parts/DeviceItem'
 
 export default function App() {
   return (
     <div className={S.container}>
-      <MemoizationValue />
+      <SmartHomePanel>
+        <DeviceItem />
+      </SmartHomePanel>
     </div>
   )
 }
