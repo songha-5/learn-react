@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import S from './style.module.css'
 import { useToggle, useInput } from '@/hooks'
 
@@ -15,14 +15,27 @@ export default function ReusingLogics() {
 
   // 중복 로직 3: Input (사용자 이름용)
   // 인풋 로직 재사용 적용
-  const nameInput = useInput('')  
+  const { props: nameProps, methods: {reset: nameReset} } = useInput('')  
+  
   // 인풋 로직 재사용 적용
   // 중복 로직 4: Input (이메일용)
-  const emailInput = useInput('')
+  const { 
+    props: emailProps, 
+    methods: {
+      reset: emailReset, 
+      focus: emailFocus,
+      select: emailSelect
+    }
+  } = useInput('')
+  
+  // 방법 2 순서 고정 방법
+  // const [nameInputProps, nameInputMethods] = useInput('')
+  // const [emailInputProps, emailInputMethods] = useInput('')
+
 
   const handleResetAll = () => {
-    nameInput.reset()
-    emailInput.reset()
+    nameReset()
+    emailReset()
   }
 
   return (
@@ -43,8 +56,7 @@ export default function ReusingLogics() {
           <input
             id="user-name"
             type="text"
-            value={nameInput.value}
-            onChange={nameInput.handleChange}
+            {...nameProps}
             placeholder="이름을 입력하세요"
             className={S.input}
           />
@@ -57,8 +69,7 @@ export default function ReusingLogics() {
           <input
             id="user-email"
             type="email"
-            value={emailInput.value}
-            onChange={emailInput.handleChange}
+            {...emailProps}
             placeholder="이메일을 입력하세요"
             className={S.input}
           />
@@ -66,10 +77,10 @@ export default function ReusingLogics() {
 
         <div className={S.resultBox}>
           <p className={S.resultText}>
-            입력된 이름: <span>{nameInput.value ?? '없음'}</span>
+            입력된 이름: <span>{nameProps.value ?? '없음'}</span>
           </p>
           <p className={S.resultText}>
-            입력된 이메일: <span>{emailInput.value ?? '없음'}</span>
+            입력된 이메일: <span>{emailProps.value ?? '없음'}</span>
           </p>
         </div>
 
@@ -84,7 +95,10 @@ export default function ReusingLogics() {
           </button>
           <button
             type="button"
-            onClick={setIsDarkMode}
+            onClick={() => {
+              setIsDarkMode()
+              emailFocus()
+            }}
             className={S.buttonOutline}
           >
             {isDarkMode ? '라이트 모드' : '다크 모드'}
