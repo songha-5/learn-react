@@ -8,13 +8,18 @@ export function useFetch<T>(url: string) {
 
   // 이펙트 (외부 시스템과 리액트 동기화)
   useEffect(() => {
+
+    // 경쟁 상태
+    const controller = new AbortController()
+    const { signal } = controller
+
     // 데이터 페칭
     const fetchData = async () => {
       setIsLoading(true)
       setError(null)
 
       try {
-        const response = await fetch(url)
+        const response = await fetch(url, { signal })
         if (!response.ok) {
           throw new Error(`네트워크 요청이 실패했습니다. 상태코드 : ${response.status}`)
         }
@@ -23,9 +28,11 @@ export function useFetch<T>(url: string) {
         setData(responseData)
       } catch(error) {
         const isError = error instanceof Error
+        if (isError && error.name !== 'AbortError') return
         setError(isError ? error : new Error('알 수 없는 에러가 발생했습니다.'))
       } finally {
-        setIsLoading(false)
+        // 만약 이 통신이 중간에 강제 취소된 게 아니라면(!), 그때만 로딩을 꺼라!
+        if (!signal.aborted) setIsLoading(false)
       }
     }
 
