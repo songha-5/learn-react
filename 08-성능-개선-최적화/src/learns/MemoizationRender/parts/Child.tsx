@@ -1,8 +1,8 @@
+import { memo } from 'react'
 import { blockThread } from '@/util/blockThread'
 import childImage from '@/assets/icons/child.png'
 import { blockThreadTime } from './GrandFather'
 import S from './style.module.css'
-import { memo } from 'react'
 
 const iconSize = 18
 

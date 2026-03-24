@@ -1,4 +1,4 @@
-import { CompositionRender, DeepRender, MemoizationCallback, MemoizationRender } from '@/learns'
+import { MemoizationCallback } from '@/learns'
 import S from './style.module.css'
 
 export default function App() {

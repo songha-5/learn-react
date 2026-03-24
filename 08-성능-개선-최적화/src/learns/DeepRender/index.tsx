@@ -8,10 +8,9 @@ const getCurrentDate = () => new Date()
 export default function DeepRender() {
   const [time, setTime] = useState(getCurrentDate)
 
-
   useEffect(() => {
     const timer = setInterval(() => {
-      setTime(new Date())
+      setTime(getCurrentDate())
     }, 1000)
 
     return () => {
@@ -20,6 +19,8 @@ export default function DeepRender() {
   }, [])
 
   const [count, setCount] = useState(0)
+
+  // console.log('DeepRender 렌더링')
 
   return (
     <div className={S.container}>
@@ -31,11 +32,9 @@ export default function DeepRender() {
       </section>
 
       <div className={S.counterSection}>
-        {/* 매번 렌더링 할 때마다 리액트 엘리먼트(객체) 생성 */}
-        {/* { createElement(GrandFather, { count, setCount })} */}
+        {/* 매번 렌더링 할 때마다 리액트 엘리먼트(객체) 생성 (렌더링될 때마다 다른 객체: 다시 렌더링하는 이유) */}
+        { createElement(GrandFather, { count, setCount })}
         {/* <GrandFather count={count} setCount={setCount} /> */}
-        
-        <GrandFather count={count} setCount={setCount} />
       </div>
     </div>
   )
