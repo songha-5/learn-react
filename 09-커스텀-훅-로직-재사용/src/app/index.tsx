@@ -1,10 +1,11 @@
-import MovieSearch from '@/practices/MovieSearch-completed'
+// import MovieSearch from '@/practices/MovieSearch-completed'
 import S from './style.module.css'
+import { HooksOfRules } from '@/learns'
 
 export default function App() {
   return (
     <div className={S.container}>
-      <MovieSearch />
+      <HooksOfRules />
     </div>
   )
 }
