@@ -4,6 +4,8 @@ import S from './PostDetailSection.module.css'
 import { useFetch } from '@/hooks'
 import { getEndpoint } from './getEndPoint'
 import type { Post, ResponseCommentsData, ResponsePostData, ResponseUserPostsData } from './types/type'
+import { FetchStatus } from '@/components'
+// import Post from './post'
 
 // API 참고
 // - https://koreandummyjson.vercel.app/docs/posts
@@ -34,41 +36,6 @@ export default function PostDetailSection() {
   })
 
   const post = postRespons.data?.post // 서버에서 가져온 포스트 데이터
-
-  useEffect(() => {
-    const controller = new AbortController()
-    const { signal } = controller
-
-    const fetchPost = async () => {
-      setIsPostLoading(true)
-      setPostError(null)
-    
-      try {
-        const response = await fetch(
-          getEndpoint(`/api/posts/${postId}`), 
-          { signal },
-        )
-    
-        if (!response.ok) throw new Error('포스트를 불러오지 못했습니다.')
-    
-        const responseData: ResponsePostData = (await response.json())
-        setPost(responseData.post)
-      } catch (error) {
-        const isError = error instanceof Error
-        if (isError && error.name === 'AbortError') return
-        const errorMessage = isError ? error.message : '알 수 없는 에러 발생' 
-        setPostError(errorMessage)
-      } finally {
-        if (!signal.aborted) setIsPostLoading(false)
-      }
-    }
-    
-    fetchPost()
-    
-    return () => {
-      controller.abort()
-    }
-  }, [postId])
 
   // 중복 로직 2: 댓글 목록
   // 댓글 목록
@@ -128,8 +95,12 @@ export default function PostDetailSection() {
 
       <div className={S.mainLayout}>
         <section className={S.contentArea}>
+          <FetchStatus
+            isLoading={postRespons.isLoading}
+            error={postRespons.error}
+          />
           <article className={S.postCard}>
-            {postRespons.isLoading ? (
+            {/* {postRespons.isLoading ? (
               <div role="status" className={S.skeleton}>
                 포스트 로딩 중...
               </div>
@@ -151,12 +122,17 @@ export default function PostDetailSection() {
                   <p className={S.postContent}>{post.content}</p>
                 </>
               )
-            )}
+            )} */}
+            {/* <Post post={postRespons.data?.post} /> */}
+            <p>포스트 요청 로딩, 에러, 데이터 처리</p>
           </article>
-
           <article className={S.commentSection}>
             <h3 className={S.sectionTitle}>댓글 ({comments?.length})</h3>
-            {commentsResponse.isLoading ? (
+            <FetchStatus
+              isLoading={postRespons.isLoading}
+              error={postRespons.error}
+            />
+            {/* {commentsResponse.isLoading ? (
               <div role="status" className={S.skeleton}>
                 댓글 로딩 중...
               </div>
@@ -183,14 +159,19 @@ export default function PostDetailSection() {
                   </li>
                 ))}
               </ul>
-            )}
+            )} */}
+            <p>포스트 댓글 목록 요청 로딩, 에러, 데이터 처리</p>
           </article>
         </section>
 
         <aside className={S.sidebar}>
           <article className={S.sidebarCard}>
             <h3 className={S.sectionTitle}>작성자의 다른 포스트</h3>
-            {userPostsResponse.isLoading ? (
+            <FetchStatus
+              isLoading={postRespons.isLoading}
+              error={postRespons.error}
+            />
+            {/* {userPostsResponse.isLoading ? (
               <div className={S.skeleton}>포스트 리스트 로딩 중...</div>
             ) : userPostsResponse.error ? (
               <div role="alert" className={S.errorBox}>
@@ -225,7 +206,8 @@ export default function PostDetailSection() {
                   <p className={S.empty}>다른 포스트는 없습니다.</p>
                 )}
               </ul>
-            )}
+            )} */}
+            <p>포스트 작성자의 다른 포스트 목록 요청, 로딩 에러, 데이터 처리</p>
           </article>
         </aside>
       </div>
