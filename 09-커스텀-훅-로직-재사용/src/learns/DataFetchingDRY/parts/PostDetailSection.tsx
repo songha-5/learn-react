@@ -4,7 +4,8 @@ import S from './PostDetailSection.module.css'
 import { useFetch } from '@/hooks'
 import { getEndpoint } from './getEndPoint'
 import type { Post, ResponseCommentsData, ResponsePostData, ResponseUserPostsData } from './types/type'
-import { FetchStatus } from '@/components'
+import { FetchStatus, PrintError, SkeletonList } from '@/components'
+import Comments from './Comments'
 // import Post from './post'
 
 // API 참고
@@ -98,6 +99,7 @@ export default function PostDetailSection() {
           <FetchStatus
             isLoading={postRespons.isLoading}
             error={postRespons.error}
+            loadingFallback={<SkeletonList />}
           />
           <article className={S.postCard}>
             {/* {postRespons.isLoading ? (
@@ -132,6 +134,9 @@ export default function PostDetailSection() {
               isLoading={postRespons.isLoading}
               error={postRespons.error}
             />
+            <Comments data={comments}/>
+
+
             {/* {commentsResponse.isLoading ? (
               <div role="status" className={S.skeleton}>
                 댓글 로딩 중...
@@ -169,8 +174,20 @@ export default function PostDetailSection() {
             <h3 className={S.sectionTitle}>작성자의 다른 포스트</h3>
             <FetchStatus
               isLoading={postRespons.isLoading}
+              loadingFallback={<SkeletonList count={1} />}
               error={postRespons.error}
-            />
+              // render(function) props
+              errorFallback={(message) => {
+                console.log({ message })
+                return (
+                  <PrintError
+                    message={message}
+                    onRetry={postRespons.refetch}
+                  />
+                )
+              }}
+            >
+            </FetchStatus>
             {/* {userPostsResponse.isLoading ? (
               <div className={S.skeleton}>포스트 리스트 로딩 중...</div>
             ) : userPostsResponse.error ? (

@@ -1,34 +1,28 @@
-import S from './BookDetailSection.module.css'
+import { formatDate } from '@/util'
+import S from './PostDetailSection.module.css'
+import type { Comment } from './types/type'
 
 interface Props {
-  data: Comment[]
+  data?: Comment[]
 }
 
-export default function Comments({data}: Props) {
-  <ul className={S.otherPostList}>
-    {data ? (
-      data.map((userPost) => (
-        <li key={userPost.id} className={S.otherPostItem}>
-          <a
-            href=""
-            role="button"
-            onClick={(e) => {
-              e.preventDefault()
-              setPostId(userPost.id)
-            }}
-          >
-            <span className={S.otherPostTitle}>
-              {userPost.title} <span className="sr-only">포스트로 이동</span>
-            </span>
-            <time
-              dateTime={userPost.createdAt}
-              className={S.otherPostDate}
-            >
-              {formatDate(userPost.createdAt)}
+export default function Comments({ data }: Props) {
+
+  if (!data) return null
+
+  return (
+    <ul className={S.commentList}>
+      {data?.map((comment) => (
+        <li key={comment.commentId} className={S.commentItem}>
+          <div className={S.commentHeader}>
+            <span className={S.commentUser}>댓글 #{comment.commentId}</span>
+            <time dateTime={comment.createdAt} className={S.commentDate}>
+              {formatDate(comment.createdAt)}
             </time>
-          </a>
+          </div>
+          <p className={S.commentText}>{comment.content}</p>
         </li>
-      ))
-    )
+      ))}
     </ul>
+  )
 }
