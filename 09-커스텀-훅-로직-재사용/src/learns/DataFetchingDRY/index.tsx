@@ -4,7 +4,7 @@ import PostDetailSection from "./parts/PostDetailSection"
 export default function DataFetchingDRY() {
   return (
     <>
-      {/* <PostDetailSection /> */}
+      <PostDetailSection />
       <BookDetailSection />
     </>
   )
