@@ -1,7 +1,7 @@
-import { useId } from 'react'
+import { useEffect, useId, useState } from 'react'
 
 import { FetchStatus } from '@/components'
-import { useFetch, useInput } from '@/hooks'
+import { useDebounce, useFetch, useInput } from '@/hooks'
 
 import type { ResponseMovieData } from './api/type'
 import { getTmdbQuery, tmdbFetchOptions } from './api/getTmdbQuery'
@@ -17,10 +17,13 @@ export default function MovieSearch() {
 
   // useInput 훅을 사용해 사용자 입력 값을 상태로 관리 (로직 재사용)
   const searchInput = useInput('')
+  const searchTerm = searchInput.props.value
+
+  const [debounceSearch] = useDebounce(searchTerm)
 
   // useFetch 훅을 사용해 서버에 데이터 요청 (로직 재사용)
   const { isLoading, error, data, refetch } = useFetch<ResponseMovieData>({
-    url: getTmdbQuery(searchInput.props.value), // 인기 또는 검색된 영화 목록 요청 엔드포인트 반환
+    url: getTmdbQuery(debounceSearch), // 인기 또는 검색된 영화 목록 요청 엔드포인트 반환
     options: tmdbFetchOptions,
   })
 
