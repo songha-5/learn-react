@@ -1,18 +1,11 @@
-import { useContext } from 'react'
 import grandFatherIcon from '../icons/grand-father.png'
-import { FamilyContext } from '../index'
 import Father from './Father'
 import S from '../style.module.css'
+import { useFamily } from '@/_/contexts/familyContext/context'
 
 export default function GrandFather() {
 
-  const familyContextValue = useContext(FamilyContext)
-
-  if (!familyContextValue) {
-    throw new Error('familyContextValue가 존재하지 않습니다.')
-  }
-
-  const { name, email, checked } = familyContextValue
+  const { name, email, checked } = useFamily()
 
   return (
     <article>

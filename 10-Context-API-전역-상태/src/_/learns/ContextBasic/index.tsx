@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import GrandFather from './parts/GrandFather'
 import S from './style.module.css'
-import { FamilyContext, type FamilyContextValue } from '@/_/contexts/familyContext'
+import { FamilyContext, type FamilyContextValue } from '@/_/contexts/familyContext/context'
 
 
 export default function ContextBasic() {

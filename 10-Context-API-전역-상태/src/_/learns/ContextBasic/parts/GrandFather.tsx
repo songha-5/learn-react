@@ -2,7 +2,7 @@ import grandFatherIcon from '../icons/grand-father.png'
 import Father from './Father'
 import S from '../style.module.css'
 import { useContext } from 'react'
-import { FamilyContext } from '@/_/contexts/familyContext'
+import { FamilyContext } from '@/_/contexts/familyContext/context'
 
 type DispatchAction<T> = React.Dispatch<React.SetStateAction<T>>
 
