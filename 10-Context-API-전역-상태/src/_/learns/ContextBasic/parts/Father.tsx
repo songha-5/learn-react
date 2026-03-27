@@ -1,5 +1,4 @@
 import fatherIcon from '../icons/father.png'
-import type { FamilyProps } from './GrandFather'
 import Child from './Child'
 import S from '../style.module.css'
 

@@ -2,7 +2,7 @@ import grandFatherIcon from '../icons/grand-father.png'
 import Father from './Father'
 import S from '../style.module.css'
 import { useContext } from 'react'
-import { FamilyContext } from '..'
+import { FamilyContext } from '@/_/contexts/familyContext'
 
 type DispatchAction<T> = React.Dispatch<React.SetStateAction<T>>
 
@@ -15,7 +15,7 @@ export interface FamilyProps {
   setChecked: DispatchAction<boolean>
 }
 
-export default function GrandFather(props: FamilyProps) {
+export default function GrandFather() {
 
   const contextValue = useContext(FamilyContext)
 
@@ -39,7 +39,7 @@ export default function GrandFather(props: FamilyProps) {
         </p>
       </div>
 
-      <Father {...props} />
+      <Father/>
     </article>
   )
 }
