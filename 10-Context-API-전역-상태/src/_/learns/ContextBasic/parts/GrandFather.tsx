@@ -1,6 +1,8 @@
 import grandFatherIcon from '../icons/grand-father.png'
 import Father from './Father'
 import S from '../style.module.css'
+import { useContext } from 'react'
+import { FamilyContext } from '..'
 
 type DispatchAction<T> = React.Dispatch<React.SetStateAction<T>>
 
@@ -15,6 +17,8 @@ export interface FamilyProps {
 
 export default function GrandFather(props: FamilyProps) {
 
+  const contextValue = useContext(FamilyContext)
+
   return (
     <article>
       <h2 className={`${S.familyTitle} ${S.grandFather}`}>
@@ -25,13 +29,13 @@ export default function GrandFather(props: FamilyProps) {
 
       <div className={S.summary}>
         <p>
-          <strong>이름:</strong> {props.name}
+          <strong>이름:</strong> {contextValue?.name}
         </p>
         <p>
-          <strong>이메일:</strong> {props.email}
+          <strong>이메일:</strong> {contextValue?.email}
         </p>
         <p>
-          <strong>항렬자 사용:</strong> {props.checked ? '✅' : '❎'}
+          <strong>항렬자 사용:</strong> {contextValue?.checked ? '✅' : '❎'}
         </p>
       </div>
 

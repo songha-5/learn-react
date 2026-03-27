@@ -1,10 +1,11 @@
-import { ContextAdvanced, PropsDrilling } from '@/_/learns'
+import { ContextAdvanced, ContextBasic, PropsDrilling } from '@/_/learns'
 import S from './style.module.css'
 
 export default function App() {
   return (
     <div className={S.container}>
-      <PropsDrilling />
+      <ContextBasic />
+      {/* <PropsDrilling /> */}
       {/* <ContextAdvanced /> */}
     </div>
   )
