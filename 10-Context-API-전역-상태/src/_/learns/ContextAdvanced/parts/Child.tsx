@@ -1,9 +1,15 @@
+import { useFamily } from '@/contexts/FamilyContext'
 import childIcon from '../icons/child.png'
 import S from '../style.module.css'
-import { useFamily } from '@/_/contexts/familyContext/context'
+import LoginForm from '@/components/LoginForm'
+import ProtectedContent from '@/components/ProtectedContent'
+import { useAuth } from '@/contexts'
 
 export default function Child() {
-  const { name, setName, email, setEmail, checked, setChecked } = useFamily()
+  
+  const { name, email, checked, setName, setEmail, setChecked }  = useFamily()
+
+  const { user } = useAuth()
 
   return (
     <section className={`${S.box} ${S.active}`}>
@@ -51,6 +57,10 @@ export default function Child() {
           <span>항렬자 사용 ({checked ? '동의함' : '미동의'})</span>
         </label>
       </fieldset>
+      <div style={{ display: 'flex', gap: 20, flexFlow: 'column' }}>
+        <LoginForm />
+        <ProtectedContent user={user} />
+      </div>
     </section>
   )
 }

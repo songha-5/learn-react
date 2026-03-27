@@ -1,16 +1,18 @@
-import { ContextAdvanced, ContextBasic, PropsDrilling } from '@/_/learns'
+import { ContextAdvanced } from '@/_/learns'
+import { AuthProvider, FamilyProvider } from '@/contexts'
 import S from './style.module.css'
-import { FamilyProvider } from '@/_/contexts/familyContext/provider'
+import { ThemeProvider } from '@/_/contexts/themeContext'
 
 export default function App() {
   return (
-    <FamilyProvider>
-      <div className={S.container}>
-        <ContextAdvanced />
-        {/* <ContextBasic /> */}
-        {/* <PropsDrilling /> */}
-        {/* <ContextAdvanced /> */}
-      </div>
-    </FamilyProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <FamilyProvider>
+          <div className={S.container}>
+            <ContextAdvanced />
+          </div>
+        </FamilyProvider>
+      </ThemeProvider>
+    </AuthProvider>
   )
 }

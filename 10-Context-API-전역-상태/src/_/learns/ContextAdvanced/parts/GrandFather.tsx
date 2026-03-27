@@ -1,12 +1,12 @@
+import { useFamily } from '@/contexts/FamilyContext'
 import grandFatherIcon from '../icons/grand-father.png'
-import Father from './Father'
 import S from '../style.module.css'
-import { useFamily } from '@/_/contexts/familyContext/context'
+import Father from './Father'
 
 export default function GrandFather() {
 
   const { name, email, checked } = useFamily()
-
+  
   return (
     <article>
       <h2 className={`${S.familyTitle} ${S.grandFather}`}>

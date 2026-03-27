@@ -2,7 +2,6 @@ import { useCallback, useRef, useState } from 'react'
 
 type InputOrTextarea = HTMLInputElement | HTMLTextAreaElement
 
-// T추가로 타입에러가 안일어남 (??)
 export interface ReturnInputType<T extends InputOrTextarea = HTMLInputElement> {
   props: {
     ref: React.RefObject<T | null>

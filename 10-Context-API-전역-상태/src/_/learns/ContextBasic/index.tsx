@@ -1,26 +1,28 @@
 import { useState } from 'react'
+
+import { FamilyContext } from '@/contexts/FamilyContext/context'
 import GrandFather from './parts/GrandFather'
 import S from './style.module.css'
-import { FamilyContext, type FamilyContextValue } from '@/_/contexts/familyContext/context'
 
+// --------------------------------------------------------------------------
 
 export default function ContextBasic() {
   const [name, setName] = useState('박하루')
   const [email, setEmail] = useState('haru@child.family')
   const [checked, setChecked] = useState(false)
-
-  const familyContextValue: FamilyContextValue = {
+  
+  // 3. 컨텍스트 프로바이더를 통해 컨텍스트 값 공급하기
+  const familyContextValue = {
     name, email, checked,
     setName, setEmail, setChecked
   }
 
   return (
-    <section className={`${S.box} ${S.container}`}>
-      <h1 className={S.title}>깊숙히 컴포넌트 Props 전달</h1>
-      {/* 컨텍스트 공급자(Context.Provider) : 데이터(값) 공급 */}
-      <FamilyContext.Provider value={familyContextValue}>
-        <GrandFather />
-      </FamilyContext.Provider>
-    </section>
+    <FamilyContext.Provider value={familyContextValue}>
+      <section className={`${S.box} ${S.container}`}>
+        <h1 className={S.title}>깊숙히 컴포넌트 Props 전달</h1>
+          <GrandFather />
+      </section>
+    </FamilyContext.Provider>
   )
 }

@@ -1,22 +1,13 @@
+import { useContext } from 'react'
+
+import { FamilyContext } from '@/contexts/FamilyContext/context'
 import grandFatherIcon from '../icons/grand-father.png'
 import Father from './Father'
 import S from '../style.module.css'
-import { useContext } from 'react'
-import { FamilyContext } from '@/_/contexts/familyContext/context'
-
-type DispatchAction<T> = React.Dispatch<React.SetStateAction<T>>
-
-export interface FamilyProps {
-  name: string
-  email: string
-  checked: boolean
-  setName: DispatchAction<string>
-  setEmail: DispatchAction<string>
-  setChecked: DispatchAction<boolean>
-}
 
 export default function GrandFather() {
 
+  // 컨텍스트 값 사용하기
   const contextValue = useContext(FamilyContext)
 
   return (
@@ -39,7 +30,7 @@ export default function GrandFather() {
         </p>
       </div>
 
-      <Father/>
+      <Father />
     </article>
   )
 }
