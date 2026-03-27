@@ -9,9 +9,9 @@ export default function Home() {
         <p className={S.subtitle}>지금 가장 핫한 영화들을 만나보세요.</p>
       </header>
 
-      <section className={S.content}>
+     {/*  <section className={S.content}>
         <MovieCardList />
-      </section>
+      </section> */}
     </div>
   )
 }

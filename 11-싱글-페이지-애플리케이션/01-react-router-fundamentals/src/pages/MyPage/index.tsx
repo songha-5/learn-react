@@ -37,7 +37,8 @@ export default function MyPage() {
           </div>
         </div>
 
-        <button type="button" className={S.logoutButton} onClick={handleLogout}>
+        {/* <button type="button" className={S.logoutButton} onClick={handleLogout}> */}
+        <button type="button" className={S.logoutButton}>
           로그아웃
         </button>
       </section>
