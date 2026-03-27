@@ -1,11 +1,15 @@
 import Father from './Father'
 import grandFatherIcon from '../icons/grand-father.png'
 import S from '../style.module.css'
+import { useInput } from '@/hooks'
+import { useState } from 'react'
 
 export default function GrandFather() {
-  const name = '박하루'
-  const email = 'haru@child.family'
-  const checked = false
+  const nameInput = useInput('박하루')
+  const emailInput = useInput('haru@child.family')
+  const [checked, setChecked] = useState(false)
+
+
 
   return (
     <article>
@@ -17,17 +21,17 @@ export default function GrandFather() {
 
       <div className={S.summary}>
         <p>
-          <strong>이름:</strong> {name}
+          <strong>이름:</strong> {nameInput.props.value}
         </p>
         <p>
-          <strong>이메일:</strong> {email}
+          <strong>이메일:</strong> {emailInput.props.value}
         </p>
         <p>
           <strong>항렬자 사용:</strong> {checked ? '✅' : '❎'}
         </p>
       </div>
 
-      <Father />
+      <Father nameInput={nameInput} emailInput={emailInput} checked={checked} setChecked={setChecked} />
     </article>
   )
 }

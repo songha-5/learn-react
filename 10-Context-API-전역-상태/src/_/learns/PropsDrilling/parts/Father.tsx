@@ -1,8 +1,16 @@
 import Child from './Child'
 import fatherIcon from '../icons/father.png'
 import S from '../style.module.css'
+import type { ReturnInputType } from '@/hooks'
 
-export default function Father() {
+interface Props {
+  emailInput: ReturnInputType<HTMLInputElement>
+  nameInput: ReturnInputType<HTMLInputElement>
+}
+
+
+
+export default function Father({ nameInput, emailInput, checked, setChecked }: Props) {
   return (
     <section className={S.box}>
       <h3 className={`${S.familyTitle} ${S.father}`}>
