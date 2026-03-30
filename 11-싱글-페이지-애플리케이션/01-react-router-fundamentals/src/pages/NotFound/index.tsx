@@ -1,8 +1,17 @@
+import { useNavigate } from 'react-router-dom'
 import S from './style.module.css'
 
 export default function NotFound() {
+  // a => link, NavLink 추천
+
+  // button => useNavigate - 프로그래밍방식
+  const navigate = useNavigate()
+
+  const handleGoHome = () => navigate('/') //홈으로 탐색
+  const handleGoBack = () => navigate(-1) // 뒤로 이동
 
   return (
+
     <section className={S.container}>
       <div className={S.content}>
         <h1 className={S.errorCode}>404</h1>
@@ -15,14 +24,14 @@ export default function NotFound() {
           <button
             type="button"
             className={S.homeButton}
-            onClick={() => console.log('홈 페이지로 이동')}
+            onClick={handleGoHome}
           >
             홈으로 돌아가기
           </button>
           <button
             type="button"
             className={S.backButton}
-            onClick={() => console.log('이전 페이지로 이동')}
+            onClick={handleGoBack}
           >
             이전 페이지
           </button>
