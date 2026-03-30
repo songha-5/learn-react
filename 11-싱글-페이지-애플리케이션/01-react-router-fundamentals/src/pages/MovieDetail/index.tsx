@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import S from './style.module.css'
 import { useMovies } from '@/contexts'
 import { useEffect } from 'react'
+import AppTitle from '@/components/AppTitle'
 
 
 export default function MovieDetail() {
@@ -24,6 +25,8 @@ export default function MovieDetail() {
 
   return (
     <div className={S.container}>
+      <AppTitle subTitle={movie?.title} />
+
       <button type="button" aria-label="뒤로 가기" onClick={handleGoBack}>
         ← Back
       </button>

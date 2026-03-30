@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts'
 import S from './style.module.css'
 import { useNavigate } from 'react-router-dom'
+import AppTitle from '@/components/AppTitle'
 
 export default function MyPage() {
 
@@ -17,6 +18,7 @@ export default function MyPage() {
 
   return (
     <div className={S.container}>
+      <AppTitle subTitle={user?.email} />
       <section className={S.profileCard}>
         <div className={S.avatar}>{user?.email?.[0].toUpperCase() || 'U'}</div>
 
