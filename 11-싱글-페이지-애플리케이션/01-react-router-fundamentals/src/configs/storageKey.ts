@@ -1,0 +1,1 @@
+export const USER_STOREGE_KEY = '@app/user'

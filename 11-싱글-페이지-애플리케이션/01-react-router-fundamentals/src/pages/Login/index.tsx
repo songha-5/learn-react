@@ -1,13 +1,28 @@
+import { useAuth } from '@/contexts'
 import S from './style.module.css'
+import { useTransition } from 'react'
+import { NAVIGATION_PATH } from '@/configs/navigationPaths'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
-  
+  const { login } = useAuth()
+  const [isLoading, startTransition] = useTransition()
+  const navigate = useNavigate()
+
   const handleLogin = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // 방어적 프로그래밍
+    if (isLoading) return
+
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
-    
+
+    // 로그인 시도(요청/응답)
+    startTransition(async () => {
+      await login(email)
+      navigate({ pathname: NAVIGATION_PATH.base})
+    })
   }
 
   return (
@@ -21,7 +36,13 @@ export default function Login() {
             aria-label="이메일"
             defaultValue="yamoo9@naver.com"
           />
-          <button type="submit">로그인</button>
+          <button
+            type="submit"
+            className={S.submitButton}
+            aria-disabled={isLoading}
+          >
+            {isLoading ? '로그인 중...' : '로그인'}
+          </button>
         </form>
       </div>
     </div>

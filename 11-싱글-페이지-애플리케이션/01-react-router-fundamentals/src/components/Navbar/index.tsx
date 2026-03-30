@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
 import NavLink from '../NavLink'
 import S from './style.module.css'
+import { useAuth } from '@/contexts'
+import { NAVIGATION_PATH } from '@/configs/navigationPaths'
 
 export default function Navbar() {
-  const user = null
+
+  // 인증 사용자 정보 가져오기
+  const { user } = useAuth()
 
   return (
     <nav className={S.navbar}>
@@ -13,16 +17,16 @@ export default function Navbar() {
         </h1>
         <ul className={S.navLinks}>
           <li>
-            <NavLink to="/">홈</NavLink>
+            <NavLink to={NAVIGATION_PATH.base}>홈</NavLink>
           </li>
           <li>
-            <NavLink to="/actors">배우</NavLink>
+            <NavLink to={NAVIGATION_PATH.actors}>배우</NavLink>
           </li>
           <li>
             {!user ? (
-              <NavLink to="/login">로그인</NavLink>
+              <NavLink to={NAVIGATION_PATH.login}>로그인</NavLink>
             ) : (
-              <NavLink to="/mypage">마이 페이지</NavLink>
+              <NavLink to={NAVIGATION_PATH.mypage}>마이 페이지</NavLink>
             )}
           </li>
         </ul>
