@@ -16,16 +16,18 @@ export default function MyPage() {
     setTimeout(logout, 50)
   }
 
+  const nickname = user?.email.split('@').at(0)
+
   return (
     <div className={S.container}>
-      <AppTitle subTitle={user?.email} />
+      <AppTitle subTitle={nickname} />
       <section className={S.profileCard}>
         <div className={S.avatar}>{user?.email?.[0].toUpperCase() || 'U'}</div>
 
         <div className={S.info}>
           <h1 className={S.title}>마이 페이지</h1>
           <p className={S.welcome}>
-            안녕하세요! <span className={S.email}>{user?.email.split('@').at(0)}</span>님!
+            안녕하세요! <span className={S.email}>{nickname}</span>님!
           </p>
           <p className={S.description}>
             무비 앱의 회원이 되신 것을 환영합니다. <br />
