@@ -7,6 +7,9 @@ import NotFound from "./pages/NotFound";
 import CommonLayout from "./layouts/CommonLayout";
 import { MoviesProvider } from "./contexts/movies/provider";
 
+// 페이지 전환 시, 스크롤 위치를 페이지 상단으로 이동
+import ScrollToTop from "./components/ScrollToTop";
+
 export default function App() {
   return (
     <MoviesProvider>
@@ -36,6 +39,7 @@ export default function App() {
           {/* <NotFound /> */}
           {/* <MyPage /> */}
         </Routes>
+        <ScrollToTop />
       </BrowserRouter>
     </MoviesProvider>
 
