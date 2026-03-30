@@ -55,6 +55,11 @@
   }
 }
 
+.homeLink {
+  color: #414040;
+  text-decoration: none;
+}
+
 @media (max-width: 640px) {
   .wrapper {
     padding: 0 1rem;
