@@ -1,10 +1,11 @@
+import { readLikes } from '@/functions/likes-read-write'
 import LikeButton from './like-button'
 
-export default async function PassingData() {
+export default async function PassingData() { // 서버 컴포넌트 (비동기 함수 사용 가능)
   
   // 서버 함수 readLikes()를 실행해 
   // 결과 값을 클라이언트 컴포넌트에 전달
-  const currentLikes = 0
+  const currentLikes = await readLikes()
 
   return (
     <section className="flex flex-col items-center justify-center p-24">

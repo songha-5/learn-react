@@ -1,3 +1,4 @@
+import PassingData from '@/_learn/ui/passing-data'
 import { cn } from '@/utils'
 
 export default function Page() {
@@ -26,7 +27,7 @@ export default function Page() {
         </h1>
       </header>
       <main>
-        
+        <PassingData />
       </main>
     </div>
   )
