@@ -1,5 +1,7 @@
+import { ServerComponent } from '@/_learn'
 import { cn } from '@/utils'
 
+// 서버 컴포넌트
 export default function Page() {
   return (
     <div
@@ -26,7 +28,7 @@ export default function Page() {
         </h1>
       </header>
       <main>
-        
+        <ServerComponent />
       </main>
     </div>
   )
