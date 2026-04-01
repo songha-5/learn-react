@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-
+import { useState, useTransition } from 'react'
 import { cn, isErrorObject, wait } from '@/utils'
 import { writeLikes } from '@/functions/likes-read-write'
+import { revalidatePath } from 'next/cache'
 
 interface Props {
   initialLikes: number
@@ -11,27 +11,27 @@ interface Props {
 
 export default function LikeButton({ initialLikes }: Props) {
   const [like, setLike] = useState(initialLikes)
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
   const handleLike = async () => {
-    setIsPending(true)
+    if (isPending) return
 
-    try {
-      const nextCount = like + 1
+    startTransition(async () => {
+      try {
+        const nextCount = like + 1
 
-      // 서버 함수 호출 (서버의 JSON 파일을 업데이트)
-      // const result = { success: true }
-      const result = await writeLikes(nextCount)
-      // await wait(600)
-
-      // 서버 함수 결과에 따라 상태 업데이트
-      if (result.success) setLike(nextCount)
-    } catch (error) {
-      if (isErrorObject(error)) console.error(error)
-      else console.error('에러발생', String(error))
-    } finally {
-      setIsPending(false)
-    }
+        // 서버 함수 호출 (서버의 JSON 파일을 업데이트)
+        // const result = { success: true }
+        const result = await writeLikes(nextCount)
+        await wait(600)
+        revalidatePath('/')
+        // 서버 함수 결과에 따라 상태 업데이트
+        if (result.success) setLike(nextCount)
+      } catch (error) {
+        if (isErrorObject(error)) console.error(error)
+        else console.error('에러발생', String(error))
+      }
+    })
   }
 
   return (
@@ -44,6 +44,8 @@ export default function LikeButton({ initialLikes }: Props) {
         'rounded-full border border-rose-200',
         'bg-rose-50 px-6 py-2 text-rose-600',
         'transition-all hover:bg-rose-100 disabled:opacity-50',
+        isPending &&
+          'cursor-not-allowed opacity-60 grayscale-100 active:scale-100',
       )}
       onClick={handleLike}
     >
