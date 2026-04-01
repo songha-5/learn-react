@@ -1,4 +1,4 @@
-import { ServerComponent } from '@/_learn'
+import { ClientComponent, ServerComponent } from '@/_learn'
 import { cn } from '@/utils'
 
 // 서버 컴포넌트
@@ -29,6 +29,7 @@ export default function Page() {
       </header>
       <main>
         <ServerComponent />
+        <ClientComponent />
       </main>
     </div>
   )

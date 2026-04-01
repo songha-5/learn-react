@@ -1,7 +1,24 @@
+'use client'
+
 import { cn } from '@/utils'
+import { useState } from 'react'
+import { useImmer } from 'use-immer'
 
 export default function ClientComponent() {
   
+  const [counterStore, setCountStore] = useImmer({
+    counter: {
+      countValue: {
+        count: 0,
+      },
+    },
+  })
+
+  const handleUpdateCountStore = () =>
+    setCountStore((draft) => {
+      draft.counter.countValue.count += 1
+    })
+
   return (
     <section
       className={cn(
@@ -26,13 +43,14 @@ export default function ClientComponent() {
         )
       </h2>
       <p className="font-mono text-xs text-pink-800 text-center leading-relaxed">
-        이 컴포넌트는 서버(Node.js)에러 렌더링되고,<br />
+        이 컴포넌트는 서버(Node.js)에서 렌더링되고,<br />
         클라이언트(Browser) 환경에서 하이드레이션되었습니다.
       </p>
       
       <button
         type="button"
         aria-label="좋아요"
+        onClick={handleUpdateCountStore}
         className={cn(
           'cursor-pointer',
           'rounded-2xl p-1.5',
@@ -42,8 +60,9 @@ export default function ClientComponent() {
           'focus:outline-pink-200',
         )}
       >
-        🩷
+        ❤
       </button>
+      [{counterStore.counter.countValue.count}]
     </section>
   )
 }
