@@ -1,0 +1,38 @@
+# 1. 의존성 패키지 (용량이 매우 크므로 반드시 제외)
+/node_modules
+
+# 2. Next.js 빌드 및 캐시 폴더 (자동 생성되는 파일들)
+/.next/
+/out/
+/build
+
+# 3. 환경 변수 파일 (보안 유지! 절대 깃허브에 올라가면 안 됨)
+.env*.local
+.env
+.env.development
+.env.production
+
+# 4. 로그 파일 (에러 기록 등)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun.log*
+.pnpm-debug.log*
+
+# 5. OS 및 에디터 관련 파일 (개인 설정 및 찌꺼기 파일)
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 6. Vercel 배포 관련 폴더
+.vercel
+
+# 7. 테스트 커버리지 및 TypeScript 빌드 정보
+/coverage
+*.tsbuildinfo
+next-env.d.ts
