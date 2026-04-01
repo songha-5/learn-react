@@ -1,11 +1,14 @@
 import { readLikes } from '@/functions/likes-read-write'
 import LikeButton from './like-button'
 
-export default async function PassingData() { // 서버 컴포넌트 (비동기 함수 사용 가능)
-  
-  // 서버 함수 readLikes()를 실행해 
+export default async function PassingData() {
+  // 서버 컴포넌트 (비동기 함수 사용 가능)
+
+  // 서버 함수 readLikes()를 실행해
   // 결과 값을 클라이언트 컴포넌트에 전달
   const currentLikes = await readLikes()
+
+  const renderedTime = new Date().toISOString()
 
   return (
     <section className="flex flex-col items-center justify-center p-24">
@@ -14,8 +17,8 @@ export default async function PassingData() { // 서버 컴포넌트 (비동기 
           Next.js 데이터 전달
         </h2>
         <p className="mb-8 text-sm text-gray-600">
-          아래 버튼을 누르면 서버의 
-          <code className="rounded bg-gray-100 px-1.5 py-0.5 mx-0.5 text-rose-600">
+          아래 버튼을 누르면 서버의
+          <code className="mx-0.5 rounded bg-gray-100 px-1.5 py-0.5 text-rose-600">
             likes.json
           </code>
           파일이 업데이트됩니다.
@@ -25,6 +28,9 @@ export default async function PassingData() { // 서버 컴포넌트 (비동기 
 
         <p className="mt-6 font-mono text-xs text-gray-400">
           서버 사이드 데이터 = {currentLikes}
+          <p>
+            (<time>{renderedTime}</time>)
+          </p>
         </p>
       </div>
     </section>
