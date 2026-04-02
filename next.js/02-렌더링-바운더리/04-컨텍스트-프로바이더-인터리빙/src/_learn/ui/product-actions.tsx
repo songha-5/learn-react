@@ -3,16 +3,23 @@
 import { ShoppingBag, AlertTriangle } from 'lucide-react'
 import { cn } from '@/utils'
 import { useNoti } from '../contexts/noti-context'
+import { useToast } from '@/contexts/toast-context'
 
 export default function ProductActions() {
-  const { noti } = useNoti()
+  // const { noti } = useNoti()
+  const { toast } = useToast()
 
   const handlePutInCart = () => {
     // toast 함수 호출
     // - 장바구니 담기 완료
     // - 선택하신 상품이 장바구니에 성공적으로 담겼습니다.
     // - success
-    noti(
+    // noti(
+    //   '장바구니 담기 완료',
+    //   '선택한 상품이 장바구니에 성공적으로 담겼습니다',
+    //   'success',
+    // )
+    toast(
       '장바구니 담기 완료',
       '선택한 상품이 장바구니에 성공적으로 담겼습니다',
       'success',
@@ -24,11 +31,11 @@ export default function ProductActions() {
     // - 결제 오류
     // - 네트워크 연결 상태를 확인한 후 다시 시도해주세요.
     // - error
-    noti(
-      '결제 오류',
-      '네트워크 연결 상태를 확인한 후 다시 시도해주세요.',
-      'error',
-    )
+    // noti(
+    //   '결제 오류',
+    //   '네트워크 연결 상태를 확인한 후 다시 시도해주세요.',
+    //   'error',
+    // )
   }
 
   return (
