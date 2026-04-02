@@ -2,13 +2,32 @@
 
 import { ArrowRight, Mail, MapPinHouse, User } from 'lucide-react'
 
-import { cn } from '@/utils'
+import { cn, isErrorObject } from '@/utils'
 import UserListSkeleton from './user-list-skeleton'
-import { ResponseUserData } from '../api/users'
+import { getUsers, ResponseUserData } from '../api/users'
+import { useEffect, useState, useTransition } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 export function UserList() {
-  const isPending = true
-  const data = {} as ResponseUserData
+  const { isPending } = useQuery({
+    queryKey: ['users'],
+    queryFn: getUsers,
+  })
+
+  // const [isPending, startTransition] = useTransition()
+  const [data, setData] = useState<ResponseUserData | null>(null)
+
+  /*  useEffect(() => {
+    startTransition(async () => {
+      try {
+        const responseData = await getUsers()
+        setData(responseData)
+      } catch (error) {
+        if (isErrorObject(error)) console.log(error.message)
+        else console.error(String(error))
+      }
+    })
+  }, []) */
 
   if (isPending) {
     return <UserListSkeleton />

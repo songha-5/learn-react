@@ -1,3 +1,4 @@
+import { Users } from '@/_learn'
 import { cn } from '@/utils'
 
 export default function Page() {
@@ -27,7 +28,7 @@ export default function Page() {
       </header>
 
       <main>
-        
+        <Users />
       </main>
     </div>
   )
