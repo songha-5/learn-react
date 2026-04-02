@@ -16,6 +16,7 @@ const product = {
   reviews: 124,
 }
 
+// 비동기 컴포넌트 (클라이언트 컴포넌트가 아님)
 export default async function Product() {
   await wait(400)
 
@@ -29,7 +30,7 @@ export default async function Product() {
     >
       {/* 상품 이미지 섹션 */}
       <section className="group relative overflow-hidden rounded-3xl bg-slate-100 shadow-inner">
-        <div className={cn('flex relative w-1/2 rounded-2xl')}>
+        <div className={cn('relative flex w-1/2 rounded-2xl')}>
           {product.images.map((src) => (
             <img
               key={src}
@@ -179,7 +180,7 @@ export default async function Product() {
             'flex w-full items-center justify-center gap-2 rounded-2xl py-4',
             'border-2 border-slate-900 bg-white text-sm font-black text-slate-900',
             'transition-all duration-300 hover:bg-slate-900 hover:text-white',
-            'focus:outline-foreground'
+            'focus:outline-foreground',
           )}
         >
           공식 스토어에서 보기

@@ -1,4 +1,4 @@
-import { ClientComponent, ServerComponent } from '@/_learn'
+import { ClientComponent, InterleavingDemo, ServerComponent } from '@/_learn'
 import Cart from '@/components/cart'
 import Modal from '@/components/modal'
 import { cn } from '@/utils'
@@ -33,9 +33,12 @@ export default function Page() {
       </header>
 
       <main className="flex flex-col gap-5">
-        <Modal>
+        {/* <Modal>
           <Cart />
         </Modal>
+         */}
+
+        <InterleavingDemo />
       </main>
 
       <main className="flex flex-col gap-5">
