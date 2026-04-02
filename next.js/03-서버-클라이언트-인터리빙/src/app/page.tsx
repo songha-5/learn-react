@@ -1,4 +1,6 @@
 import { ClientComponent, ServerComponent } from '@/_learn'
+import Cart from '@/components/cart'
+import Modal from '@/components/modal'
 import { cn } from '@/utils'
 
 export default function Page() {
@@ -29,6 +31,12 @@ export default function Page() {
           </span>
         </h1>
       </header>
+
+      <main className="flex flex-col gap-5">
+        <Modal>
+          <Cart />
+        </Modal>
+      </main>
 
       <main className="flex flex-col gap-5">
         <ClientComponent>

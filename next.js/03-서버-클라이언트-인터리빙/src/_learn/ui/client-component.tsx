@@ -1,15 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { type ComponentProps, useState } from 'react'
 import { MousePointerClick, Layers } from 'lucide-react'
 import { cn } from '@/utils'
 
-type Props = {
-  className?: string
-  children?: React.ReactNode
-}
-
-export default function ClientComponent({ className, children }: Props) {
+export default function ClientComponent({
+  className,
+  children,
+  ...restProps
+}: ComponentProps<'section'>) {
   const [count, setCount] = useState(0)
   const [isActive, setIsActive] = useState(false)
 
@@ -33,6 +32,7 @@ export default function ClientComponent({ className, children }: Props) {
           : 'border-dashed border-slate-300 bg-white shadow-sm',
         className,
       )}
+      {...restProps}
     >
       <div className="mb-6 flex items-center justify-between">
         <header className="flex items-center gap-2">
@@ -108,8 +108,10 @@ export default function ClientComponent({ className, children }: Props) {
         </div>
 
         <div className="mt-5">
-          {/* 서버 컴포넌트를 삽입해보세요. */}
-          {/* 서버에서 렌더링된 결과가 클라이언트 환경에서 문제없이 작동할 수 있도록 slot 생성 */}
+          {/* 서버 컴포넌트를 삽입하면 에러가 발생 */}
+
+          {/* 서버에서 렌더링된 결과가 클라이언트 환경에서 문제없이 작동할 수 있도록 구멍(slot) 생성 */}
+          {/* 클라이언트 컴포넌트 내부에 서버 컴포넌트를 에러 없이 렌더링하는 방법 - 인터리빙 */}
           {children}
         </div>
       </div>
