@@ -3,15 +3,14 @@ import { LucideTrophy } from 'lucide-react'
 import LinkCard from '@/components/ui/link-card'
 import PageSectionTitle from '@/components/ui/page-section-title'
 
-
 export default async function BooksPage() {
-
   return (
     <div className="mx-auto space-y-8">
       <PageSectionTitle
         title="북 아카이브"
         description="현재 큐레이션 된 도서 목록입니다. 당신의 인생 책을 찾아보세요."
       />
+      {/* ISBN 정보를 가진 데이터를 순환해 리스트 렌더링 */}
 
       <LinkCard
         href="/books/best"
