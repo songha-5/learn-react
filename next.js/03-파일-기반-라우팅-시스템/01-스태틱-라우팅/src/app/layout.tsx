@@ -5,6 +5,7 @@ import { QueryProvider } from '@/contexts/query-context'
 import { cn } from '@/utils'
 
 import '@/styles/globals.css'
+import Link from 'next/link'
 
 const notoSansKR = Noto_Sans_KR({ variable: '--font-noto' })
 
@@ -33,16 +34,29 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
               <ul className="flex gap-5 bg-slate-50 p-5">
                 {/* 내비게이션 바 (로고, 링크, 검색 바 등) */}
                 <li>
-                  <a href="/">홈</a>
+                  <Link href="/">
+                    <img src="/next-js.svg" alt="" />
+                  </Link>
                 </li>
                 <li>
-                  <a href="/unknown">알 수 없는 페이지</a>
+                  <Link href="/categories">카테고리 페이지</Link>
+                </li>
+                <li>
+                  <Link href="/another">다른 페이지</Link>
+                </li>
+                <li>
+                  <Link href="/books">도서 목록 페이지</Link>
+                </li>
+                <li>
+                  <Link href="/profile">프로필</Link>
                 </li>
               </ul>
             </nav>
           </header>
+
           <main className={cn('container mx-auto grow px-6')}>{children}</main>
-          <footer className="flex justify-center bg-slate-100 p-5">
+
+          <footer className="flex justify-center bg-slate-100 p-7">
             <small lang="en" className="text-sm font-medium">
               {/* 저작권 등 사이트 정보 */}
               &copy; {new Date().getFullYear()} Copy light All Reserved.
