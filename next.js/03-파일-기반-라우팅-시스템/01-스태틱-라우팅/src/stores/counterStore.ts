@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { combine, devtools, persist } from 'zustand/middleware'
 
-/**
+/** 
  * 초기 상태(State) 정의
  * 공통으로 관리할 데이터의 기본값을 설정합니다.
  */
@@ -42,7 +42,7 @@ export const useCounterStore = create(
                     state.count += delta
                   },
                   false, // 상태를 덮어쓰지 않고 병합함 (Zustand 기본 작동)
-                  'counter/increase', // DevTools에 표시될 액션의 이름
+                  'counter/increase' // DevTools에 표시될 액션의 이름
                 )
               },
               // 감소 액션
@@ -52,7 +52,7 @@ export const useCounterStore = create(
                     state.count -= delta
                   },
                   false,
-                  'counter/decrease',
+                  'counter/decrease'
                 )
               },
               // 초기화 액션
@@ -62,14 +62,14 @@ export const useCounterStore = create(
               },
             },
           }
-        }),
+        })
       ),
       // persist 설정: 로컬 스토리지에 저장될 키 이름
-      { name: 'counter-storage' },
+      { name: 'counter-storage' }
     ),
     // devtools 설정: DevTools에서 보여줄 스토어의 이름
-    { name: 'CounterStore' },
-  ),
+    { name: 'CounterStore' }
+  )
 )
 
 /**

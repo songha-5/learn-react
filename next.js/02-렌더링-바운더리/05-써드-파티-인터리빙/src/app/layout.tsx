@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { Noto_Sans_KR } from 'next/font/google'
 
+import { QueryProvider } from '@/contexts/query-context.tsx'
 import { ToastProvider } from '@/contexts/toast-context'
 import { cn } from '@/utils'
 
 import '@/styles/globals.css'
-import { QueryProvider } from '@/contexts/tanstak-query-context'
 
 const notoSansKR = Noto_Sans_KR({ variable: '--font-noto' })
 
@@ -26,7 +26,9 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
         )}
       >
         <QueryProvider>
-          <ToastProvider>{children}</ToastProvider>
+          <ToastProvider>
+            <main>{children}</main>
+          </ToastProvider>
         </QueryProvider>
       </body>
     </html>

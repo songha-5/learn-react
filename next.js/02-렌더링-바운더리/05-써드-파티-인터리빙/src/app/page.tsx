@@ -1,15 +1,15 @@
 import { Users } from '@/_learn'
 import { cn } from '@/utils'
 
-export default function Page() {
+export default async function MainPage() {
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-5',
+        'flex flex-col items-center justify-start gap-5',
         'bg-background min-h-screen',
       )}
     >
-      <header>
+      <header hidden>
         <h1
           className={cn(
             'text-foreground text-center text-4xl font-extralight',
