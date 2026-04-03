@@ -1,3 +1,5 @@
+import 'client-only'
+
 // 클라이언트 전용 함수 (window는 서버에 없음)
 export const getStorage = (key: string) => {
   const data = window.localStorage.getItem(key)

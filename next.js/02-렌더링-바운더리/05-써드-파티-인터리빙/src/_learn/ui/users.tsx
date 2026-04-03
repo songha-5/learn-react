@@ -6,9 +6,11 @@ import {
   QueryClient,
 } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
-import { getQueryClient } from '@/functions/query-client'
+import { getApiKey } from '@/functions/get-api-key'
 
 export default async function Users() {
+  console.log(getApiKey)
+
   // 서버 컴포넌트
   // 서버에는 다양한 유저사용이니까 쿼리클라이언트 여러개 생성해야함
   // queryCompoent 사용(요청)할 때마다 생성
