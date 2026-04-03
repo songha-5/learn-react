@@ -1,10 +1,18 @@
-import { environmentManager, QueryClient } from "@tanstack/react-query"
+'use client'
+
+import {
+  QueryClient,
+  QueryClientProvider,
+  environmentManager,
+} from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { useState } from 'react'
 
 /**
  * @function makeQueryClient
  * @description 새로운 QueryClient 인스턴스를 생성하는 팩토리 함수입니다.
  */
-export function makeQueryClient() {
+function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
@@ -32,13 +40,13 @@ export function makeQueryClient() {
  * [클라이언트 전용 싱글톤 변수]
  * 브라우저 환경에서 딱 하나만 생성되어 앱 전체의 캐시 기억력을 담당합니다.
  */
-export let browserQueryClient: QueryClient | undefined = undefined
+let browserQueryClient: QueryClient | undefined = undefined
 
 /**
  * @function getQueryClient
  * @description 실행 환경(Server vs Client)에 따라 최적화된 인스턴스를 반환합니다.
  */
-export function getQueryClient() {
+function getQueryClient() {
   if (environmentManager.isServer()) {
     /**
      * [서버 환경: Isolation]
@@ -56,4 +64,29 @@ export function getQueryClient() {
     if (!browserQueryClient) browserQueryClient = makeQueryClient()
     return browserQueryClient
   }
+}
+
+/**
+ * @component QueryProvider
+ * @description 앱 전체에 React Query 상태를 주입하는 프로바이더입니다.
+ * 클라이언트 컴포넌트이지만, Next.js 특성상 서버에서도 초기 렌더링(SSR)이 수행됩니다.
+ */
+export function QueryProvider({
+  children,
+  hideDevtools = false,
+}: React.PropsWithChildren<{ hideDevtools?: boolean }>) {
+  /**
+   * [지연 초기화 (Lazy Initialization)]
+   * useState(() => getQueryClient()) 형태로 전달하여
+   * 리액트 렌더링 생명주기 내에서 초기 렌더링 시 딱 한 번만 실행되도록 보장합니다.
+   * 이는 불필요한 인스턴스 생성을 방지하고 클라이언트 측 싱글톤을 안전하게 바인딩합니다.
+   */
+  const [queryClient] = useState(() => getQueryClient())
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      {hideDevtools || <ReactQueryDevtools />}
+    </QueryClientProvider>
+  )
 }

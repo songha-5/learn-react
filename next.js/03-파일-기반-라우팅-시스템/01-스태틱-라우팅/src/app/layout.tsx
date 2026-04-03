@@ -6,7 +6,6 @@ import { cn } from '@/utils'
 
 import '@/styles/globals.css'
 
-
 const notoSansKR = Noto_Sans_KR({ variable: '--font-noto' })
 
 export const metadata: Metadata = {
@@ -20,18 +19,35 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
       <body
         className={cn(
           notoSansKR.variable,
-          'min-h-screen overflow-y-scroll',
-          'bg-background text-foreground antialiased',
+          'flex min-h-screen flex-col overflow-y-scroll',
+          'bg-background text-foreground min-h-screen antialiased',
           'selection:bg-foreground selection:text-background',
           'focus:outline-none',
-          '[&_*:focus-visible]:ring-2 [&_*:focus-visible]:ring-foreground [&_*:focus-visible]:ring-offset-2',
-          '[&_*:focus-visible]:ring-offset-background'
+          '[&_*:focus-visible]:ring-foreground [&_*:focus-visible]:ring-2 [&_*:focus-visible]:ring-offset-2',
+          '[&_*:focus-visible]:ring-offset-background',
         )}
       >
         <QueryProvider hideDevtools>
-          <main className={cn('container mx-auto px-6')}>
-            {children}
-          </main>
+          <header>
+            <nav>
+              <ul className="flex gap-5 bg-slate-50 p-5">
+                {/* 내비게이션 바 (로고, 링크, 검색 바 등) */}
+                <li>
+                  <a href="/">홈</a>
+                </li>
+                <li>
+                  <a href="/unknown">알 수 없는 페이지</a>
+                </li>
+              </ul>
+            </nav>
+          </header>
+          <main className={cn('container mx-auto grow px-6')}>{children}</main>
+          <footer className="flex justify-center bg-slate-100 p-5">
+            <small lang="en" className="text-sm font-medium">
+              {/* 저작권 등 사이트 정보 */}
+              &copy; {new Date().getFullYear()} Copy light All Reserved.
+            </small>
+          </footer>
         </QueryProvider>
       </body>
     </html>
