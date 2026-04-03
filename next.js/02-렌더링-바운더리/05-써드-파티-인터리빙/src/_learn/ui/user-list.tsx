@@ -1,33 +1,19 @@
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { ArrowRight, Mail, MapPinHouse, User } from 'lucide-react'
 
-import { cn, isErrorObject } from '@/utils'
+import { cn } from '@/utils'
+import { getUsers } from '../api/users'
 import UserListSkeleton from './user-list-skeleton'
-import { getUsers, ResponseUserData } from '../api/users'
-import { useEffect, useState, useTransition } from 'react'
-import { useQuery } from '@tanstack/react-query'
 
 export function UserList() {
-  const { isPending } = useQuery({
+  // 앱이 초기화될 때 처음 생성된 QueryClient 객체(싱글톤) 사용
+
+  const { isPending, data } = useQuery({
     queryKey: ['users'],
     queryFn: getUsers,
   })
-
-  // const [isPending, startTransition] = useTransition()
-  const [data, setData] = useState<ResponseUserData | null>(null)
-
-  /*  useEffect(() => {
-    startTransition(async () => {
-      try {
-        const responseData = await getUsers()
-        setData(responseData)
-      } catch (error) {
-        if (isErrorObject(error)) console.log(error.message)
-        else console.error(String(error))
-      }
-    })
-  }, []) */
 
   if (isPending) {
     return <UserListSkeleton />

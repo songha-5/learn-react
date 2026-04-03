@@ -1,7 +1,28 @@
 import { cn } from '@/utils'
 import { UserList } from './user-list'
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
+import { getUsers } from '../api/users'
+import { getQueryClient } from '@/contexts/query-context.tsx'
 
 export default async function Users() {
+  // 서버 컴포넌트
+  // 서버에는 다양한 유저사용이니까 쿼리클라이언트 여러개 생성해야함
+  // queryCompoent 사용(요청)할 때마다 생성
+  const queryClient = new QueryClient()
+
+  // 생성된 queryClient를 사용해 api서버에서 프리패칭(prefetch)
+  await queryClient.prefetchQuery({
+    queryKey: ['users'],
+    queryFn: getUsers,
+  })
+
+  // 클라이언트에 보낼 프리페칭해 캐싱된 데이터를 압축
+  const dehydratedState = dehydrate(queryClient)
+
   return (
     <section className="mx-auto max-w-md space-y-8 p-8">
       <header className="space-y-4">
@@ -14,8 +35,9 @@ export default async function Users() {
         >
           팀 매니저
         </h2>
-        <p className="text-slate-500 text-sm leading-relaxed">
-          서버에서 미리 가져온 데이터(Prefetched Data)를 React Query에서 관리하도록 구성해봅니다.
+        <p className="text-sm leading-relaxed text-slate-500">
+          서버에서 미리 가져온 데이터(Prefetched Data)를 React Query에서
+          관리하도록 구성해봅니다.
         </p>
       </header>
 
@@ -25,7 +47,9 @@ export default async function Users() {
           'shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
         )}
       >
-        <UserList />
+        <HydrationBoundary state={dehydratedState}>
+          <UserList />
+        </HydrationBoundary>
       </div>
     </section>
   )
