@@ -14,6 +14,7 @@ export default function BooksLayout({ children }: React.PropsWithChildren) {
           placeholder="도서 제목 및 저자로 검색해보세요"
         />
       </search>
+      <h1>태그</h1>
       <SearchForm />
       {children}
     </div>

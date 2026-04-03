@@ -9,12 +9,7 @@ interface Props {
   icon: LucideIcon
 }
 
-export default function LinkCard({
-  href,
-  title,
-  description,
-  icon: Icon,
-}: Props) {
+export default function LinkCard({ href, title, description, icon: Icon }: Props) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <Link
@@ -22,17 +17,17 @@ export default function LinkCard({
         className={cn(
           'group hover:border-primary/50 relative flex flex-col justify-between overflow-hidden',
           'rounded-xl border p-6 shadow-sm transition-all',
-          'focus-visible:ring-foreground ring-offset-2 focus-visible:ring-2 focus-visible:outline-none',
+          'focus-visible:ring-foreground focus-visible:ring-2 ring-offset-2 focus-visible:outline-none',
         )}
       >
         <div className="flex items-center justify-between">
           <div className="space-y-2">
-            <div className="text-foreground group-hover:text-primary flex items-center gap-2 font-semibold transition-colors">
+            <div className="text-foreground transition-colors group-hover:text-primary flex items-center gap-2 font-semibold">
               <Icon className="h-5 w-5" aria-hidden="true" />{' '}
               <span>{title}</span>
             </div>
 
-            <p className="text-muted-foreground group-hover:text-primary/90 text-sm transition-colors">
+            <p className="text-muted-foreground text-sm transition-colors group-hover:text-primary/90">
               {description}
             </p>
           </div>

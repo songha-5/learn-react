@@ -4,7 +4,7 @@ import { LucideBookOpen } from 'lucide-react'
 
 export default function CategoriesPage() {
   return (
-    <section className="max-w-5x1 mx-auto space-y-8 py-12">
+    <section className="max-w-5x1 mx-auto space-y-8 bg-amber-700 py-12">
       <PageSectionTitle
         title="북 카테고리"
         description="관심있는 분야를 발견하고 새로운 영감을 발견하세요"

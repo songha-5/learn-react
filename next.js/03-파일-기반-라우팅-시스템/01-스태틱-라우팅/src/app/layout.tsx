@@ -7,6 +7,7 @@ import { cn } from '@/utils'
 import '@/styles/globals.css'
 import Link from 'next/link'
 import Navbar from '@/_learn/ui/navbar'
+import Navi from '@/components/ui/navi'
 
 const notoSansKR = Noto_Sans_KR({ variable: '--font-noto' })
 
@@ -30,9 +31,11 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
         )}
       >
         <QueryProvider hideDevtools>
-          <Navbar />
+          {/* <Navbar /> */}
+          <Navi />
 
-          <main className={cn('container mx-auto grow px-6')}>{children}</main>
+          <main>{children}</main>
+          {/* <main className={cn('container mx-auto grow px-6')}>{children}</main> */}
 
           <footer className="flex justify-center bg-slate-100 p-7">
             <small lang="en" className="text-sm font-medium">
