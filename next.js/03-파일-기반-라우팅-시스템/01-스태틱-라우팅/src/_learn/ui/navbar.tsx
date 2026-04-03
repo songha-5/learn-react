@@ -4,9 +4,10 @@ import { Activity } from 'react'
 import { Command, BookOpen, Bookmark, User } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import NavLink from './nav-link'
 
 import { cn } from '@/utils'
-
+import NavList from './nav-list'
 
 const navItems = [
   { name: '아카이브', href: '/books', icon: BookOpen },
@@ -22,13 +23,13 @@ export default function Navbar() {
       className={cn(
         'sticky top-0 z-50 w-full border-b transition-all duration-300',
         'border-foreground/10 bg-background/70 backdrop-blur-xl',
-        'focus-within:bg-background/90'
+        'focus-within:bg-background/90',
       )}
       aria-label="메인 내비게이션"
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="group flex items-center gap-2.5 outline-none"
           aria-label="Urban Library 홈으로 이동"
         >
@@ -41,56 +42,78 @@ export default function Navbar() {
           >
             <Command className="size-5" />
           </span>
-          <span className={cn(
-            'text-xl font-black tracking-tighter uppercase',
-            'text-foreground transition-colors'
-          )}>
+          <span
+            className={cn(
+              'text-xl font-black tracking-tighter uppercase',
+              'text-foreground transition-colors',
+            )}
+          >
             Urban 🪧 Lib
           </span>
         </Link>
 
-        <ul 
-          role="list"
-          className="flex items-center gap-1 sm:gap-2"
-        >
+        <ul role="list" className="flex items-center gap-1 sm:gap-2">
           {navItems.map((item) => {
-            const isActive = pathname === item.href
             return (
               <li key={item.href}>
-                <Link
+                <NavLink
                   href={item.href}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={cn(
-                    'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all outline-none',
-                    'hover:bg-foreground/5 active:scale-95',
-                    'focus-visible:ring-2 focus-visible:ring-primary/50',
-                    isActive 
-                      ? 'text-primary' 
-                      : 'text-foreground/40 hover:text-foreground/70'
-                  )}
+                  className={({ isActive }) =>
+                    cn(
+                      'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all outline-none',
+                      'hover:bg-foreground/5 active:scale-95',
+                      'focus-visible:ring-primary/50 focus-visible:ring-2',
+                      isActive
+                        ? 'text-primary'
+                        : 'text-foreground/40 hover:text-foreground/70',
+                    )
+                  }
                 >
-                  <item.icon
+                  {({ isActive }) => (
+                    <>
+                      <item.icon
+                        className={cn(
+                          'size-4 transition-colors',
+                          isActive ? 'text-primary' : 'text-inherit',
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span className="hidden md:inline">{item.name}</span>
+                      <Activity mode={isActive ? 'visible' : 'hidden'}>
+                        <span
+                          className={cn(
+                            'absolute -bottom-[16.5px] left-1/2 size-1 rounded-full',
+                            'bg-primary animate-in fade-in zoom-in duration-300',
+                            'md:left-1/2 md:translate-x-2',
+                          )}
+                          aria-hidden="true"
+                        />
+                      </Activity>
+                    </>
+                  )}
+                  {/* <item.icon
                     className={cn(
                       'size-4 transition-colors',
-                      isActive ? 'text-primary' : 'text-inherit'
+                      // isActive ? 'text-primary' : 'text-inherit',
                     )}
                     aria-hidden="true"
                   />
                   <span className="hidden md:inline">{item.name}</span>
-                  
+
+                  render props 패턴
                   <Activity mode={isActive ? 'visible' : 'hidden'}>
-                    <span 
+                    <span
                       className={cn(
-                        'absolute -bottom-[16.5px] size-1 rounded-full left-1/2',
+                        'absolute -bottom-[16.5px] left-1/2 size-1 rounded-full',
                         'bg-primary animate-in fade-in zoom-in duration-300',
                         'md:left-1/2 md:translate-x-2',
-                      )} 
+                      )}
                       aria-hidden="true"
                     />
-                  </Activity>
-                </Link>
+                  </Activity> */}
+                </NavLink>
               </li>
-            );
+            )
           })}
         </ul>
       </div>

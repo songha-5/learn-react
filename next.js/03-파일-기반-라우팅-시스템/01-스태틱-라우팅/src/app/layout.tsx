@@ -6,6 +6,7 @@ import { cn } from '@/utils'
 
 import '@/styles/globals.css'
 import Link from 'next/link'
+import Navbar from '@/_learn/ui/navbar'
 
 const notoSansKR = Noto_Sans_KR({ variable: '--font-noto' })
 
@@ -29,30 +30,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
         )}
       >
         <QueryProvider hideDevtools>
-          <header>
-            <nav>
-              <ul className="flex gap-5 bg-slate-50 p-5">
-                {/* 내비게이션 바 (로고, 링크, 검색 바 등) */}
-                <li>
-                  <Link href="/">
-                    <img src="/next-js.svg" alt="" />
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/categories">카테고리 페이지</Link>
-                </li>
-                <li>
-                  <Link href="/another">다른 페이지</Link>
-                </li>
-                <li>
-                  <Link href="/books">도서 목록 페이지</Link>
-                </li>
-                <li>
-                  <Link href="/profile">프로필</Link>
-                </li>
-              </ul>
-            </nav>
-          </header>
+          <Navbar />
 
           <main className={cn('container mx-auto grow px-6')}>{children}</main>
 
