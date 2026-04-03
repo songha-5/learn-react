@@ -6,7 +6,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
-import { getQueryClient } from '@/contexts/query-context.tsx'
+import { getQueryClient } from '@/functions/query-client'
 
 export default async function Users() {
   // 서버 컴포넌트

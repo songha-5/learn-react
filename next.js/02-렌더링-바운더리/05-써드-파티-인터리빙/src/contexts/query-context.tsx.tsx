@@ -2,17 +2,14 @@
 
 import { useState } from 'react'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import {
-  QueryClient,
-  QueryClientProvider,
-  environmentManager,
-} from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { getQueryClient } from '@/functions/query-client'
 
 /**
  * @function makeQueryClient
  * @description 새로운 QueryClient 인스턴스를 생성하는 팩토리 함수입니다.
  */
-function makeQueryClient() {
+export function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
@@ -34,36 +31,6 @@ function makeQueryClient() {
       },
     },
   })
-}
-
-/**
- * [클라이언트 전용 싱글톤 변수]
- * 브라우저 환경에서 딱 하나만 생성되어 앱 전체의 캐시 기억력을 담당합니다.
- */
-let browserQueryClient: QueryClient | undefined = undefined
-
-/**
- * @function getQueryClient
- * @description 실행 환경(Server vs Client)에 따라 최적화된 인스턴스를 반환합니다.
- */
-export function getQueryClient() {
-  if (environmentManager.isServer()) {
-    /**
-     * [서버 환경: Isolation]
-     * 서버는 여러 사용자의 요청을 동시에 처리합니다.
-     * 요청 간 데이터 오염(A 사용자의 데이터를 B가 보는 현상)을 막기 위해
-     * 매 요청마다 항상 새로운 QueryClient를 생성하여 격리합니다.
-     */
-    return makeQueryClient()
-  } else {
-    /**
-     * [클라이언트 환경: Singleton]
-     * 브라우저에서는 사용자가 페이지를 이동해도 이전 데이터를 기억해야 합니다.
-     * 따라서 단 하나의 인스턴스만 유지하여 캐시 재사용성을 극대화합니다.
-     */
-    if (!browserQueryClient) browserQueryClient = makeQueryClient()
-    return browserQueryClient
-  }
 }
 
 /**
