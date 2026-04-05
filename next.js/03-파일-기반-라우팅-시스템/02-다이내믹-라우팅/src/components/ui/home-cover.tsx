@@ -1,11 +1,11 @@
-import { cn } from "@/utils"
+import { cn } from '@/utils'
 
 export default function HomeCover() {
   return (
-    <section 
+    <section
       aria-labelledby="hero-title"
       className={cn(
-        'flex flex-col items-center justify-center text-center translate-y-40',
+        'flex translate-y-40 flex-col items-center justify-center text-center',
         'transition-colors duration-500',
         'motion-safe:animate-in motion-safe:fade-in motion-safe:duration-1000',
       )}
@@ -20,10 +20,12 @@ export default function HomeCover() {
         )}
       >
         <span className="relative flex h-2 w-2" aria-hidden="true">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 bg-primary/50" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+          <span className="bg-primary/50 absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
+          <span className="bg-primary relative inline-flex h-2 w-2 rounded-full" />
         </span>
-        <span lang="en" className="font-medium select-none">Next.js Routing Guide</span>
+        <span lang="en" className="font-medium select-none">
+          Next.js Routing Guide
+        </span>
       </div>
 
       <header className="space-y-8">
@@ -54,7 +56,7 @@ export default function HomeCover() {
         <div className="bg-foreground/10 h-px w-16" />
         <span
           lang="en"
-          className="font-mono text-[11px] font-bold tracking-widest uppercase text-foreground/50"
+          className="text-foreground/50 font-mono text-[11px] font-bold tracking-widest uppercase"
         >
           Urban Minimalist Archive
         </span>

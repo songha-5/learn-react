@@ -1,3 +1,7 @@
+/**
+ * @see https://prettier.io/docs/configuration
+ * @type {import("prettier").Config}
+ */
 const prettierConfig = {
   // 사용할 플러그인 설정 (Tailwind 클래스 자동 정렬)
   plugins: ["prettier-plugin-tailwindcss"],
