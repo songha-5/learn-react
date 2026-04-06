@@ -6,6 +6,7 @@ import PageSectionTitle from '@/components/ui/page-section-title'
 import Link from 'next/link'
 import { books } from './_resources/data'
 import { cn } from '@/utils'
+import SortOrder from './_resources/sort-order/server'
 
 /**
  * [실습] 동적 세그먼트(Dynamic Segment) 및 쿼리 스트링 활용
@@ -38,7 +39,7 @@ interface Props {
 
 export default async function BooksPage({ searchParams }: Props) {
   const {
-    orderBy = 'disc',
+    orderBy = 'desc',
     sortKey = 'pubdate',
     page = 1,
     size = 6
@@ -47,29 +48,14 @@ export default async function BooksPage({ searchParams }: Props) {
   const filteredBooks = books.toSorted((a, b) => {
     const aField = String(a[sortKey] ?? '')
     const bField = String(b[sortKey] ?? '')
-    const comparison = aField.localeCompare(bField) // 1, 0, -1
-
+    const comparison = aField.localeCompare(bField)
     return orderBy === 'asc' ? comparison : -comparison
   })
-
+  
   return (
     <div className="mx-auto space-y-8">
-      <PageSectionTitle
-        title="북 아카이브"
-        description="현재 큐레이션 된 도서 목록입니다. 당신의 인생 책을 찾아보세요."
-      />
 
-      {/* 이름순, 출판일순, ISBN순 정렬(오름차, 내림차순) 기능 구현 */}
-      <div className="flex ge-5 p-5 border border-slate-400 rounded-x1">
-        <Link 
-          className="text-foreground/70 hover:text-foreground"
-          href="?sortKey=title&orderBy=asc"
-        >이름순 정렬 (오름차순)</Link>
-        <Link 
-          className="text-foreground/70 hover:text-foreground"
-          href="?sortKey=title&orderBy=desc"
-        >이름순 정렬 (내림차순)</Link>
-      </div>
+      <SortOrder sortKey={sortKey} orderBy={orderBy} />
 
       {/* books 리스트 렌더링 */}
       <nav
