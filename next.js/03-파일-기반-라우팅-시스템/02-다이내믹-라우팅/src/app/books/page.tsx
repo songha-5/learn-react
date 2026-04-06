@@ -2,22 +2,31 @@ import { LucideTrophy } from 'lucide-react'
 
 import LinkCard from '@/components/ui/link-card'
 import PageSectionTitle from '@/components/ui/page-section-title'
+import { books } from './_resources/data'
+import Link from 'next/link'
+import { cn } from '@/utils'
 
 export default async function BooksPage() {
   return (
-    <div className="mx-auto space-y-8">
-      <PageSectionTitle
-        title="북 아카이브"
-        description="현재 큐레이션 된 도서 목록입니다. 당신의 인생 책을 찾아보세요."
-      />
-      {/* ISBN 정보를 가진 데이터를 순환해 리스트 렌더링 */}
-
-      <LinkCard
-        href="/books/best"
-        title="베스트셀러"
-        description="지금 가장 인기 있는 도서들을 확인해보세요."
-        icon={LucideTrophy}
-      />
-    </div>
+      <nav
+        aria-label="도서 목록"
+        className="flex flex-col gap-2 rounded-xl border p-5"
+      >
+      {books.map((book) => {
+        return (
+          // Soft Navigation
+          <Link
+            key={book.isbn}
+            href={`/books/${book.isbn}/${book.title}`}
+            className={cn(
+              'px-2 pt-1 pb-1.5',
+              'text-foreground/80 hover:text-foreground font-medium',
+            )}
+          >
+            {book.title}
+          </Link>
+        )
+      })}
+    </nav>
   )
 }
