@@ -36,8 +36,13 @@ export default async function BooksPage({ searchParams }: PageProps<'/books'>) {
     page = 1,
     size = 6
   } = await searchParams
+
+  // =====================
+  // 페이지네이션 정보 가져오기
+  const pagination = getPagination(books, page as string, size as string)
+  // =====================
  
-  const filteredBooks = books.toSorted((a, b) => {
+  const filteredBooks = pagination.data.toSorted((a, b) => {
     const aField = String(a[sortKey as SortKey] ?? '')
     const bField = String(b[sortKey as SortKey] ?? '')
     const comparison = aField.localeCompare(bField)
@@ -76,6 +81,20 @@ export default async function BooksPage({ searchParams }: PageProps<'/books'>) {
         })}
       </nav>
 
+      <div className="p-2 border rounded-x1">
+        {Array.from({ length: pagination.totalPage }).map((_, index) => {
+          const pageIndex = index + 1
+          const isActive = pageIndex === Number(page)
+            return (
+              <Link className={cn(
+                'inline-flex justify-center',
+                'items-center p-1 bg-background rounded-full size-6',
+                isActive && 'text-background'
+              )} scroll={false} href={`?page=${pageIndex}&size=${size}`}>{pageIndex}</Link>
+            )
+        })}
+      </div>
+
       <LinkCard
         href="/books/best"
         title="베스트셀러"
@@ -84,4 +103,29 @@ export default async function BooksPage({ searchParams }: PageProps<'/books'>) {
       />
     </div>
   )
+}
+
+
+// 페이지네이션 정볼르 반환하는 함수 (로직 재사용)
+function getPagination<T>(list: T[], page: number | string = 1, size: number | string = 10) {
+  // 방어적 프로그래밍 
+  // 최소 1개라고 방어해놔서 큰 값 적용 (음수일땐 1, 양수일땐 해당페이지)
+  const safePage = Math.max(1, Number(page))
+  const safeSize = Math.max(1, Number(size))
+  // 데이터의 총 개수
+  const totalCount = books.length
+  // 화면에 표시할 데이터
+  // const data = books.slice(startIndexm endIndex)
+  const startIndex = (safePage - 1) * safeSize
+  const data = list.slice(startIndex, startIndex + safeSize)
+  // 총 페이지수
+  const totalPages = Math.ceil(totalCount / safeSize)
+
+  return {
+    data,
+    currentPage: safePage,
+    totalCount,
+    totalPage: totalPages,
+    hasNextPage: safePage < totalPages
+  }
 }
