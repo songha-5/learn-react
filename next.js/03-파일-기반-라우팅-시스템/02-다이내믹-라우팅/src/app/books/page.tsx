@@ -25,7 +25,33 @@ import { cn } from '@/utils'
  * - 클라이언트 측: 드롭다운이나 버튼 클릭 시 URL을 변경하여 서버 다시 읽기 유도
  * - UI: 페이지네이션 정보(TotalCount, TotalPages, HasNextPage) 계산 및 표시
  */
-export default function BooksPage() {
+
+
+interface Props {
+  searchParams: Promise<{
+    sortKey: 'title' | 'pubdate' | 'isbn'
+    orderBy: 'asc' | 'desc'
+    page: number
+    size: number
+  }>
+}
+
+export default async function BooksPage({ searchParams }: Props) {
+  const {
+    orderBy = 'disc',
+    sortKey = 'pubdate',
+    page = 1,
+    size = 6
+  } = await searchParams
+ 
+  const filteredBooks = books.toSorted((a, b) => {
+    const aField = String(a[sortKey] ?? '')
+    const bField = String(b[sortKey] ?? '')
+    const comparison = aField.localeCompare(bField) // 1, 0, -1
+
+    return orderBy === 'asc' ? comparison : -comparison
+  })
+
   return (
     <div className="mx-auto space-y-8">
       <PageSectionTitle
@@ -33,12 +59,24 @@ export default function BooksPage() {
         description="현재 큐레이션 된 도서 목록입니다. 당신의 인생 책을 찾아보세요."
       />
 
+      {/* 이름순, 출판일순, ISBN순 정렬(오름차, 내림차순) 기능 구현 */}
+      <div className="flex ge-5 p-5 border border-slate-400 rounded-x1">
+        <Link 
+          className="text-foreground/70 hover:text-foreground"
+          href="?sortKey=title&orderBy=asc"
+        >이름순 정렬 (오름차순)</Link>
+        <Link 
+          className="text-foreground/70 hover:text-foreground"
+          href="?sortKey=title&orderBy=desc"
+        >이름순 정렬 (내림차순)</Link>
+      </div>
+
       {/* books 리스트 렌더링 */}
       <nav
         aria-label="도서 목록"
         className="flex flex-col gap-2 rounded-xl border p-5"
       >
-        {books.map((book) => {
+        {filteredBooks.map((book) => {
           return (
             // Hard Navigation : <a> (외부 링크)
             // Soft Navigation : <Link> (내부 링크)
@@ -53,6 +91,7 @@ export default function BooksPage() {
               )}
             >
               {book.title}
+              ({'isbn : '}{book.isbn}){''}{'출간날자 :'}{book.pubdate}
             </Link>
           )
         })}
