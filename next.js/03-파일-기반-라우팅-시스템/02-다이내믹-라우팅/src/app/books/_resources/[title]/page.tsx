@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { Book, books } from "../_resources/data"
+import { Book, books } from "../data"
 
 interface Props {
   params: Promise<{ title: Book['title'] }>
