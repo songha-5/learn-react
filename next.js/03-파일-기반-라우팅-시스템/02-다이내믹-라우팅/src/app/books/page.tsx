@@ -4,7 +4,7 @@ import LinkCard from '@/components/ui/link-card'
 import PageSectionTitle from '@/components/ui/page-section-title'
 
 import Link from 'next/link'
-import { books } from './_resources/data'
+import { books, type OrderBy, type SortKey } from './_resources/data'
 import { cn } from '@/utils'
 import SortOrderClient from './_resources/sort-order/client'
 import SortOrderServer from './_resources/sort-order/server'
@@ -29,16 +29,7 @@ import SortOrderServer from './_resources/sort-order/server'
  */
 
 
-interface Props {
-  searchParams: Promise<{
-    sortKey: 'title' | 'pubdate' | 'isbn'
-    orderBy: 'asc' | 'desc'
-    page: number
-    size: number
-  }>
-}
-
-export default async function BooksPage({ searchParams }: Props) {
+export default async function BooksPage({ searchParams }: PageProps<'/books'>) {
   const {
     orderBy = 'desc',
     sortKey = 'pubdate',
@@ -47,8 +38,8 @@ export default async function BooksPage({ searchParams }: Props) {
   } = await searchParams
  
   const filteredBooks = books.toSorted((a, b) => {
-    const aField = String(a[sortKey] ?? '')
-    const bField = String(b[sortKey] ?? '')
+    const aField = String(a[sortKey as SortKey] ?? '')
+    const bField = String(b[sortKey as SortKey] ?? '')
     const comparison = aField.localeCompare(bField)
     return orderBy === 'asc' ? comparison : -comparison
   })
@@ -57,7 +48,7 @@ export default async function BooksPage({ searchParams }: Props) {
     <div className="mx-auto space-y-8">
 
       <SortOrderClient />
-      <SortOrderServer sortKey={sortKey} orderBy={orderBy} />
+      <SortOrderServer sortKey={sortKey as SortKey} orderBy={orderBy as OrderBy} />
 
       {/* books 리스트 렌더링 */}
       <nav
