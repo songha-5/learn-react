@@ -86,7 +86,9 @@ export default async function BooksPage({ searchParams }: PageProps<'/books'>) {
           const pageIndex = index + 1
           const isActive = pageIndex === Number(page)
             return (
-              <Link className={cn(
+              <Link
+                prefetch={false} // 프리패치(미리 데이터불러오기) 끄기
+                className={cn(
                 'inline-flex justify-center',
                 'items-center p-1 bg-background rounded-full size-6',
                 isActive && 'text-background'
