@@ -6,7 +6,8 @@ import PageSectionTitle from '@/components/ui/page-section-title'
 import Link from 'next/link'
 import { books } from './_resources/data'
 import { cn } from '@/utils'
-import SortOrder from './_resources/sort-order/server'
+import SortOrderClient from './_resources/sort-order/client'
+import SortOrderServer from './_resources/sort-order/server'
 
 /**
  * [실습] 동적 세그먼트(Dynamic Segment) 및 쿼리 스트링 활용
@@ -51,11 +52,12 @@ export default async function BooksPage({ searchParams }: Props) {
     const comparison = aField.localeCompare(bField)
     return orderBy === 'asc' ? comparison : -comparison
   })
-  
+
   return (
     <div className="mx-auto space-y-8">
 
-      <SortOrder sortKey={sortKey} orderBy={orderBy} />
+      <SortOrderClient />
+      <SortOrderServer sortKey={sortKey} orderBy={orderBy} />
 
       {/* books 리스트 렌더링 */}
       <nav
