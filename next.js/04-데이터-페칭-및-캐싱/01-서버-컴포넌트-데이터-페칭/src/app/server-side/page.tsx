@@ -11,6 +11,7 @@ import { LucideServer } from 'lucide-react'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const pokemonApiUrl = `${process.env.MOCK_API_URL}/pokemon`
 
+
 export default function ServerSidePage() {
   
   // 서버 컴포넌트는 async/await를 사용하여 컴포넌트 수준에서 직접 데이터를 호출합니다.

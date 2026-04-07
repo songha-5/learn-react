@@ -36,7 +36,7 @@ export default function MainPage() {
         />
         <LinkCard
           color="emerald"
-          href="/client-side"
+          href="/server-side"
           title="서버 사이드 (SSR)"
           actionLabel="서버 측 데이터 페칭"
           description={''}

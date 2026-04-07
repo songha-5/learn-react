@@ -1,22 +1,11 @@
 'use client'
 
-import useSWR from 'swr'
 import { LucideMousePointer2 } from 'lucide-react'
 
-import { type Pokemon } from '@/types/pokemon'
 import { PokemonList } from '@/components/ui/pokemon-list'
 import { PrintError } from '@/components/ui/print-error'
 import { Spinner } from '@/components/ui/spinner'
-import { useAllPokemons } from './utils/pokemons'
-
-function usePokemon(id: string) {
-  return useSWR(
-    `${process.env.NEXT_PUBLIC_MOCK_API_URL}/pokemon/${id}`,
-    async (url: string): Promise<Pokemon[]> => {
-      return fetch(url).then((r) => r.json())
-    },
-  )
-}
+import { useAllPokemons, usePokemon } from './utils/pokemons'
 
 export default function ClientSidePage() {
   const { data, error, isLoading } = useAllPokemons()
