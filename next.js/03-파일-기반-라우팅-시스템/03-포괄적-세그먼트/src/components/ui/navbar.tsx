@@ -60,6 +60,24 @@ export function Navbar() {
             />
             <span>shop</span>
           </Link>
+
+          <Link
+            href="/dashboard"
+            className={cn(
+              'flex items-center gap-1.5 rounded-full border px-4 py-2 transition-all duration-200',
+              isShopActive
+                ? 'border-emerald-100 bg-emerald-50 text-emerald-600 shadow-sm'
+                : 'border-transparent text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-600',
+            )}
+          >
+            <ShoppingBag
+              className={cn(
+                'h-4 w-4',
+                isShopActive ? 'text-emerald-600' : 'text-slate-400',
+              )}
+            />
+            <span>dashboard</span>
+          </Link>
         </div>
       </div>
     </nav>
