@@ -1,8 +1,7 @@
 import { cn } from "@/utils"
-import Statistics from "./statistics"
-import Chart from "./chart"
 
-export default function DashboardLayout({children}: LayoutProps<'/dashboard'>) {
+
+export default function DashboardLayout({ children, chart, statistics, auth }: LayoutProps<'/dashboard'>) {
   return (
     <div className="flex flex-col items-start gap-4">
       <strong className={cn(
@@ -16,13 +15,15 @@ export default function DashboardLayout({children}: LayoutProps<'/dashboard'>) {
       {/* 컬럼 레이아웃 박스 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 self-stretch">
         {/* 방문자 수 통계 */}
-        <Statistics />
+        {statistics}
         {/* 그래프 차트 */}
-        <Chart />
+        {chart}
       </div>
-      
-      {/* 대시보드 페이지 */}
-      {children}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 self-stretch">
+        {/* 대시보드 페이지 */}
+        {children}
+        {auth}
+      </div>      
    </div>
  )
 }
