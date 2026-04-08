@@ -13,7 +13,10 @@ export default async function TagBasedRevalidationPage() {
    * 3. 데이터가 변경되었을 때(예: 포켓몬 추가/수정), 서버 액션에서
    *    revalidateTag('pokemons')를 호출하면 그 즉시 캐시가 무효화됩니다.
    */
-  const response = await fetch( `${process.env.NEXT_PUBLIC_MOCK_API_URL}/pokemon`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API_URL}/pokemon`, {
+    // 특정 태그를 활용해 정밀하게 캐시 제어
+    next: {tags: ['pokemon']}
+  })
   // 특정 태그를 설정해 추후 정밀하게 캐시를 제어하기 위한 설정
 
   if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.')

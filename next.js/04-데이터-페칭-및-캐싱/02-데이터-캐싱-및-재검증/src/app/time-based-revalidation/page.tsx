@@ -12,7 +12,11 @@ export default async function TimeBasedRevalidationPage() {
    * 3. 60초가 지난 후 첫 접속자가 오면, 서버는 '이전 캐시'를 먼저 보여준 뒤
    *    백그라운드에서 데이터를 새로 가져와 캐시를 갱신합니다. (Stale-While-Revalidate)
    */
-  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`)
+  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`, {
+    // cache: 'no-store' // 기본적으로 기억하지 않음 ( 개발자가 필요할때 기억하도록 설정 )
+    cache: 'force-cache', // 개발자가 요청/응답 결과를 캐시 설정
+    next: { revalidate: 60 } // 1분마다 새 데이터로 다시 정적 생성한 결과 캐싱
+  })
   // 60초마다 데이터의 유효성을 검사하도록 설정
 
   if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.')
