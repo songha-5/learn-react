@@ -12,9 +12,15 @@ export default async function HybridRevalidationPage() {
    * 2. 주문형(On-demand): 'pokemons' 태그를 사용하여 60초가 지나지 않았더라도 
    *    Server Action(revalidateTag)을 통해 즉시 수동 갱신이 가능합니다.
    */
-  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`)
-  // - 60초 자동 갱신
-  // - 수동 갱신을 위한 태그 설정
+  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`, {
+    cache: 'force-cache',
+    next: {
+      // 1시간 마다 자동 갱신 (ISR, 시간 기반 재검증 설정)
+      revalidate: 60 * 60,
+      // 수동(on-demand) 갱신을 위한 태그 설정
+      tags: ['pokemon']
+    }
+  })
 
   if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.')
   const pokemons = (await response.json()) as Pokemon[]
