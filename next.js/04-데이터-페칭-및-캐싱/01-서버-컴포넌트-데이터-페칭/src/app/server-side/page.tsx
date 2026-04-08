@@ -10,10 +10,11 @@ import { LucideServer } from 'lucide-react'
  * - SEO 최적화 : 데이터가 포함된 완성된 HTML이 브라우저에 도달하여 검색 엔진 노출에 유리합니다.
  */
 
+// 외부 API에 직접 접근
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const pokemonApiUrl = `${process.env.MOCK_API_URL}/pokemon`
 
-
+// 비동기 함수로서 서버 컴포넌트 몸체가 데이터 페칭 영역
 export default async function ServerSidePage() {
   
   // 서버 컴포넌트는 async/await를 사용하여 컴포넌트 수준에서 직접 데이터를 호출합니다.
@@ -24,8 +25,6 @@ export default async function ServerSidePage() {
   
   // JSON 파싱: 서버 환경에서 데이터를 객체 형태로 변환합니다.
   const data = await response.json() as Pokemon[]
-
-  console.log(data)
 
   return (
     <section className="m-6 space-y-6 md:mx-0">
