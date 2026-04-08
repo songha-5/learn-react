@@ -15,6 +15,7 @@ export default async function TagBasedRevalidationPage() {
    */
   const response = await fetch(`${process.env.NEXT_PUBLIC_MOCK_API_URL}/pokemon`, {
     // 특정 태그를 활용해 정밀하게 캐시 제어
+    cache: 'force-cache',
     next: {tags: ['pokemon']}
   })
   // 특정 태그를 설정해 추후 정밀하게 캐시를 제어하기 위한 설정
