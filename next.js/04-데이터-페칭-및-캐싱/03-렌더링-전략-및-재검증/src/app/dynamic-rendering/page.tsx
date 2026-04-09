@@ -3,18 +3,18 @@
 
 // --------------------------------------------------------------------------------------------
 
+import 'server-only'
+
 import { LucideInfo, LucideZap } from 'lucide-react'
 
 import { PokemonList } from '@/components/ui/pokemon-list'
-import { Pokemon } from '@/types/pokemon'
+import { getCachedPokemons } from './pokemon'
 
 export default async function DynamicRenderingPage() {
   
-  // Next.js 15부터 fetch의 기본값은 'no-store'이므로, 명시하지 않아도 동적으로 작동합니다.
-  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`)
-
-  if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.')
-  const pokemons = (await response.json()) as Pokemon[]
+  
+  const pokemons = await getCachedPokemons()
+  
 
   return (
     <section className="m-6 space-y-6 lg:mx-0">

@@ -4,19 +4,19 @@
 
 // --------------------------------------------------------------------------------------------
 
+export const revalidate = 86400 // 하루 60 * 60 * 24
+
 import { LucideInfo, LucideRefreshCw } from 'lucide-react'
 
 import { PokemonList } from '@/components/ui/pokemon-list'
 import { Pokemon } from '@/types/pokemon'
+import { getCachedPokemons } from '../dynamic-rendering/pokemon'
 
 export default async function TimeBasedRevalidationPage() {
   
   // fetch 레벨에서도 revalidate 옵션을 설정할 수 있습니다.
   // 위에서 선언한 export const revalidate 설정이 이 fetch에도 적용됩니다.
-  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`)
-
-  if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.')
-  const pokemons = (await response.json()) as Pokemon[]
+  const pokemons = await getCachedPokemons()
 
   return (
     <section className="m-6 space-y-6 lg:mx-0">

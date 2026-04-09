@@ -2,6 +2,7 @@
 // 이 설정을 통해 페이지를 빌드 시점에 정적 HTML로 생성하도록 강제합니다.
 
 // --------------------------------------------------------------------------------------------
+export const dynamic = 'force-static'
 
 import { LucideInfo, LucideGlobe } from 'lucide-react'
 
@@ -12,7 +13,9 @@ export default async function StaticRenderingPage() {
   
   // fetch에 별도 옵션이 없어도 위 dynamic 설정이 우선순위를 가집니다.
   // 명시적으로 cache: 'force-cache'를 추가하여 정적 캐싱을 확실히 할 수 있습니다.
-  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`)
+  const response = await fetch(`${process.env.MOCK_API_URL}/pokemon`, {
+    cache: 'force-cache'
+  } )
 
   if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.')
   const pokemons = (await response.json()) as Pokemon[]
