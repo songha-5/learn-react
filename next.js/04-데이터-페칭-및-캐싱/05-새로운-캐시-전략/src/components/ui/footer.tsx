@@ -15,8 +15,8 @@ export default async function Footer() {
       className="border-t border-slate-100 py-8 text-center text-xs text-slate-400"
     >
       <Suspense fallback={<div>로딩중 ...</div>}>
-        {/* <CopyrightClient /> */}
-        <Copyright />
+        <CopyrightClient />
+        {/* <Copyright /> */}
       </Suspense>
       {/* © {currentYear} EUID. Copyright all reserved. */}
     </footer>

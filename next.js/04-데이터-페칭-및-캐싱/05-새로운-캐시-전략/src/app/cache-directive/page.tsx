@@ -6,6 +6,8 @@ import {
 } from 'lucide-react'
 
 import { cn, wait } from '@/utils'
+import { Suspense } from 'react'
+import { Spinner } from '@/components/ui/spinner'
 
 
 export default function CacheDirectivePage() {
@@ -24,8 +26,12 @@ export default function CacheDirectivePage() {
       </header>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <DynamicDataCard />
-        <CachedDataCard />
+        <Suspense fallback={<Spinner />}>
+          <DynamicDataCard />
+        </Suspense>
+        <Suspense fallback={<Spinner />}>
+          <CachedDataCard />
+        </Suspense>
       </div>
 
       <div className="rounded-2xl border border-blue-100 bg-blue-50/50 p-6">
@@ -71,7 +77,7 @@ async function getCachedData() {
 
 // 일반 데이터 카드 컴포넌트
 async function DynamicDataCard() {
-  const data = await getDynamicData()
+  const data = await getDynamicData() // 동적 데이터 가져오기 (캐시 안됨)
 
   return (
     <div
@@ -99,7 +105,7 @@ async function DynamicDataCard() {
 
 // 캐시된 데이터 카드 컴포넌트
 async function CachedDataCard() {
-  const data = await getCachedData()
+  const data = await getCachedData() // 동적 데이터 가져옴 (캐시됨)
 
   return (
     <div
