@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useTransition } from 'react'
 import {
   LucideArrowRight,
   LucideLoader2,
@@ -8,38 +9,69 @@ import {
   LucideCheckCircle2,
 } from 'lucide-react'
 
+import { createItemAction } from '@/actions'
 import { useInput } from '@/hooks'
 import { cn } from '@/utils'
-import { useState, useTransition } from 'react'
-import { createItemAction } from '@/server-actions/create-item-action'
+
+
+/**
+ * [Next.js 폼 상태 관리: useActionState (이전 이름: useFormState)]
+ * 
+ * useActionState란?
+ * - 서버 액션의 실행 결과(성공, 에러 메시지 등)를 클라이언트 상태로 관리하는 React 훅입니다.
+ * - 폼 제출 시 서버와 클라이언트 간의 상태 동기화를 간결하게 처리합니다.
+ * - 참고: https://react.dev/reference/react/useActionState 
+ *        (현재 한글 번역 문서는 하이드레이션 오류 발생 가능성이 있으니 영문 문서 권장)
+ * 
+ * 왜 사용하는가?
+ * - 기존의 useState + useEffect 조합 없이도 서버의 응답을 UI에 즉각 반영할 수 있기 때문입니다.
+ * 
+ * 주요 특징 및 장점
+ * - 자동 상태 업데이트: 액션이 반환하는 값을 자동으로 상태(state)에 반영합니다.
+ * - Pending 상태 제공: 현재 액션이 실행 중인지 여부(isPending)를 불리언 값으로 제공합니다.
+ * - 점진적 향상 지원: JS가 로드되기 전에도 기본 폼 제출이 작동하며, 로드 후에는 풍부한 UI 경험을 제공합니다.
+ * 
+ * 사용 방법
+ * - [상태, 액션함수, 대기상태] = useActionState(서버액션, 초기상태)
+ * - 폼의 <form action={액션함수}>에 연결하여 사용합니다.
+ */
+
 
 export default function ClientSidePage() {
-  
-  // 폼 상태를 클라이언트 측 메모리에 관리해보세요.
-  const [isPending, startTransition] = useTransition() // 서버액션요청 (로딩상태관리, 렌더링)
-  const [message, setMessage] = useState('') // 서버에서 성공 응답이 왔을때 상태 업데이트 -> UI반영 (성공메세지)
-  const [error, setError] = useState<undefined|string>(null) // 서버에서 실패 응답이 왔을때 상태 업데이트 -> UI 반영 (에러메세지)
+  const [message, setMessage] = useState('')
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
 
   const itemInput = useInput('')
   const isNotInput = itemInput.props.value.trim().length === 0
 
-  // 서버 액션을 클라이언트 핸들러 내부에서 실행하는 코드를 작성하고
-  // 응답 성공 또는 실패 상황에 따라 UI 화면을 제공하도록 설정합니다.
-  const handleAction = (formData: FormData) => {
-    // 서버함수는 startTransition함수 안에서 실행
+  const handleSubmit = async (formData: FormData) => {
+    if (isPending || isNotInput) return
+
+    setError(null)
+    setMessage('')
+
     startTransition(async () => {
       const result = await createItemAction(formData)
 
-      // 서버의 응답 결과가 성공했을 때
       if (result.success) {
-        setMessage(result.message ?? '요청이 성공적으로 수행되었습니다.')
+        setMessage(result.message ?? '')
+        // 성공 시 입력창 초기화
+        itemInput.methods.reset()
       } else {
-        setError(result.error ?? '알수없는 에러가 발생하였습니다')
+        // 서버에서 보낸 error 메시지 사용
+        setError(result.error ?? '알 수 없는 에러가 발생했습니다.')
       }
     })
-
   }
 
+  const handleReset = () => {
+    setError(null)
+    setMessage('')
+    const { reset, focus } = itemInput.methods
+    reset()
+    setTimeout(focus, 50)
+  }
 
   return (
     <div className="flex grow items-center justify-center p-4">
@@ -81,9 +113,7 @@ export default function ClientSidePage() {
 
           {!message ? (
             <form
-              // 서버 액션을 연결해보세요.
-              // ...
-              action={handleAction}
+              action={handleSubmit}
               className="relative z-10 space-y-4"
               noValidate
             >
@@ -155,8 +185,7 @@ export default function ClientSidePage() {
                   'flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-bold transition-all',
                   'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]',
                 )}
-                // 폼 초기화 로직을 실행하는 핸들러를 연결해보세요.
-                // ...
+                onClick={handleReset}
               >
                 새로운 아이템 추가
               </button>
