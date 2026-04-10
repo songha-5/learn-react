@@ -26,6 +26,8 @@ export default function ClientSidePage() {
   // 서버 액션을 클라이언트 핸들러 내부에서 실행하는 코드를 작성하고
   // 응답 성공 또는 실패 상황에 따라 UI 화면을 제공하도록 설정합니다.
   const handleAction = (formData: FormData) => {
+    if (isPending || isNotInput) return // 방어적 프로그래밍
+    
     // 서버함수는 startTransition함수 안에서 실행
     startTransition(async () => {
       const result = await createItemAction(formData)
@@ -37,8 +39,15 @@ export default function ClientSidePage() {
         setError(result.error ?? '알수없는 에러가 발생하였습니다')
       }
     })
-
   }
+
+  const handleReset = () => {
+    setError(undefined)
+    setMessage('')
+    itemInput.methods.reset()
+    setTimeout(() => itemInput.methods.focus(), 50)
+  }
+
 
 
   return (
@@ -156,7 +165,7 @@ export default function ClientSidePage() {
                   'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]',
                 )}
                 // 폼 초기화 로직을 실행하는 핸들러를 연결해보세요.
-                // ...
+                onClick={handleReset}
               >
                 새로운 아이템 추가
               </button>
