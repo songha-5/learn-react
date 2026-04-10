@@ -1,6 +1,7 @@
 'use server'
 
 import { wait } from "@/utils"
+import { redirect } from "next/navigation"
 
 // 비동기 서버 함수 (또는 액션)
 export async function createItemAction(formData: FormData) {
@@ -40,4 +41,12 @@ export async function createItemAction(formData: FormData) {
       error: '서버에서 일시적인 장애로 에러가 발생했습니다. 잠시 후 다시 시도해보세요.'
     }
   }
+}
+
+// 비동기 서버 액션 (점진적 향상 테스트용)
+export async function progressiveEnhancementAction(formData: FormData) {  console.log(Object.fromEntries(formData.entries()))
+
+  redirect('/')
+
+  // return undefined
 }

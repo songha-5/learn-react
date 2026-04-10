@@ -11,14 +11,17 @@ import {
 import { useInput } from '@/hooks'
 import { cn } from '@/utils'
 import { useState, useTransition } from 'react'
-import { createItemAction } from '@/server-actions/create-item-action'
+import {
+  createItemAction,
+  // progressiveEnhancementAction
+} from '@/server-actions/create-item-action' // 서버사이드
 
 export default function ClientSidePage() {
   
   // 폼 상태를 클라이언트 측 메모리에 관리해보세요.
   const [isPending, startTransition] = useTransition() // 서버액션요청 (로딩상태관리, 렌더링)
   const [message, setMessage] = useState('') // 서버에서 성공 응답이 왔을때 상태 업데이트 -> UI반영 (성공메세지)
-  const [error, setError] = useState<undefined|string>(null) // 서버에서 실패 응답이 왔을때 상태 업데이트 -> UI 반영 (에러메세지)
+  const [error, setError] = useState<undefined|string>(undefined) // 서버에서 실패 응답이 왔을때 상태 업데이트 -> UI 반영 (에러메세지)
 
   const itemInput = useInput('')
   const isNotInput = itemInput.props.value.trim().length === 0
@@ -90,9 +93,11 @@ export default function ClientSidePage() {
 
           {!message ? (
             <form
-              // 서버 액션을 연결해보세요.
-              // ...
-              action={handleAction}
+              // 실제 서버에서 실행되는 액션(함수)
+              // form 요소의 action에 연결된 서버 액션 함수는 반환 값이 없어야 한다.
+              // action={progressiveEnhancementAction}
+              // 클라이언트 핸들러 (내부에서 서버 액션 실행)
+              // action={handleClientAction}
               className="relative z-10 space-y-4"
               noValidate
             >
