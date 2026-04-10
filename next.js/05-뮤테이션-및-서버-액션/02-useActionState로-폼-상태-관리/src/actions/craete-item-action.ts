@@ -4,27 +4,13 @@ import { wait } from '@/utils'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export interface FormState {
-  success: boolean
-  message?: string
-  error?: string
-}
+export async function createItemAction(formData: FormData, isRedirect = false) {
+  let shouldRedirect = false
 
-// 리듀서 함수 형태로 변경
-export async function createItemAction(prevState: FormState, formData: FormData): Promise<FormState> {
-
-  const title = formData.get('title')?.toString().trim()
+  const title = formData.get('title')?.toString()
 
   try {
-    if (!title) {
-      return {
-        ...prevState,
-        success: false,
-        error: '내용을 입력해주세요'
-      }
-    }
-
-    if (!title || title.length < 2) {
+    if (!title || title.trim().length < 2) {
       return {
         success: false,
         error: '아이템 이름은 최소 2글자 이상이어야 합니다.',
@@ -33,7 +19,6 @@ export async function createItemAction(prevState: FormState, formData: FormData)
 
     if (/바보|멍청이|또라이/.test(title)) {
       return {
-        ...prevState,
         success: false,
         error: '부적절한 단어가 포함되어 있습니다.',
       }
@@ -49,6 +34,10 @@ export async function createItemAction(prevState: FormState, formData: FormData)
 
     revalidatePath('/server-side')
     revalidatePath('/client-side')
+
+    if (isRedirect) {
+      shouldRedirect = true
+    }
   } catch (error) {
     console.error('서버 액션 에러:', error)
     return {
@@ -57,9 +46,11 @@ export async function createItemAction(prevState: FormState, formData: FormData)
     }
   }
 
+  if (shouldRedirect) {
+    redirect('/action-success')
+  }
 
   return {
-    ...prevState,
     success: true,
     message: `"${title}" 아이템이 성공적으로 생성되었습니다.`,
   }
