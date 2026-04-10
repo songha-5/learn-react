@@ -8,6 +8,12 @@ interface Props {
 }
 
 export function SuccessScreen({ state, onReset }: Props) {
+
+  const handleRestore = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    onReset()
+  }
+  
   return (
     <div
       aria-live="polite"
@@ -20,7 +26,7 @@ export function SuccessScreen({ state, onReset }: Props) {
       </div>
       <button
         type="button"
-        onClick={onReset}
+        onClick={handleRestore}
         className={cn(
           'flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-bold transition-all',
           'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]',

@@ -1,4 +1,4 @@
-import { useActionState } from "react"
+import { useActionState, useImperativeHandle } from "react"
 import { LucideAlertCircle } from "lucide-react"
 
 import { useInput } from "@/hooks"
@@ -17,20 +17,34 @@ const INITIAL_FORM_STATE = {
 }
 
 interface CreateActionFormProps {
+  ref: React.RefObject<{ focus: () => void }>
   onReset: () => void
 }
 
-export function CreateActionForm({ onReset }: CreateActionFormProps) {
+export function CreateActionForm({ ref, onReset }: CreateActionFormProps) {
   
   // useActionState 훅이 일괄적으로 관리할 상태 (서버에서 보내주는 데이터)
   const [state, dispatchAction, isPending] = useActionState(
     createItemAction, // 서버 액션 (리듀서 액션 함수)
     INITIAL_FORM_STATE, // 폼 초기 상태
+    '/client-side'
   )
 
   const itemInput = useInput('')
   const isNotInput = itemInput.props.value.trim().length === 0
 
+  // 현재 컴포넌트 내부의 명령형 핸들을 상위 컴포넌트에 노출하는 방법
+  useImperativeHandle(ref, () => {
+
+    // 명령형 핸들을 포함한 객체
+    return {
+      focus: () => {
+        itemInput.methods.focus()
+      }
+    }
+  })
+
+  
   return (
     <div
       className={cn(
