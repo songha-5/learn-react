@@ -36,6 +36,14 @@ export default function MainPage() {
           description="훅을 사용하지 않고 리디렉션과 쿼리 파라미터만을 이용해 에러를 처리하는 고전적인 방식을 비교 학습합니다."
           icon={LucideZap}
         />
+
+        <LinkCard
+          href="/understand-reducer"
+          title="전통적 서버 방식"
+          actionLabel="리듀서 이해하기"
+          description="리듀서 이해하기 위한 간단한 예제"
+          icon={LucideZap}
+        />
       </section>
     </div>
   )
