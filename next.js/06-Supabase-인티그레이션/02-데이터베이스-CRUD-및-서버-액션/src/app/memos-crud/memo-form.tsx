@@ -1,3 +1,5 @@
+import { createMemoAction } from "@/actions/memo-action";
+
 export default function MemoForm() {
 
   /**
@@ -8,7 +10,7 @@ export default function MemoForm() {
    */
 
   return (
-    <form className="flex flex-col gap-3">
+    <form action={createMemoAction} className="flex flex-col gap-3">
       <input
         type="text"
         name="title"
