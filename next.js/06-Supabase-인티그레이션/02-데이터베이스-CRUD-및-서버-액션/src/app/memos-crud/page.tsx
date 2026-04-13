@@ -1,13 +1,22 @@
+import { readMemoAction } from '@/actions/memo-action'
 import MemoForm from './memo-form'
 import MemoList from './memo-list'
+import { Suspense } from 'react'
+import { Spinner } from '@/components/ui/spinner'
+
+
 
 export default function MemoCRUDPage() {
 
+
   /**
-   * readMemosAction 서버 액션을 정의합니다.
-   * readMemosAction 액션를 실행한 Promise를 MemoList 컴포넌트에 전달합니다.
+   * readMemoAction 서버 액션을 정의합니다. (supabase 데이터 가져오기)
+   * readMemoAction 액션를 실행한 Promise를 MemoList 컴포넌트에 전달합니다.
    */
   
+  const memoListPromise = readMemoAction() // Promise<Memo[]>
+
+
   return (
     <section className="mx-auto w-9/10 max-w-3xl px-6 py-12 antialiased lg:w-3/5">
       <header className="mb-10 flex items-center justify-between">
@@ -25,7 +34,9 @@ export default function MemoCRUDPage() {
         <MemoForm />
       </div>
 
-      <MemoList />
+      <Suspense fallback={<Spinner />}>
+        <MemoList memoListPromise={memoListPromise}/>
+      </Suspense>
 
     </section>
   )

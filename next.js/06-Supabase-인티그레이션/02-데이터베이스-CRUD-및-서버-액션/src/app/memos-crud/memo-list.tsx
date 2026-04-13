@@ -1,15 +1,16 @@
 import { use } from 'react'
 import MemoItem from './memo-item'
+import { Memo } from '@/actions/memo-action'
 
 interface Props {
-  memosPromise?: Promise<unknown[]>
+  memoListPromise?: Promise<Memo[]>
 }
 
-export default function MemoList({ memosPromise }: Props) {
+export default function MemoList({ memoListPromise }: Props) {
 
-  if (!memosPromise) return null
+  if (!memoListPromise) return null
 
-  const memos = use(memosPromise)
+  const memos = use(memoListPromise)
 
   return (
     <article className="space-y-4">
@@ -17,8 +18,8 @@ export default function MemoList({ memosPromise }: Props) {
         메모 목록 ({memos?.length || 0})
       </h3>
 
-      {memos?.map((memo, index) => (
-        <MemoItem key={index} />
+      {memos?.map((memo) => (
+        <MemoItem key={memo.id} memo={memo} />
       ))}
     </article>
   )
