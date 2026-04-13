@@ -1,11 +1,6 @@
 import { LucideAlertCircle, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/utils'
-
-interface FormState {
-  success: boolean
-  message: string
-  errors: string
-}
+import { type FormState } from '@/actions/post-actions'
 
 export function ValidateStatus({ state }: { state?: FormState }) {
   

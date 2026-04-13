@@ -1,5 +1,5 @@
 import { LucideShieldCheck } from 'lucide-react'
-
+import { type postState } from '@/actions/post-actions'
 import { cn } from '@/utils'
 import PostForm from './post-form/post-form'
 
