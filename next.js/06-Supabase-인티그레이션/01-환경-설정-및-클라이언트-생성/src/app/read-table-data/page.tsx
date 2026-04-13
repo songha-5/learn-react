@@ -9,22 +9,32 @@ import {
   LucideCircleSmall,
 } from 'lucide-react'
 import Link from 'next/link'
-
+import { cookies } from 'next/headers'
 import { cn } from '@/utils'
+import { createClient } from '@/lib/supabase/server'
 
 interface Memo {
-  id: string | number
+  id: string
   title: string
   content: string
-  created_at: Date | string
+  created_at: string
+  updated_at: string
 }
 
 export default async function ReadTableDataPage() {
  
-  // Supabase 데이터베이스 memos 테이블에서 데이터 조회
-  const supabase = null
-  const data = [] as Memo[]
-  const error = null as unknown as Error
+  // Supabase 데이터베이스 memoslist 테이블에서 데이터 조회
+  const cookiesStore = await cookies() // 서버에서 가지고 와야함
+  const supabase = createClient(cookiesStore)
+
+  const { error, data: memos } = await supabase
+    .from('memolist') //필드 데이터
+    .select('title,created_at,id') // 원하는 필드 가져옴, 빈값은 전부임
+    .order('created_at', { ascending: false }) // 정렬
+    .limit(4) // 데이터 개수
+
+  
+  const data = memos as Memo[]
 
   return (
     <section

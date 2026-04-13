@@ -11,12 +11,7 @@ export default function SupabaseSetupPage() {
           'mx-auto w-full max-w-4xl p-6 md:p-0'
         )}
       >
-        {/* 
-          [환경 설정]
-          - Supabase 계정 및 프로젝트 생성
-          - `.env.*` 파일에 url, key 추가
-          - Supabase URL/KEY 설정 및 createClient (서버/클라이언트 측) 유틸리티 작성
-        */}
+        {/* 환경 설정 및 연결 테스트 */}
         <LinkCard
           href="/setup-check"
           title="환경 설정 및 연결 확인"
@@ -25,18 +20,13 @@ export default function SupabaseSetupPage() {
           icon={LucideSettings2}
         />
 
-        {/* 
-          [데이터베이스 테이블 데이터 조회]
-          - memos 데이터베이스 생성 (인터페이스 확인)
-          - 서버 컴포넌트에서 Supabase 테이블 데이터 가져오기
-          - memos.csv를 사용해 데이터 일괄 업로드
-        */}
+        {/* 데이터베이스 CRUD 및 서버 액션 */}
         <LinkCard
           color="emerald"
-          href="/read-table-data"
-          title="테이블 데이터 조회"
-          actionLabel="첫 데이터 불러오기"
-          description="Supabase 대시보드에서 생성한 테이블의 데이터를 서버 컴포넌트에서 직접 조회하여 화면에 출력합니다."
+          href="/memos-crud"
+          title="데이터베이스 CRUD"
+          actionLabel="메모 관리 시작하기"
+          description="서버 액션을 활용하여 DB 테이블의 데이터를 생성, 조회, 수정, 삭제하는 기능을 구현합니다."
           icon={LucideDatabase}
         />
       </section>
