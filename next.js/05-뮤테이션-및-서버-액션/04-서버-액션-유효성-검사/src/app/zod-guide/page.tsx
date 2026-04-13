@@ -5,12 +5,13 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { cn } from '@/utils'
-import { validateUser } from './validate-user'
+import { validateUser, type User } from './validate-user-zod'
+import { regex, z } from 'zod'
 
 export default function ZodGuidePage() {
   
   // 유효성 검증할 데이터
-  const users = [
+  const users: User[] = [
     {
       name: '박주아',
       age: 23,
@@ -31,6 +32,65 @@ export default function ZodGuidePage() {
     },
   ]
 
+  const [user, user2] = users
+
+  // zod를 사용한 스키마
+  // const mySchema = z
+  //   .number('사용자 나이는 숫자여야 합니다')
+  //   .positive('0보다 큰 양수여야 합니다')
+  //   .min(19, '사용자 나이는 19세 이상이여야합니다')
+  //   .max(59, '사용자 나이는 59세 이하여야 합니다')
+
+  const mySchema = z
+    .number('사용자 나이는 숫자여야 합니다')
+    .positive('0보다 큰 양수여야 합니다')
+    .min(19, '사용자 나이는 19세 이상이여야합니다')
+    .max(59, '사용자 나이는 59세 이하여야 합니다')
+
+  const userEmailSchema = z.email('유효하지 않은 이메일')
+  const PhoneNumberSchema = z
+    .string('폰 번호는 문자값이여야합니다')
+    .regex(
+      /^010-\d{4}\d{4}^/,
+      '유효하지 않은 전화번호 양식입니다'
+  )
+  const UrlSchema = z
+    .string('URL은 문자값이어야 합니다.')
+    .startsWith(
+      'https://',
+      'GitHub 웹 사이트 경로는 https://로 시작해야 합니다.',
+    )
+
+  const RoleSchema = z.enum(
+    ['admin', 'member', 'guest'],
+    '권한은 admin, member, guest 중 하나여야 합니다.',
+  )
+
+  // 사용자 정보 입력 내용 유효성 검사를 위한 스키마 선언(객체형)
+  const UserSchema = z.object({
+    name: z.string().min(2),
+    age: z.number().min(19).max(59),
+    job: z.string(),
+    email: z.email(),
+    phoneNumber: z.string().regex(/^010-\d{4}\d{4}^/),
+    github: z.string().startsWith('https://'),
+    role: z.enum(['admin', 'member', 'guest'])
+  })
+
+  // 사용자 입력 값
+  // const someValue = user2.age
+  const someValue = user2.age
+  const emailValue = user.email
+  
+  // 선언된 스키마를 사용해 값의 유효성 검사
+  // error 반환
+  // console.log(mySchema.parse(someValue))
+  // {success: false, message: '' 반환}
+  // console.log(mySchema.safeParse(someValue))
+  // console.log(mySchema.safeParse(someValue))
+  // console.log(userEmailSchema.safeParse(emailValue))
+
+  // validate zod사용자 검증을 통해 사용자 검증
   users.forEach((user) => console.log(validateUser(user)))
   
 
