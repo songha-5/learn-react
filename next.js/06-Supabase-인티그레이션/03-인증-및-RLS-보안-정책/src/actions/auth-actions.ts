@@ -3,6 +3,7 @@
 import z from 'zod'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { createSupabase } from '@/lib/supabase/helpers'
 
 const REVALIDATE_PATH = '/auth-basic'
 
@@ -41,11 +42,14 @@ export async function signUpAction(prevState: AuthState, formData: FormData): Pr
   const { email, password } = validatedFields.data
 
   // 서버용 Supabase 클라이언트 생성
+  const supabase = await createSupabase()
+  // 검증된 email, password 정보로 회원가입(auth.siginup) 시도
+  const { error } = await supabase.auth.signUp({ email, password })
+
 
   // 검증된 email, password 정보로 회원가입(auth.signUp) 시도
   console.log({ email, password })
   
-  const error = new Error('Supabase 회원가입 기능 설정이 필요합니다.')
   
   if (error) return { success: false, message: error.message }
 
@@ -72,11 +76,11 @@ export async function signInAction(prevState: AuthState, formData: FormData): Pr
   const { email, password } = validatedFields.data
 
   // 서버용 Supabase 클라이언트 생성
+  const supabase = await createSupabase()
 
   // 검증된 email, password 정보로 로그인(auth.signInWithPassword) 시도
   console.log({ email, password })
-
-  const error = new Error('Supabase 로그인 기능 설정이 필요합니다.')
+  const {error, data} = await supabase.auth.signInWithPassword({ email, password })
   
   if (error) return { success: false, message: error.message }
 
@@ -91,6 +95,9 @@ export async function signOutAction() {
 
   // 서버용 Supabase 클라이언트 생성
   // 로그아웃(auth.signOut) 시도
+  const supabase = await createSupabase()
+
+  await supabase.auth.signOut()
   
   revalidatePath(REVALIDATE_PATH)
 }
