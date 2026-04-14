@@ -1,7 +1,10 @@
+'use client'
+
 import { use } from 'react'
 
 import MemoItem from './memo-item'
 import type { ActionResponse, Memo } from '@/actions/memo-actions'
+import { toast } from 'sonner'
 
 
 interface Props {
@@ -13,9 +16,9 @@ export default function MemoList({ memolistPromise }: Props) {
   const result = use(memolistPromise)
 
   if (!result.success) {
+    toast.error(result.error)
     throw new Error(result.error)
   } else {
-
     const memolist = result.data
 
     return (
