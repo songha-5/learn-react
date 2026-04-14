@@ -2,9 +2,12 @@ import { redirect } from 'next/navigation'
 
 import { createMemoAction } from '../../actions/memo-action'
 
-export default async function MemoForm({ errorMessage }:  { errorMessage?: string | string[] }) {
+interface Props {
+  errorMessage?: string | string[]
+}
 
 
+export default async function MemoForm({ errorMessage }: Props) {
   // 오류 원인: 일반 서버 컴포넌트 (페이지 컴포넌트가 아님. 검색 매개변수 못 읽음)
   // 오류 해결 방법
   // 1. 서버 컴포넌트: 부모(페이지) 컴포넌트 -> 폼 컴포넌트 error prop 전달 ✅

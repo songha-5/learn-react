@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import {
   LucideStickyNote,
   LucideCalendar,
@@ -11,16 +11,17 @@ import {
 } from 'lucide-react'
 
 import { cn } from '@/utils'
-import { Memo } from '@/actions/memo-action'
+import { updateMemoAction, type Memo } from '@/actions/memo-action'
 
 interface Props {
-  memo?: Memo
+  memo: Memo
 }
 
 export default function MemoItem({ memo }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const [title, setTitle] = useState(memo?.title)
   const [content, setContent] = useState(memo?.content)
+  const [isPending, startTransition] = useTransition()
 
   /**
    * updateMemoAction 서버 액션을 정의합니다.
@@ -28,7 +29,13 @@ export default function MemoItem({ memo }: Props) {
    */
   const updateMemo = async () => {
     console.log('메모 수정 기능')
-    setIsEditing(false) // 에디트 모드 OFF
+
+    startTransition(async () => {
+      const result = await updateMemoAction(memo?.id, { title, content })
+      console.log(result)
+      setIsEditing(false) // 에디트 모드 OFF
+    })
+
   }
 
   /**
