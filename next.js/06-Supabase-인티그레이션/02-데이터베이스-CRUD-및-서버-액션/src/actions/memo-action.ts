@@ -1,17 +1,15 @@
 'use server'
 
+import z from 'zod'
 import { revalidatePath } from 'next/cache'
 
 import { getErrorMessage } from '@/utils'
 import { createSupabase } from '@/lib/supabase/helpers'
-import z, { success } from 'zod'
-import { redirect } from 'next/navigation'
 
 /* DB 테이블 이름 및 갱신할 페이지 경로 정의 ------------------------------------------- */
 
 const DB_NAME = 'memolist'
 const REVALIDATE_PATH = '/memos-crud'
-
 
 /* 타입 정의 (Types) ------------------------------------------------------------ */
 
@@ -26,7 +24,7 @@ export type Memo = {
 // 생성 시 필요한 타입 (id, 날짜 제외)
 export type MemoInsert = Pick<Memo, 'title' | 'content'>
 
-// 수정 시 필요한 타입(옵셔널하게 선택)
+// 수정 시 필요한 타입 (옵셔널 title, content)
 export type MemoUpdate = Partial<MemoInsert>
 
 // 액션 응답 반환 공통 타입
@@ -40,29 +38,29 @@ export type ActionResponse<T> =
       error: string
     }
 
-/* 메모 스키마 ------------------------------------------------------------------ */
+/* 메모 생성 스키마 --------------------------------------------------------------- */
 
-const MemoFormSchema = z.object({
+const MemoSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(2, '최소 두글자 이상 입력해야 합니다.')
+    .min(2, '메모 제목은 최소 2글자 이상 입력해야 합니다.')
     .max(16, '메모 제목은 최대 16글자까지만 입력 가능합니다.'),
   content: z
     .string()
     .trim()
     .min(5, '메모 내용은 최소 5글자 이상 입력해야 합니다.')
-    .max(100, '메모 내용은 최대 100글자로 작성해야 합니다.')
+    .max(100, '메모 내용은 최대 100글자로 작성해야 합니다.'),
 })
 
 // 메모 생성 폼의 상태 타입
-export type MemoInput = z.infer<typeof MemoFormSchema>
+export type MemoFormState = z.infer<typeof MemoSchema>
 
 /* 서버 액션 (Actions) ---------------------------------------------------------- */
 
 /**
  * [CREATE] 새로운 메모를 생성합니다.
- * @param formData 폼 데이터 { title, content } 
+ * @param formData 폼 데이터 { title, content }
  */
 export const createMemoAction = async (
   formData: FormData,
@@ -70,23 +68,19 @@ export const createMemoAction = async (
   // 사용자가 입력한 폼 데이터 값 추출
   const title = formData.get('title')?.toString().trim()
   const content = formData.get('content')?.toString().trim()
-  
+
   // 서버 측 유효성 검사: 예측 가능한 에러 (사용자 실수)
   // Zod를 사용한 입력 값 검증(Safe Parse -> Validation)
-  const result = MemoFormSchema.safeParse({ title, content })
+  const result = MemoSchema.safeParse({ title, content })
 
   // Supabase 데이터베이스에 연결할 필요없이 바로 실패 응답 결과 반환
   if (!result.success) {
-    
     // 각 필드마다 에러를 표시하고자 할 경우 (클라이언트 화면용)
     // const treeifyError = z.treeifyError(result.error)
     // console.log(treeifyError)
 
     // 전체 에러 메시지를 화면에 표시할 경우 (서버 터미널 디버깅용)
     const prettifyError = z.prettifyError(result.error)
-
-    // 페이지 리디렉션(redirection)
-    redirect(`?error=${encodeURIComponent(prettifyError)}`)
 
     return {
       success: false,
@@ -128,15 +122,13 @@ export const createMemoAction = async (
   }
 }
 
-// errorMessage.split('✖').filter(Boolean).map((message) => {
-//   return '✖ ' + message.split(' → at ').at(0).trim()
-// })
-
 /**
  * [READ] 메모 리스트를 가져옵니다. (단순 조회용)
  * @param limit 가져올 메모의 개수
  */
-export const readMemoAction = async (limit = 10): Promise<ActionResponse<Memo[]>> => {
+export const readMemoAction = async (
+  limit = 10,
+): Promise<ActionResponse<Memo[]>> => {
   try {
     // Supabase 인스턴스 생성 (서버용)
     const supabase = await createSupabase()
@@ -153,31 +145,41 @@ export const readMemoAction = async (limit = 10): Promise<ActionResponse<Memo[]>
     // 응답 성공 시, 반환 값
     return {
       success: true,
-      data: (data as Memo[]) ?? []
+      data: (data as Memo[]) ?? [],
     }
-  } catch(error) {
+  } catch (error) {
     // 서버 디버깅 로그용
     console.error('메모 리스트 가져오기 실패', getErrorMessage(error))
 
     // 응답 실패 시, 반환 값
     return {
       success: false,
-      error: '메모 리스트 데이터 가져오기에 실패했습니다.'
+      error: '메모 리스트 데이터 가져오기에 실패했습니다.',
     }
   }
-  
 }
 
 // [UPDATE] 기존 메모의 내용을 수정합니다.
-export const updateMemoAction = async (memoId: Memo['id'], updateMemo: MemoUpdate) => {
-  const result = MemoFormSchema.safeParse(updateMemo)
+export const updateMemoAction = async (
+  memoId: Memo['id'],
+  updateMemo: MemoUpdate,
+): Promise<ActionResponse<Memo>> => {
+  // 서버 측 유효성 검사: 예측 가능한 에러 (사용자 실수)
+  // Zod를 사용한 입력 값 검증(Safe Parse -> Validation)
+  const result = MemoSchema.safeParse(updateMemo)
 
+  // Supabase 데이터베이스에 연결할 필요없이 바로 실패 응답 결과 반환
   if (!result.success) {
-    const treeifyError = z.treeifyError(result.error)
+    // 각 필드마다 에러를 표시하고자 할 경우 (클라이언트 화면용)
+    // const treeifyError = z.treeifyError(result.error)
+    // console.log(treeifyError)
+
+    // 전체 에러 메시지를 화면에 표시할 경우 (서버 터미널 디버깅용)
+    const prettifyError = z.prettifyError(result.error)
 
     return {
       success: false,
-      error: treeifyError
+      error: prettifyError,
     }
   }
 
@@ -189,25 +191,57 @@ export const updateMemoAction = async (memoId: Memo['id'], updateMemo: MemoUpdat
       .update(result.data)
       .eq('id', memoId)
       .select('*')
-      .maybeSingle()
-    
+      .single()
+
     if (error) throw error
 
     revalidatePath(REVALIDATE_PATH)
+
+    return {
+      success: true,
+      data: data as Memo,
+    }
   } catch (error) {
-    console.log('메모 수정 실패', getErrorMessage(error))
+    console.error('메모 수정 실패', getErrorMessage(error))
     return {
       success: false,
-      error: '메모 수정에 실패했습니다.'
+      error: '메모 수정에 실패했습니다.',
     }
   }
 }
 
 // [DELETE] 특정 메모를 삭제합니다.
-export const deleteMemoAction = async () => {
+export const deleteMemoAction = async (memoId: Memo['id']): Promise<ActionResponse<null>> => {
+
+  if (!memoId) {
+    return {
+      success: false,
+      error: '삭제할 메모 ID가 없습니다.'
+    }
+  }
+
+  try {
+    const supabase = await createSupabase()
+    const { error } = await supabase.from(DB_NAME).delete().eq('id', memoId)
+
+    if (error) throw error
+
+    revalidatePath(REVALIDATE_PATH)
+
+    return {
+      success: true,
+      data: null
+    }
+
+  } catch(error) {
+    console.error('메모 삭제 실패', getErrorMessage(error))
+    return {
+      success: false,
+      error: '메모 삭제에 실패했습니다.'
+    }
+  }
 
 }
-
 
 /* -------------------------------------------------------------------------- */
 
