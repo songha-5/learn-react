@@ -34,6 +34,15 @@ export default function MemoCRUDPage() {
         <MemoForm />
       </div>
 
+      {/* 라이브러리 썼을경우 */}
+      {/* React + TypeScript + Zod + react-error-boundary */}
+      {/* <ErrorBoundary fallbackRender={({ error, resetErrorBoundary }) => <div role='alert'>{error}</div>}>
+        <Suspense fallback={<Spinner />}>
+          <MemoList memolistPromise={memolistPromise} />
+        </Suspense>
+      </ErrorBoundary> */}
+
+
       <Suspense fallback={<Spinner />}>
         <MemoList memoListPromise={memoListPromise}/>
       </Suspense>
