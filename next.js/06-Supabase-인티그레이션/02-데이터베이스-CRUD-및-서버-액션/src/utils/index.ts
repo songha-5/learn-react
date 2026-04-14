@@ -1,3 +1,4 @@
+export * from './get-error-message'
 export * from './isErrorObject'
 export * from './debounce'
 export * from './throttle'
