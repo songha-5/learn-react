@@ -1,26 +1,33 @@
 import { use } from 'react'
 import MemoItem from './memo-item'
-import { Memo } from '@/actions/memo-action'
+import { ActionResponse, Memo } from '@/actions/memo-action'
 
 interface Props {
-  memoListPromise?: Promise<Memo[]>
+  memolistPromise: Promise<ActionResponse<Memo[]>>
 }
 
-export default function MemoList({ memoListPromise }: Props) {
+export default function MemoList({ memolistPromise }: Props) {
 
-  if (!memoListPromise) return null
+  if (!memolistPromise) return null
 
-  const memos = use(memoListPromise)
+  const result = use(memolistPromise)
 
-  return (
-    <article className="space-y-4">
-      <h3 className="px-2 text-sm font-bold tracking-tight text-slate-400 uppercase">
-        메모 목록 ({memos?.length || 0})
-      </h3>
+  if (!result.success) {
+    throw new Error(result.error)
+  } else {
 
-      {memos?.map((memo) => (
-        <MemoItem key={memo.id} memo={memo} />
-      ))}
-    </article>
-  )
+    const memolist = result.data
+
+    return (
+      <article className="space-y-4">
+        <h3 className="px-2 text-sm font-bold tracking-tight text-slate-400 uppercase">
+          메모 목록 ({memolist?.length || 0})
+        </h3>
+
+        {memolist?.map((memo) => (
+          <MemoItem key={memo.id} memo={memo} />
+        ))}
+      </article>
+    )
+  }
 }
